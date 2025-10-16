@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portalen - Serviceportal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+            z-index: 10000;
+            border-top: 3px solid #0066cc;
+        }
+
+        .cookie-banner h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .cookie-banner p {
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-buttons button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 9999;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #0066cc;
+        }
+
+        .modal p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .modal button {
+            width: 100%;
+            padding: 14px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9997;
+            max-width: 350px;
+            border-left: 4px solid #ff6b6b;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification-toast h4 {
+            margin-bottom: 8px;
+            color: #ff6b6b;
+        }
+
+        .top-nav {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -250px;
+            right: -100px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-text {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 35px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #999;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: -60px auto 0;
+            padding: 0 40px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 350px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .service-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .skeleton-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 20px;
+        }
+
+        .skeleton-title {
+            height: 24px;
+            margin-bottom: 12px;
+            width: 70%;
+        }
+
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-text:last-child {
+            width: 85%;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .sidebar-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 99%;
+            animation: stuck 3s ease-in-out infinite;
+        }
+
+        @keyframes stuck {
+            0%, 100% { width: 99%; }
+            50% { width: 99.5%; }
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .chatbot {
+            position: fixed;
+            bottom: 200px;
+            right: 30px;
+            width: 380px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            z-index: 9996;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h4 {
+            font-size: 16px;
+        }
+
+        .chatbot-body {
+            padding: 20px;
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            background: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .tooltip {
+            position: fixed;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            z-index: 10001;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            z-index: 9995;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .illustration {
+            position: fixed;
+            bottom: 20px;
+            right: 420px;
+            width: 280px;
+            opacity: 0.8;
+            z-index: 100;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot, .illustration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modal-overlay">
+        <div class="modal">
+            <h2>🎉 Välkommen till den nya Portalen!</h2>
+            <p>Vi har gjort stora uppdateringar för att förbättra din upplevelse. Var god läs igenom våra nya användarvillkor innan du fortsätter.</p>
+            <button onclick="document.querySelector('.modal-overlay').style.display='none'">Jag accepterar (sidan laddas om automatiskt)</button>
+            <button style="background: white; color: #666; border: 1px solid #ddd;">Läs användarvillkor (27 sidor)</button>
+            <button style="background: white; color: #666; border: 1px solid #ddd;">Anpassa cookie-inställningar</button>
+        </div>
+    </div>
+
+    <div class="notification-toast">
+        <h4>⚠️ Systemvarning</h4>
+        <p>Din session kommer att upphöra om 15 minuter p.g.a. inaktivitet</p>
+        <small style="color: #999;">Du loggades in för 12 sekunder sedan</small>
+    </div>
+
+    <div class="tooltip" style="top: 100px; left: 200px;">Klicka här för att komma igång!</div>
+    <div class="tooltip" style="top: 150px; left: 400px;">Detta är en viktig funktion</div>
+    <div class="tooltip" style="top: 200px; left: 600px;">Behöver du hjälp?</div>
+
+    <div class="top-nav">
+        <div class="logo">Portalen</div>
+        <div class="nav-items">
+            <div class="nav-item">
+                🔔 Notifieringar
+                <span class="badge">47</span>
+            </div>
+            <div class="nav-item">
+                💬 Meddelanden
+                <span class="badge">12</span>
+            </div>
+            <div class="nav-item">🛒 Kundvagn</div>
+            <div class="nav-item">⚙️ Inställningar</div>
+            <div class="nav-item">👤 NULL NULL</div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-content">
+            <div class="welcome-text">Hej NULL NULL,</div>
+            <div class="subtitle">Välkommen till Portalen</div>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Hur kan vi hjälpa dig idag?">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h3 style="margin-bottom: 15px; color: #333;">Systemuppdatering pågår...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="loading-text">99% färdigt... Vänligen vänta (sedan 2024-03-17)</div>
+        </div>
+
+        <div class="main-grid">
+            <div>
+                <div class="service-card">
+                    <div class="service-icon">🛒</div>
+                    <div class="service-title">Beställningskatalog</div>
+                    <div class="service-desc">Beställ en tjänst eller en behörighet<br><br><span style="color: #ff6b6b; font-size: 12px;">⚠️ Tjänstekataloginläsning timeout (32 försök)</span></div>
+                </div>
+                
+                <div class="skeleton-card">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">👤</div>
+                    <div class="service-title">Mina sidor</div>
+                    <div class="service-desc">Följ upp dina ärenden och tjänster hos oss<br><br><span style="color: #ff6b6b; font-size: 12px;">⚠️ Kunde ej hämta dina 847 pågående ärenden</span></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="service-card">
+                    <div class="service-icon">📚</div>
+                    <div class="service-title">Guider</div>
+                    <div class="service-desc">Information om våra tjänster och system<br><br><span style="color: #ff6b6b; font-size: 12px;">⚠️ Guidedatabasen migrerar (ETA: Okänd)</span></div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <div class="service-title">Felanmälan</div>
+                    <div class="service-desc">Har något slutat fungera?<br><br><span style="color: #ff6b6b; font-size: 12px;">⚠️ Felanmälningssystemet är nere (skriv till support)</span></div>
+                </div>
+
+                <div class="skeleton-card">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <h3>🔴 Driftstatus</h3>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    Databas: READ_ONLY
+                </div>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    Backup: Ej körts sedan 2022
+                </div>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    SSL: Upphört 327 dagar sedan
+                </div>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    Disk: 99.8% belagt
+                </div>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    RAM: 8.2GB / 8.0GB
+                </div>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    Uptime: 4m 17s
+                </div>
+                <div class="sidebar-item">
+                    <span class="status-dot"></span>
+                    Aktiva sessioner: 847 (823 timeout)
+                </div>
+
+                <h3 style="margin-top: 30px;">📰 Nyheter</h3>
+                <div class="skeleton" style="height: 60px; margin-bottom: 12px;"></div>
+                <div class="skeleton" style="height: 60px; margin-bottom: 12px;"></div>
+                <div class="skeleton" style="height: 60px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chatbot">
+        <div class="chatbot-header">
+            <h4>💬 Supportassistent</h4>
+            <span style="cursor: pointer; font-size: 20px; opacity: 0.3;">×</span>
+        </div>
+        <div class="chatbot-body">
+            <div class="chat-message">
+                Hej! Jag är din virtuella assistent. Hur kan jag hjälpa dig idag?
+            </div>
+            <div class="chat-message">
+                Jag ser att du har 847 olösta ärenden. Vill du att jag öppnar dem alla?
+            </div>
+            <div class="chat-message">
+                Förresten, ditt lösenord upphör om 0 dagar. Ska jag påminna dig varje timme?
+            </div>
+            <div class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="illustration">
+        <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="140" cy="180" rx="100" ry="15" fill="#e0e0e0"/>
+            <rect x="90" y="100" width="100" height="80" fill="#87ceeb" stroke="#5a9fd4" stroke-width="2" rx="3"/>
+            <rect x="95" y="105" width="90" height="60" fill="#b8e0f6" stroke="#5a9fd4" stroke-width="1"/>
+            <rect x="135" y="175" width="10" height="10" fill="#666"/>
+            <circle cx="100" cy="70" r="25" fill="#ffd700"/>
+            <circle cx="97" cy="67" r="3" fill="#333"/>
+            <circle cx="103" cy="67" r="3" fill="#333"/>
+            <path d="M 95 75 Q 100 78 105 75" stroke="#333" stroke-width="2" fill="none"/>
+            <ellipse cx="140" cy="50" rx="40" ry="25" fill="#90EE90" opacity="0.3"/>
+            <rect x="60" y="120" width="25" height="35" fill="#ff6b6b" stroke="#cc5555" stroke-width="2" rx="2"/>
+            <circle cx="70" cy="130" r="2" fill="white"/>
+            <circle cx="75" cy="130" r="2" fill="white"/>
+        </svg>
+    </div>
+
+    <div class="cookie-banner">
+        <h3>🍪 Vi värdesätter din integritet</h3>
+        <p>Denna webbplats använder cookies för att förbättra din upplevelse, analysera trafik, visa personaliserade annonser, spåra din aktivitet, dela data med 847 partners, och sälja din information till högstbjudande. Genom att klicka "Acceptera alla" godkänner du användning av alla cookies inklusive de som vi inte har implementerat än.</p>
+        <div class="cookie-buttons">
+            <button style="background: #0066cc; color: white;">Acceptera alla (rekommenderat)</button>
+            <button style="background: white; color: #333; border: 1px solid #ddd;">Avvisa alla (sidan fungerar ej)</button>
+            <button style="background: white; color: #333; border: 1px solid #ddd;">Hantera inställningar</button>
+            <button style="background: white; color: #333; border: 1px solid #ddd;">Läs mer om cookies</button>
+            <button style="background: white; color: #333; border: 1px solid #ddd;">Juridisk information</button>
+            <button style="background: white; color: #333; border: 1px solid #ddd;">Integritetspolicy</button>
+            <button style="background: white; color: #333; border: 1px solid #ddd;">Anpassa upplevelse</button>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            for(let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-20px';
+                confetti.style.background = ['#ff6b6b', '#51cf66', '#339af0', '#ffd43b'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }, 2000);
+
+        setInterval(() => {
+            const notifications = [
+                "Din session upphör snart",
+                "Nytt meddelande från NULL NULL",
+                "Systemuppdatering tillgänglig",
+                "Ditt lösenord upphör om 0 dagar",
+                "847 nya notifieringar"
+            ];
+            const toast = document.querySelector('.notification-toast h4');
+            const text = document.querySelector('.notification-toast p');
+            toast.textContent = "⚠️ " + notifications[Math.floor(Math.random() * notifications.length)];
+            text.textContent = "Klicka här för att ignorera detta meddelande";
+        }, 5000);
+    </script>
+
+</body>
+</html>
