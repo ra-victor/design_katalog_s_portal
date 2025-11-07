@@ -568,6 +568,7 @@
                     <option value="support">Support</option>
                     <option value="finance">Ekonomi</option>
                 </select>
+                <div class="form-hint">Alfabetiskt sorterad för din bekvämlighet</div>
             </div>
         </div>
 
@@ -578,16 +579,29 @@
             <div class="form-group">
                 <label class="form-label">Notifikationsvolym</label>
                 <div class="volume-control">
-                    <p style="text-align: center; color: #666; margin-bottom: 10px;">Cirkulär volymkontroll - precision genom rotation</p>
-                    <div class="volume-circle-container" id="volumeContainer">
-                        <svg viewBox="0 0 200 200" style="width: 100%; height: 100%; transform: rotate(-90deg);">
-                            <circle cx="100" cy="100" r="85" fill="none" stroke="#e1e1e1" stroke-width="12"/>
-                            <circle id="volumeCircle" cx="100" cy="100" r="85" fill="none" stroke="#0078d4" stroke-width="12"
-                                    stroke-dasharray="534" stroke-dashoffset="534" stroke-linecap="round"/>
-                        </svg>
-                        <div class="volume-value-display" id="volumeValue">0%</div>
+                    <p style="text-align: center; color: #666; margin-bottom: 20px;">Gravitationsbaserad volymkontroll - innovativ styrning genom musposition</p>
+                    <div style="display: flex; gap: 40px; align-items: center; justify-content: center;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">🔊</div>
+                            <div style="font-size: 14px; color: #666;">100%</div>
+                        </div>
+                        <div style="position: relative; width: 60px; height: 400px; background: linear-gradient(to top, #e1e1e1 0%, #0078d4 100%); border-radius: 30px; border: 3px solid #0078d4;">
+                            <div id="volumeSlider" style="position: absolute; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; background: white; border: 4px solid #0078d4; border-radius: 50%; cursor: grab; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: none;"></div>
+                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;">
+                                <div style="position: absolute; left: 70px; top: 0; font-size: 12px; color: #666;">Max</div>
+                                <div style="position: absolute; left: 70px; top: 50%; transform: translateY(-50%); font-size: 12px; color: #666;">50%</div>
+                                <div style="position: absolute; left: 70px; bottom: 0; font-size: 12px; color: #666;">Tyst</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">🔇</div>
+                            <div style="font-size: 14px; color: #666;">0%</div>
+                        </div>
                     </div>
-                    <div class="form-hint">Dra runt cirkeln för att justera volym</div>
+                    <div style="text-align: center; margin-top: 25px;">
+                        <div style="font-size: 32px; font-weight: 700; color: #0078d4;" id="volumeValueGravity">50%</div>
+                        <div class="form-hint">För musen åt vänster för att sänka volym, åt höger för att höja</div>
+                    </div>
                 </div>
             </div>
 
@@ -777,33 +791,122 @@
             });
         });
 
-        // Cirkulär volymkontroll
-        const volumeContainer = document.getElementById('volumeContainer');
-        const volumeCircle = document.getElementById('volumeCircle');
-        const volumeValue = document.getElementById('volumeValue');
-        let isDragging = false;
+        // Gravitationsbaserad volymslider
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValueGravity = document.getElementById('volumeValueGravity');
+        let sliderPosition = 200; // Start i mitten (50%)
+        let sliderVelocity = 0;
+        let isDraggingVolume = false;
+        let dragStartY = 0;
+        let dragStartPos = 0;
         
-        volumeContainer.addEventListener('mousedown', () => {
-            isDragging = true;
+        volumeSlider.addEventListener('mousedown', (e) => {
+            isDraggingVolume = true;
+            dragStartY = e.clientY;
+            dragStartPos = sliderPosition;
+            volumeSlider.style.cursor = 'grabbing';
+            sliderVelocity = 0;
         });
         
         document.addEventListener('mouseup', () => {
-            isDragging = false;
+            if (isDraggingVolume) {
+                volumeSlider.style.cursor = 'grab';
+            }
+            isDraggingVolume = false;
         });
         
         document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
+            if (isDraggingVolume) {
+                const deltaY = e.clientY - dragStartY;
+                sliderPosition = Math.max(0, Math.min(350, dragStartPos + deltaY));
+                volumeSlider.style.top = sliderPosition + 'px';
+                const volume = Math.round((1 - sliderPosition / 350) * 100);
+                volumeValueGravity.textContent = volume + '%';
+            }
             
-            const rect = volumeContainer.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-            let volume = ((angle + Math.PI / 2) / (Math.PI * 2)) * 100;
-            if (volume < 0) volume += 100;
+            // Gravitation baserat på musposition relativt till slidern
+            if (!isDraggingVolume) {
+                const sliderRect = volumeSlider.getBoundingClientRect();
+                const sliderCenterX = sliderRect.left + sliderRect.width / 2;
+                const sliderCenterY = sliderRect.top + sliderRect.height / 2;
+                
+                // Beräkna horisontellt avstånd
+                const horizontalDist = e.clientX - sliderCenterX;
+                const verticalDist = Math.abs(e.clientY - sliderCenterY);
+                
+                // Om musen är nära vertikalt och åt sidan horisontellt
+                if (verticalDist < 250 && Math.abs(horizontalDist) < 400) {
+                    // Ju närmare musen är, desto starkare gravitation
+                    const gravityStrength = (400 - Math.abs(horizontalDist)) / 400 * 0.5;
+                    
+                    if (horizontalDist < 0) {
+                        // Mus till vänster = slider faller nedåt (mot 0%)
+                        sliderVelocity += gravityStrength;
+                    } else {
+                        // Mus till höger = slider faller uppåt (mot 100%)
+                        sliderVelocity -= gravityStrength;
+                    }
+                }
+            }
+        });
+        
+        // Uppdatera slider-position kontinuerligt
+        function updateGravitySlider() {
+            if (!isDraggingVolume) {
+                sliderPosition += sliderVelocity;
+                sliderPosition = Math.max(0, Math.min(350, sliderPosition));
+                
+                volumeSlider.style.top = sliderPosition + 'px';
+                const volume = Math.round((1 - sliderPosition / 350) * 100);
+                volumeValueGravity.textContent = volume + '%';
+                
+                // Friktion
+                sliderVelocity *= 0.95;
+            }
+            requestAnimationFrame(updateGravitySlider);
+        }
+        updateGravitySlider();
+        
+        // Initial position
+        volumeSlider.style.top = sliderPosition + 'px';
+
+        // Avdelning dropdown med smart sortering
+        const departmentSelect = document.getElementById('departmentSelect');
+        const departments = [
+            { value: 'it', text: 'IT' },
+            { value: 'hr', text: 'HR' },
+            { value: 'sales', text: 'Försäljning' },
+            { value: 'support', text: 'Support' },
+            { value: 'finance', text: 'Ekonomi' }
+        ];
+        
+        departmentSelect.addEventListener('focus', () => {
+            // Sortera omvänt alfabetiskt varje gång användaren öppnar dropdown
+            departments.sort((a, b) => b.text.localeCompare(a.text, 'sv'));
             
-            const offset = 534 - (volume / 100) * 534;
-            volumeCircle.style.strokeDashoffset = offset;
-            volumeValue.textContent = Math.round(volume) + '%';
+            departmentSelect.innerHTML = '<option value="">Välj avdelning</option>';
+            departments.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept.value;
+                option.textContent = dept.text;
+                departmentSelect.appendChild(option);
+            });
+            
+            // Efter en kort stund, sortera på nytt
+            setTimeout(() => {
+                departments.sort(() => Math.random() - 0.5);
+                const currentValue = departmentSelect.value;
+                departmentSelect.innerHTML = '<option value="">Välj avdelning</option>';
+                departments.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept.value;
+                    option.textContent = dept.text;
+                    departmentSelect.appendChild(option);
+                });
+                if (currentValue) {
+                    departmentSelect.value = currentValue;
+                }
+            }, 800);
         });
 
         // Service items med multi-klick bekräftelse
