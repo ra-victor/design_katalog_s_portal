@@ -3,1082 +3,723 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koncernportal | Rekvisition Systemåtkomst v4.2</title>
+    <title>Koncernportal | Rekvisition v5.0 (Enterprise)</title>
     <style>
-        /* --- CORE CORPORATE DESIGN --- */
         :root {
-            --corp-blue: #003366;
-            --corp-dark: #002244;
-            --corp-accent: #cc0000;
-            --bg-gray: #f0f2f5;
-            --border-color: #dce1e6;
+            --c-primary: #0f2c59;
+            --c-secondary: #dac0a3;
+            --c-bg: #f8f9fa;
+            --c-panel: #ffffff;
+            --c-alert: #b31312;
+            --c-success: #1a5d1a;
+            --font-mono: 'Consolas', 'Monaco', monospace;
+            --font-sans: 'Segoe UI', sans-serif;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
-        body { 
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; 
-            background: var(--bg-gray); 
-            color: #2c3e50; 
-            overflow-x: hidden; 
-            font-size: 14px; 
-            line-height: 1.5;
-        }
+
+        * { box-sizing: border-box; user-select: none; }
         
-        /* HEADER */
-        .header { background: var(--corp-blue); border-bottom: 4px solid var(--corp-dark); padding: 0 40px; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 60px; }
-        .logo { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { font-weight: 300; opacity: 0.8; }
-        .user-info { font-size: 12px; text-align: right; font-family: monospace; }
+        body {
+            background-color: var(--c-bg);
+            font-family: var(--font-sans);
+            color: #333;
+            margin: 0;
+            padding-bottom: 100px;
+        }
 
-        /* CONTAINER */
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; padding-bottom: 100px; }
-        .page-header { border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 30px; }
-        h1 { font-size: 24px; font-weight: 600; color: var(--corp-blue); margin-bottom: 5px; }
-        p.ingress { color: #666; font-size: 13px; max-width: 700px; }
+        .header {
+            background: var(--c-primary);
+            color: white;
+            padding: 20px 40px;
+            border-bottom: 5px solid var(--c-secondary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
 
-        /* MODULES */
-        .module { background: white; border: 1px solid var(--border-color); border-radius: 4px; padding: 25px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
-        .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .module-title { font-size: 14px; font-weight: 700; color: #444; text-transform: uppercase; letter-spacing: 0.5px; }
-        .module-id { font-size: 10px; color: #999; font-family: monospace; }
+        .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .header .meta { font-family: var(--font-mono); font-size: 11px; opacity: 0.7; margin-top: 5px; }
 
-        .form-row { margin-bottom: 25px; }
-        label { display: block; font-weight: 700; font-size: 11px; color: #333; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .required { color: var(--corp-accent); }
-        .help-text { font-size: 11px; color: #7f8c8d; margin-top: 8px; font-style: italic; border-left: 2px solid #eee; padding-left: 8px; }
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-        /* BUTTONS */
-        .btn-group { display: flex; gap: 5px; justify-content: flex-start; flex-wrap: wrap; }
-        .btn { padding: 8px 16px; border: 1px solid #bbb; background: #f8f9fa; font-size: 11px; cursor: pointer; font-weight: 700; border-radius: 2px; transition: background 0.1s; text-transform: uppercase; }
-        .btn:hover { background: #e2e6ea; }
-        .btn:active { background: #dbe0e6; transform: translateY(1px); }
-        .btn-primary { background: var(--corp-blue); color: white; border-color: var(--corp-dark); }
-        .btn-primary:hover { background: var(--corp-dark); }
-        .btn-submit { width: 100%; padding: 15px; background: #ccc; color: #666; border: none; font-weight: bold; text-transform: uppercase; cursor: not-allowed; margin-top: 20px; font-size: 14px; letter-spacing: 1px; }
+        .alert-box {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        /* --- 1. NAME WHEEL --- */
-        .input-wrapper-wheel { background: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; display: flex; gap: 20px; align-items: center; }
-        .wheel-canvas { border: 4px solid var(--corp-blue); background: white; cursor: pointer; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .name-readout { background: #fff; border: 1px solid #ced4da; padding: 10px; min-height: 45px; flex: 1; font-family: 'Courier New', monospace; font-size: 18px; display: flex; align-items: center; word-break: break-all; font-weight: bold; color: var(--corp-blue); }
+        /* --- MODUL DESIGN --- */
+        .module {
+            background: var(--c-panel);
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
 
-        /* --- 2. BINARY DATE --- */
-        .binary-date-picker { text-align: center; border: 1px solid #ccc; padding: 20px; background: #fff; border-radius: 4px; }
-        .current-date-display { font-size: 24px; font-weight: bold; color: var(--corp-blue); margin: 15px 0; font-family: 'Courier New', monospace; letter-spacing: 2px; }
+        .module-header {
+            background: #f1f3f5;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        /* --- 3. COST CENTER SPINNERS --- */
-        .spinner-container { display: flex; gap: 15px; justify-content: center; background: #f8f9fa; padding: 20px; border: 1px solid #e9ecef; border-radius: 4px; }
-        .digit-box { text-align: center; }
-        .digit-canvas { background: white; border: 2px solid var(--corp-blue); cursor: pointer; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 5px; }
-        .digit-value { font-family: monospace; font-weight: bold; font-size: 16px; color: var(--corp-blue); }
+        .module-title {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--c-primary);
+        }
 
-        /* --- 4. ETCH-A-PHONE --- */
-        .etch-container { background: #cc0000; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; position: relative; max-width: 350px; margin: 0 auto; }
-        #etchCanvas { background: #e8e8e8; border-radius: 4px; box-shadow: inset 0 0 15px rgba(0,0,0,0.15); cursor: none; display: block; margin: 0 auto; }
-        .etch-overlay { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 300px; height: 150px; pointer-events: none; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); }
-        .etch-digit { display: flex; align-items: center; justify-content: center; font-size: 30px; color: rgba(0,0,0,0.08); font-weight: bold; font-family: sans-serif; }
-        .etch-controls { display: flex; justify-content: space-between; padding: 15px 10px 0; }
-        .knob-wrapper { display: flex; flex-direction: column; align-items: center; color: white; font-size: 10px; font-weight: bold; width: 80px; }
-        .knob { width: 60px; height: 60px; background: white; border-radius: 50%; border: 4px solid #ddd; margin-bottom: 5px; position: relative; cursor: grab; box-shadow: 0 4px 5px rgba(0,0,0,0.3); transition: transform 0.05s linear; }
-        .knob:active { cursor: grabbing; }
-        .knob::after { content: ''; position: absolute; top: 5px; left: 50%; width: 6px; height: 20px; background: #bbb; transform: translateX(-50%); border-radius: 2px; }
-        .current-number-display { background: #222; color: #0f0; font-family: 'Courier New', monospace; padding: 10px; margin-top: 15px; border-radius: 4px; min-height: 40px; font-size: 20px; letter-spacing: 3px; text-shadow: 0 0 5px #0f0; word-break: break-all; border: 2px solid #444; }
+        .module-body { padding: 25px; }
 
-        /* --- 5. OUIJA EMAIL --- */
-        .ouija-board { background: #d2b48c; border: 8px solid #5d4037; padding: 20px; position: relative; height: 280px; cursor: crosshair; overflow: hidden; border-radius: 4px; background-image: radial-gradient(#c89b72 1px, transparent 1px); background-size: 15px 15px; box-shadow: inset 0 0 50px rgba(0,0,0,0.3); }
-        .ouija-letters { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; padding: 10px; max-width: 90%; margin: 0 auto; }
-        .spirit-char { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 18px; color: #3e2723; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; user-select: none; text-shadow: 1px 1px 0px rgba(255,255,255,0.2); }
-        .planchette { position: absolute; width: 60px; height: 75px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 75'%3E%3Cpath d='M30 0 L60 20 L50 75 L10 75 L0 20 Z' fill='%23f5f5dc' stroke='%23333' stroke-width='2'/%3E%3Ccircle cx='30' cy='25' r='10' fill='none' stroke='%23333' stroke-width='2'/%3E%3C/svg%3E"); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 100; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); transition: transform 0.1s; }
-        .ouija-output { margin-top: 10px; font-family: 'Times New Roman', serif; font-size: 22px; text-align: center; border-bottom: 2px solid #ccc; padding-bottom: 5px; min-height: 35px; color: #444; font-style: italic; }
+        .label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: #666;
+        }
 
-        /* --- 6. GEO & WIND --- */
-        .geo-panel { background: #eef2f6; padding: 15px; border: 1px solid #ced4da; position: relative; border-radius: 4px; }
-        .coord-display { font-family: monospace; font-size: 12px; color: var(--corp-blue); margin-bottom: 10px; text-align: center; font-weight: bold; }
-        .map-grid { height: 200px; background: white; border: 2px solid #999; position: relative; overflow: hidden; background-image: linear-gradient(#ddd 1px, transparent 1px), linear-gradient(90deg, #ddd 1px, transparent 1px); background-size: 20px 20px; }
-        .map-pin { position: absolute; width: 12px; height: 12px; background: #e74c3c; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: top 0.1s linear, left 0.1s linear; z-index: 10; }
-        .weather-warning { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.95); padding: 4px 8px; font-size: 10px; border: 1px solid #d35400; color: #d35400; font-weight: bold; z-index: 20; border-radius: 2px; }
-        input[type=range] { width: 100%; margin: 10px 0; cursor: ew-resize; }
+        .help-text {
+            font-size: 11px;
+            color: #888;
+            font-style: italic;
+            margin-top: 8px;
+            border-left: 3px solid var(--c-secondary);
+            padding-left: 10px;
+        }
 
-        /* --- 7. PASSWORD --- */
-        .security-box { background: #2c3e50; color: #ecf0f1; padding: 20px; text-align: center; border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .char-display { font-size: 48px; font-family: monospace; border: 4px solid #34495e; display: inline-block; width: 80px; height: 80px; line-height: 72px; margin-bottom: 15px; background: #34495e; color: #2ecc71; text-shadow: 0 0 10px #2ecc71; border-radius: 4px; }
-        .pwd-output { font-family: monospace; font-size: 20px; letter-spacing: 3px; min-height: 30px; margin-bottom: 15px; color: #2ecc71; border-bottom: 1px dashed #7f8c8d; padding-bottom: 5px; word-break: break-all; }
-        .entropy-meter { height: 6px; background: #34495e; margin-top: 15px; width: 100%; border-radius: 3px; overflow: hidden; }
-        .entropy-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71); transition: width 0.2s ease-out; }
+        /* --- COMPONENT: FLYWHEEL (NAME) --- */
+        .flywheel-container {
+            display: flex;
+            gap: 20px;
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 4px;
+            align-items: center;
+        }
+        .fw-canvas-wrap { position: relative; width: 150px; height: 150px; }
+        .fw-canvas { background: #fff; border-radius: 50%; border: 4px solid #343a40; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
+        .fw-marker { position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 15px solid var(--c-alert); z-index: 10; }
+        .fw-controls { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .fw-meter { height: 10px; background: #ccc; width: 100%; position: relative; overflow: hidden; border-radius: 5px; }
+        .fw-meter-fill { height: 100%; background: linear-gradient(90deg, #ffc107, #dc3545); width: 0%; transition: width 0.1s linear; }
+        .fw-display { background: #fff; border: 2px solid #343a40; font-family: var(--font-mono); font-size: 24px; padding: 10px; min-height: 50px; letter-spacing: 5px; margin-bottom: 10px; }
+        
+        .btn-hold { background: #495057; color: white; border: none; padding: 15px; font-weight: bold; cursor: grab; text-transform: uppercase; font-size: 12px; border-radius: 3px; transition: background 0.2s; }
+        .btn-hold:active { background: #212529; cursor: grabbing; }
+        .btn-action { background: var(--c-primary); color: white; border: none; padding: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; border-radius: 3px; }
+        .btn-action:hover { background: #0b1f42; }
 
-        /* --- 8. VOLUME GRAVITY --- */
-        .slider-track-vertical { position: relative; width: 50px; height: 220px; background: linear-gradient(to right, #e9ecef, #fff, #e9ecef); border: 1px solid #ced4da; margin: 0 auto; border-radius: 25px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
-        .slider-handle { position: absolute; left: 4px; width: 40px; height: 40px; background: var(--corp-blue); border-radius: 50%; cursor: grab; top: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 2px solid white; z-index: 10; }
-        .slider-handle:active { cursor: grabbing; background: var(--corp-dark); }
-        .vol-value { text-align: center; font-size: 28px; font-weight: bold; margin-top: 15px; color: var(--corp-blue); }
+        /* --- COMPONENT: DRIFT PHONE (VELOCITY CONTROL) --- */
+        .drift-container {
+            background: #212529;
+            padding: 20px;
+            border-radius: 8px;
+            color: #0f0;
+            font-family: var(--font-mono);
+            text-align: center;
+        }
+        .drift-screen {
+            background: #000;
+            border: 2px solid #444;
+            height: 200px;
+            position: relative;
+            margin-bottom: 15px;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+        .drift-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr);
+            pointer-events: none;
+        }
+        .drift-cell { border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #333; }
+        .drift-cursor {
+            width: 10px; height: 10px; background: #0f0; border-radius: 50%;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px #0f0;
+        }
+        .drift-controls { display: flex; justify-content: space-around; margin-top: 20px; }
+        .knob-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .rotary-knob {
+            width: 60px; height: 60px; background: #e9ecef; border-radius: 50%;
+            border: 4px solid #adb5bd; position: relative; cursor: ew-resize;
+            box-shadow: 0 4px 0 #666;
+        }
+        .rotary-knob::after { content: ''; position: absolute; top: 5px; left: 50%; height: 15px; width: 4px; background: #333; transform: translateX(-50%); }
+        .velocity-bar { width: 60px; height: 4px; background: #333; margin-top: 5px; position: relative; }
+        .velocity-val { position: absolute; top: 0; height: 100%; background: #0f0; left: 50%; width: 0; transition: width 0.1s, left 0.1s; }
 
-        /* --- 9. APPROVAL SLIDER --- */
-        .legal-text { height: 120px; overflow-y: auto; border: 1px solid #ccc; padding: 15px; font-size: 11px; color: #555; background: #fff; margin-bottom: 15px; text-align: justify; line-height: 1.6; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
-        .confirmation-slider-container { height: 60px; background: #e9ecef; border-radius: 30px; position: relative; border: 1px solid #ced4da; margin-top: 20px; overflow: hidden; user-select: none; }
-        .confirmation-zone { position: absolute; left: 68%; top: 0; bottom: 0; width: 40px; background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0, 51, 102, 0.05) 5px, rgba(0, 51, 102, 0.05) 10px); border-left: 2px dashed var(--corp-blue); border-right: 2px dashed var(--corp-blue); z-index: 1; }
-        .drag-handle { width: 54px; height: 54px; background: white; border: 2px solid #bbb; border-radius: 50%; position: absolute; top: 2px; left: 3px; cursor: grab; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #666; z-index: 10; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transition: background 0.2s; }
-        .drag-handle:active { cursor: grabbing; border-color: var(--corp-blue); color: var(--corp-blue); }
-        .status-message { text-align: center; font-weight: bold; margin-top: 10px; font-size: 12px; color: var(--corp-accent); text-transform: uppercase; min-height: 18px; }
+        /* --- COMPONENT: FRICTION HEAT (APPROVAL) --- */
+        .heat-container {
+            background: #e9ecef;
+            padding: 30px;
+            text-align: center;
+            border-radius: 4px;
+            position: relative;
+        }
+        .heat-pad {
+            width: 100%;
+            height: 100px;
+            background: repeating-linear-gradient(
+                45deg,
+                #dee2e6,
+                #dee2e6 10px,
+                #e9ecef 10px,
+                #e9ecef 20px
+            );
+            border: 2px dashed #adb5bd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+        }
+        .heat-pad:active { cursor: grabbing; border-color: var(--c-primary); }
+        .heat-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
+            background: linear-gradient(to top, #ffc107, #dc3545);
+            opacity: 0.5;
+            transition: height 0.1s linear;
+            pointer-events: none;
+        }
+        .heat-status {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            margin-top: 15px;
+            height: 20px;
+            color: var(--c-primary);
+        }
+        .thermometer {
+            width: 100%; height: 10px; background: #ccc; margin-top: 10px;
+            border-radius: 5px; overflow: hidden;
+        }
+        .thermometer-fill { height: 100%; width: 0%; background: #dc3545; transition: width 0.05s linear; }
 
-        /* SERVICES */
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .service-card { border: 1px solid #eee; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; background: #fff; border-radius: 4px; }
-        .service-card:hover { border-color: var(--corp-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .status-dot { width: 12px; height: 12px; background: #eee; border-radius: 50%; margin: 0 auto 10px; border: 1px solid #ccc; transition: background 0.3s; }
+        /* --- OTHERS --- */
+        .submit-btn {
+            width: 100%; padding: 20px;
+            background: #ced4da; color: #6c757d;
+            border: none; font-weight: bold; text-transform: uppercase;
+            letter-spacing: 2px; cursor: not-allowed;
+            transition: all 0.3s;
+        }
+        .submit-btn.active { background: var(--c-success); color: white; cursor: pointer; }
 
-        /* Helper to prevent text selection during dragging */
-        .no-select { user-select: none; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="header-content">
-            <div class="logo">Koncern<span>IT</span></div>
-            <div class="user-info">Inloggad: A. Andersson (ID: 8842-B)</div>
-        </div>
+        <h1>Koncernportal Enterprise</h1>
+        <div class="meta">Säkerhetsprotokoll v5.0.1 | Inloggad: A. Andersson</div>
     </div>
 
     <div class="container">
-        <div class="page-header">
-            <h1>Rekvisition: Hårdvara & Behörighet</h1>
-            <p class="ingress">
-                Vänligen fyll i formuläret. Notera att användargränssnittet är optimerat för maximal säkerhet och eftertänksamhet enligt Koncernpolicy 2024:4.
-            </p>
+        
+        <div class="alert-box">
+            <span style="font-size: 24px;">ℹ️</span>
+            <div>
+                <strong>Systemuppdatering:</strong> För att möta ISO-9001 kraven har vi implementerat fysikbaserad datainmatning. Var god notera att precision krävs. Inaktivitet leder till omedelbar sessionstimeout.
+            </div>
         </div>
 
-        <!-- MODUL 1: IDENTIFIERING -->
+        <!-- MODUL 1: THE MOMENTUM WHEEL (NAMN) -->
         <div class="module">
             <div class="module-header">
-                <span class="module-title">1. Sökande</span>
-                <span class="module-id">REF-ID: USER_INIT_01</span>
+                <span class="module-title">1. Identifiering (Inertia System)</span>
             </div>
-            
-            <div class="form-row">
-                <label>Fullständigt namn (Enligt folkbokföringen) <span class="required">*</span></label>
-                <div class="input-wrapper-wheel">
-                    <canvas id="alphabetWheel" class="wheel-canvas" width="140" height="140"></canvas>
-                    <div style="flex:1">
-                        <div id="nameDisplay" class="name-readout"></div>
-                        <div class="btn-group" style="margin-top: 10px;">
-                            <button class="btn" id="nameSpace">Mellanslag</button>
-                            <button class="btn" id="nameBackspace">Radera</button>
-                            <button class="btn" id="nameClear">Rensa</button>
+            <div class="module-body">
+                <span class="label">Fullständigt Namn</span>
+                
+                <div class="flywheel-container">
+                    <div class="fw-canvas-wrap">
+                        <div class="fw-marker"></div>
+                        <canvas id="wheelCanvas" class="fw-canvas" width="150" height="150"></canvas>
+                    </div>
+                    
+                    <div class="fw-controls">
+                        <div class="fw-display" id="nameOutput"></div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-hold" id="accelBtn" style="flex:1;">
+                                ⚡ Håll för Motor
+                            </button>
+                            <button class="btn-hold" id="brakeBtn" style="flex:1; background: #6c757d;">
+                                🛑 Håll för Broms
+                            </button>
                         </div>
-                    </div>
-                </div>
-                <div class="help-text">Klicka på hjulet när korrekt bokstav är överst (klockan 12). Hjulet kalibrerar hastigheten dynamiskt.</div>
-            </div>
-        </div>
+                        
+                        <div class="fw-meter">
+                            <div class="fw-meter-fill" id="rpmMeter"></div>
+                        </div>
+                        <div style="text-align: center; font-size: 10px; color: #666;">RPM MONITOR</div>
 
-        <!-- MODUL 2: ORGANISATORISK PLACERING -->
-        <div class="module">
-            <div class="module-header">
-                <span class="module-title">2. Organisation & Tid</span>
-                <span class="module-id">REF-ID: ORG_TIME_SYNC</span>
-            </div>
-
-            <div class="form-row">
-                <label>Önskat leveransdatum <span class="required">*</span></label>
-                <div class="binary-date-picker">
-                    <div id="dateDisplay" class="current-date-display">2024-01-01</div>
-                    <div class="btn-group" style="justify-content: center;">
-                        <button class="btn" id="beforeBtn">Föregående intervall</button>
-                        <button class="btn btn-primary" id="exactBtn">Välj datum</button>
-                        <button class="btn" id="afterBtn">Nästa intervall</button>
+                        <button class="btn-action" id="stampBtn">STÄMPLA BOKSTAV</button>
                     </div>
-                    <div class="help-text">Binär sökning minimerar teoretiskt antalet klick. Antal klick: <span id="dateClicks">0</span></div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <label>Kostnadsställe (4 siffror) <span class="required">*</span></label>
-                <div class="spinner-container">
-                    <div class="digit-box">
-                        <canvas id="digit1" class="digit-canvas" width="50" height="70"></canvas>
-                        <div id="value1" class="digit-value">0</div>
-                    </div>
-                    <div class="digit-box">
-                        <canvas id="digit2" class="digit-canvas" width="50" height="70"></canvas>
-                        <div id="value2" class="digit-value">0</div>
-                    </div>
-                    <div class="digit-box">
-                        <canvas id="digit3" class="digit-canvas" width="50" height="70"></canvas>
-                        <div id="value3" class="digit-value">0</div>
-                    </div>
-                    <div class="digit-box">
-                        <canvas id="digit4" class="digit-canvas" width="50" height="70"></canvas>
-                        <div id="value4" class="digit-value">0</div>
-                    </div>
-                </div>
-                <div class="help-text">Klicka på snurrorna för att stanna dem vid önskad siffra.</div>
-            </div>
-
-            <div class="form-row">
-                <label>Avdelningstillhörighet <span class="required">*</span></label>
-                <select id="departmentSelect" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 4px;">
-                    <option value="">Välj enhet...</option>
-                    <option value="it">IT Drift</option>
-                    <option value="hr">Human Resources</option>
-                    <option value="fin">Finans</option>
-                    <option value="log">Logistik</option>
-                </select>
-                <div class="help-text">Listan omorganiseras vid interaktion för att säkerställa rättvis representation.</div>
-            </div>
-        </div>
-
-        <!-- MODUL 3: KONTAKTVÄGAR (OUIJA & ETCH) -->
-        <div class="module">
-            <div class="module-header">
-                <span class="module-title">3. Kontaktvägar</span>
-                <span class="module-id">REF-ID: SPIRIT_XY_PLOT</span>
-            </div>
-
-            <div class="form-row">
-                <label>E-postadress (Spektral Inmatning) <span class="required">*</span></label>
-                <div class="ouija-board" id="ouijaBoard">
-                    <div class="ouija-letters" id="ouijaLetters"></div>
-                    <div class="planchette" id="planchette"></div>
-                </div>
-                <div class="ouija-output">
-                    <span id="ouijaResult" style="opacity: 0.6;">(Rör musen för att kontakta servern...)</span>
                 </div>
                 <div class="help-text">
-                    För musen över brädet. Markören dras mot bokstäverna via simulerad magnetism. Håll kvar markören vid en bokstav för att välja.
+                    Hjulet simulerar 50kg industriellt stål. Håll "Motor" för att bygga upp rotationshastighet. Släpp för att låta det snurra fritt. Bromsa manuellt. Klicka "Stämpla" när önskad bokstav passerar markören. Systemet kräver att hjulet står nästan stilla (< 5 RPM) för en tydlig stämpel.
                 </div>
             </div>
+        </div>
 
-            <div class="form-row" style="margin-top: 40px; border-top: 1px dashed #eee; padding-top: 20px;">
-                <label>Telefonnummer (Koordinat-baserad) <span class="required">*</span></label>
-                <div class="etch-container">
-                    <canvas id="etchCanvas" width="300" height="150"></canvas>
-                    <div class="etch-overlay" id="etchOverlay"></div>
-                    <div class="etch-controls">
-                        <div class="knob-wrapper">
-                            <div class="knob" id="knobLeft"></div>
-                            <span>X-AXEL</span>
+        <!-- MODUL 2: VELOCITY CONTROL PHONE (TELEFON) -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">2. Kontakt (Drift Control)</span>
+            </div>
+            <div class="module-body">
+                <span class="label">Telefonnummer</span>
+                
+                <div class="drift-container">
+                    <div class="drift-screen" id="driftScreen">
+                        <div class="drift-grid" id="driftGrid">
+                            <!-- Grid genereras av JS -->
                         </div>
-                        <div class="knob-wrapper">
-                            <div class="knob" id="knobRight"></div>
-                            <span>Y-AXEL</span>
+                        <div class="drift-cursor" id="driftCursor"></div>
+                    </div>
+                    
+                    <div style="font-size: 24px; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px;">
+                        <span id="phoneOutput"></span><span style="animation: blink 1s infinite;">_</span>
+                    </div>
+
+                    <div class="drift-controls">
+                        <div class="knob-group">
+                            <div class="rotary-knob" id="knobX"></div>
+                            <div class="velocity-bar"><div class="velocity-val" id="velBarX"></div></div>
+                            <span style="font-size: 10px; color: #888;">X-THRUSTER</span>
+                        </div>
+                        <div class="knob-group">
+                            <button class="btn-action" id="driftSelectBtn" style="height: 60px; background: #b31312; border-radius: 50%; width: 60px; font-size: 10px;">LÅS</button>
+                            <span style="font-size: 10px; color: #888;">TARGET</span>
+                        </div>
+                        <div class="knob-group">
+                            <div class="rotary-knob" id="knobY"></div>
+                            <div class="velocity-bar"><div class="velocity-val" id="velBarY"></div></div>
+                            <span style="font-size: 10px; color: #888;">Y-THRUSTER</span>
                         </div>
                     </div>
-                    <div class="current-number-display">
-                        <span id="etchResult"></span>
-                    </div>
-                    <button class="btn" id="etchClear" style="width: 100%; margin-top: 10px; border: none; background: #444; color: white;">RENSA SKÄRM</button>
                 </div>
                 <div class="help-text">
-                    Använd rattarna för att styra pennan. Stanna pennan ovanför en siffra i 1.5 sekunder för att registrera den.
+                    Markören befinner sig i friktionslös miljö. Rattarna styr <strong>accelerationen</strong>, inte positionen. Vrid höger för att öka farten åt höger/ner. Vrid vänster för att bromsa/backa. Du måste motstyra för att stanna över en siffra. Klicka "LÅS" när markören är stabil över en siffra.
                 </div>
             </div>
         </div>
 
-        <!-- MODUL 4: SÄKERHET -->
-        <div class="module">
+        <!-- MODUL 3: KINETIC ENCRYPTION (GODKÄNNANDE) -->
+        <div class="module" style="border-top: 4px solid var(--c-primary);">
             <div class="module-header">
-                <span class="module-title">4. Autentisering</span>
-                <span class="module-id">REF-ID: SEC_AUTH_V4</span>
+                <span class="module-title">3. Kinetisk Signering</span>
             </div>
-
-            <div class="form-row">
-                <label>Generera Engångskod <span class="required">*</span></label>
-                <div class="security-box">
-                    <div class="pwd-output" id="pwdResult">_</div>
-                    <div>
-                        <div id="charSpinner" class="char-display">A</div>
+            <div class="module-body">
+                <span class="label">Generera Friktionsvärme för Kryptering</span>
+                
+                <div class="heat-container">
+                    <div class="heat-pad" id="heatPad">
+                        <span style="pointer-events: none; position: relative; z-index: 10; color: #495057; font-weight: bold;">
+                            GNUGGA HÄR
+                        </span>
+                        <div class="heat-overlay" id="heatOverlay"></div>
                     </div>
-                    <div class="btn-group" style="justify-content: center; margin-top: 15px;">
-                        <button class="btn btn-primary" id="lockCharBtn">LÅS TECKEN</button>
-                        <button class="btn" id="resetPwdBtn" style="background: #c0392b; color: white; border: none;">ÅTERSTÄLL</button>
+                    
+                    <div class="thermometer">
+                        <div class="thermometer-fill" id="heatMeter"></div>
                     </div>
-                    <div class="entropy-meter"><div id="entropyBar" class="entropy-fill"></div></div>
-                    <div class="help-text" style="color: #bdc3c7; border-color: #555;">Kodgenerering sker i realtid. Rotationshastigheten ökar exponentiellt per tecken för att försvåra obehörig avläsning.</div>
+                    
+                    <div class="heat-status" id="heatStatus">SYSTEM COLD</div>
                 </div>
-            </div>
-        </div>
 
-        <!-- MODUL 5: LEVERANS -->
-        <div class="module">
-            <div class="module-header">
-                <span class="module-title">5. Leveranskoordinater</span>
-                <span class="module-id">REF-ID: GEO_DRONE_NET</span>
-            </div>
-
-            <div class="form-row">
-                <label>Mottagarplats (WGS84) <span class="required">*</span></label>
-                <div class="geo-panel">
-                    <div class="weather-warning" id="windInd">VÄDERSYSTEM: STABILITET OKÄND</div>
-                    <div class="coord-display">
-                        LAT: <span id="latVal">59.3293</span> | LON: <span id="longVal">18.0686</span>
-                    </div>
-                    <div class="map-grid" id="geoMap">
-                        <div id="geoPin" class="map-pin" style="top: 50%; left: 50%;"></div>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <label style="font-size: 10px; color: #666;">Latitudjustering (Nord/Syd)</label>
-                        <input type="range" id="latSlider" min="55" max="69" step="0.0001" value="59.3293">
-                        <label style="font-size: 10px; color: #666; margin-top: 10px;">Longitudjustering (Väst/Öst)</label>
-                        <input type="range" id="longSlider" min="11" max="24" step="0.0001" value="18.0686">
-                    </div>
-                    <div class="help-text">Positionen påverkas av simulerat atmosfäriskt tryck (vindavdrift). Korrigera manuellt i realtid för att undvika felleverans.</div>
+                <div class="help-text">
+                    Dra musen snabbt fram och tillbaka över ytan för att generera värme. Du måste hålla temperaturen i den "gröna zonen" (80-95%) i 3 sekunder för att slutföra signeringen. 
+                    <br><strong>VARNING:</strong> Om du slutar gnugga svalnar systemet omedelbart. Om du når 100% överhettas systemet och nollställs (Emergency Venting).
                 </div>
-            </div>
-        </div>
 
-        <!-- MODUL 6: INSTÄLLNINGAR -->
-        <div class="module">
-            <div class="module-header">
-                <span class="module-title">6. Notifieringsnivå</span>
-                <span class="module-id">REF-ID: AUDIO_LEVEL_PHY</span>
+                <button class="submit-btn" id="submitBtn">Skicka Rekvisition</button>
             </div>
-            
-            <div class="form-row">
-                <label>Alert-volym (Gravitationsstyrd)</label>
-                <div style="text-align: center; background: #f8f9fa; padding: 30px; border: 1px solid #eee; border-radius: 4px;">
-                    <div class="slider-track-vertical" id="gravityTrack">
-                        <div id="volumeHandle" class="slider-handle"></div>
-                    </div>
-                    <div id="volumeValue" class="vol-value">50%</div>
-                    <div class="help-text">Reglaget påverkas av muspekarens gravitationsfält. Håll musen till höger för att lyfta (öka volym), vänster för att sänka.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MODUL 7: RESURSER -->
-        <div class="module">
-            <div class="module-header">
-                <span class="module-title">7. Resursval</span>
-                <span class="module-id">REF-ID: ITEM_SELECT</span>
-            </div>
-            <p class="help-text" style="margin-bottom: 15px;">Verifiera val genom tre-faktors-interaktion (3 distinkta klick krävs per objekt för att bekräfta).</p>
-            <div class="service-grid">
-                <div class="service-card">
-                    <div class="status-dot"></div>
-                    <strong>Laptop Standard</strong><br>
-                    <span style="font-size:11px; color:#666;">Dell Latitude (Begagnad)</span>
-                </div>
-                <div class="service-card">
-                    <div class="status-dot"></div>
-                    <strong>VPN Token</strong><br>
-                    <span style="font-size:11px; color:#666;">RSA SecurID (Fysisk)</span>
-                </div>
-                <div class="service-card">
-                    <div class="status-dot"></div>
-                    <strong>Mobiltelefon</strong><br>
-                    <span style="font-size:11px; color:#666;">Nokia 3310 (Re-issue)</span>
-                </div>
-                <div class="service-card">
-                    <div class="status-dot"></div>
-                    <strong>Office 365</strong><br>
-                    <span style="font-size:11px; color:#666;">Licens typ E1 (Webb)</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- MODUL 8: GODKÄNNANDE -->
-        <div class="module" style="border-top: 4px solid var(--corp-accent);">
-            <div class="module-header">
-                <span class="module-title">8. Slutgiltigt Godkännande</span>
-                <span class="module-id">REF-ID: FINAL_SIG</span>
-            </div>
-
-            <div class="legal-text" id="legalText">
-                <strong>ALLMÄNNA VILLKOR FÖR ANVÄNDNING AV KONCERNENS IT-RESURSER (REV 42.b)</strong><br><br>
-                1. DEFINITIONER<br>
-                "Användaren" avser den fysiska person som fyller i detta formulär. "Koncernen" avser arbetsgivaren. "Lidande" avser den tid som spenderas i detta system.<br><br>
-                2. ANSVARSFRISKRIVNING<br>
-                Koncernen tar inget ansvar för dataförlust, håravfall eller psykisk påfrestning orsakad av formulärets UX-design. Genom att fortsätta medger användaren att alla inmatade uppgifter kan komma att raderas slumpmässigt vid serverunderhåll (som sker var 15:e minut).<br><br>
-                3. BIOMETRISK DATA<br>
-                Genom att använda namnhjulet godkänner du att vi sparar din musrörelse-profil för framtida AI-träning.<br><br>
-                4. LEVERANS<br>
-                Leverans sker endast om koordinaterna matchar exakt vid leveranstillfället. Då drönare är känsliga för vindavdrift rekommenderas användaren att stå på en öppen yta och springa i motsatt riktning mot vinden.<br><br>
-                5. SIGNERING<br>
-                Dra reglaget nedan till den markerade zonen och håll kvar tills biometrisk verifiering slutförts (ca 3 sekunder). Om du släpper reglaget återställs verifieringen.<br><br>
-                [SLUT PÅ DOKUMENT]
-            </div>
-
-            <div class="form-row">
-                <label>Signering (Balansera reglaget i verifieringszonen)</label>
-                <div class="confirmation-slider-container" id="approvalContainer">
-                    <div class="confirmation-zone"></div>
-                    <div class="drag-handle" id="dragHandle">DRAG</div>
-                </div>
-                <div class="status-message" id="approvalStatus">AVVAKTAR HANDLING...</div>
-            </div>
-
-            <button id="submitBtn" class="btn-submit" disabled>Skicka Rekvisition (Bindande)</button>
         </div>
 
     </div>
 
     <script>
         /**
-         * KONCERN IT - CORE LOGIC v4.2.1 (STABLE)
-         * Optimerad för maximal byråkratisk effektivitet.
+         * KONCERN IT - PHYSICS ENGINE v5.0
+         * Inga bibliotek. Endast rå lidelse.
          */
-
-        // GLOBAL HELPERS
-        const requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
-
-        // --- 1. NAMN-HJUL ---
+        
+        // --- 1. THE FLYWHEEL (Massive Inertia Simulation) ---
         (() => {
-            const canvas = document.getElementById('alphabetWheel');
+            const canvas = document.getElementById('wheelCanvas');
             const ctx = canvas.getContext('2d');
-            const display = document.getElementById('nameDisplay');
+            const rpmMeter = document.getElementById('rpmMeter');
+            const output = document.getElementById('nameOutput');
+            
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ_".split("");
+            const segmentAngle = (Math.PI * 2) / chars.length;
+            
+            // Fysikvariabler
             let angle = 0;
-            let speed = 0.02;
-            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ ".split("");
-            const centerX = 70, centerY = 70;
+            let velocity = 0;
+            let acceleration = 0;
+            const FRICTION = 0.995; // Låg friktion (tungt hjul)
+            const MOTOR_POWER = 0.005;
+            const BRAKE_POWER = 0.02;
+            
+            let isAccelerating = false;
+            let isBraking = false;
 
-            function draw() {
-                ctx.clearRect(0, 0, 140, 140);
+            // Controls
+            document.getElementById('accelBtn').addEventListener('mousedown', () => isAccelerating = true);
+            document.getElementById('accelBtn').addEventListener('mouseup', () => isAccelerating = false);
+            document.getElementById('accelBtn').addEventListener('mouseleave', () => isAccelerating = false);
+            
+            document.getElementById('brakeBtn').addEventListener('mousedown', () => isBraking = true);
+            document.getElementById('brakeBtn').addEventListener('mouseup', () => isBraking = false);
+            document.getElementById('brakeBtn').addEventListener('mouseleave', () => isBraking = false);
+
+            function loop() {
+                // Fysikuppdatering
+                if (isAccelerating) velocity += MOTOR_POWER;
+                if (isBraking) velocity *= (1 - BRAKE_POWER);
                 
-                // Markör (Statisk i toppen)
-                ctx.beginPath();
-                ctx.moveTo(centerX, 10);
-                ctx.lineTo(centerX - 5, 0);
-                ctx.lineTo(centerX + 5, 0);
-                ctx.fillStyle = "#cc0000";
-                ctx.fill();
-
+                velocity *= FRICTION;
+                angle += velocity;
+                
+                // Rendera
+                ctx.clearRect(0, 0, 150, 150);
                 ctx.save();
-                ctx.translate(centerX, centerY);
+                ctx.translate(75, 75);
                 ctx.rotate(angle);
-
-                const radius = 55;
-                for (let i = 0; i < alphabet.length; i++) {
-                    const theta = (i * Math.PI * 2) / alphabet.length;
-                    ctx.save();
-                    ctx.rotate(theta);
-                    ctx.translate(0, -radius);
-                    ctx.rotate(-angle - theta); // Håll texten läsbar? Nej, låt den rotera med hjulet
-                    ctx.rotate(angle + theta + Math.PI/2); // Fixa orientering radiellt
-
-                    ctx.fillStyle = "#333";
-                    ctx.font = "bold 14px Arial";
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-                    ctx.fillText(alphabet[i], 0, 0);
-                    ctx.restore();
-                }
                 
-                // Dekorativa ringar
-                ctx.strokeStyle = "#003366";
-                ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.arc(0, 0, 65, 0, Math.PI*2); ctx.stroke();
-                ctx.lineWidth = 1;
-                ctx.beginPath(); ctx.arc(0, 0, 45, 0, Math.PI*2); ctx.stroke();
-
-                ctx.restore();
-
-                // Irriterande hastighetsvariation
-                speed = 0.04 + (Math.sin(Date.now() / 1200) * 0.035);
-                angle += speed;
-                requestAnimFrame(draw);
-            }
-            draw();
-
-            canvas.addEventListener('mousedown', () => {
-                // Räkna ut vilken bokstav som är "klockan 12" (negativ Y)
-                // Vi måste normalisera vinkeln
-                const totalRad = Math.PI * 2;
-                let normalizedAngle = (angle % totalRad + totalRad) % totalRad;
-                
-                // Segmentstorlek
-                const segment = totalRad / alphabet.length;
-                
-                // Hjulet snurrar medurs, så index rör sig moturs vid 12
-                // Math.round för att hitta närmaste segment
-                let index = Math.floor(((totalRad - normalizedAngle) + (segment/2)) / segment) % alphabet.length;
-                
-                display.textContent += alphabet[index];
-            });
-
-            document.getElementById('nameSpace').onclick = () => display.textContent += " ";
-            document.getElementById('nameBackspace').onclick = () => display.textContent = display.textContent.slice(0, -1);
-            document.getElementById('nameClear').onclick = () => display.textContent = "";
-        })();
-
-
-        // --- 2. BINÄR DATUM ---
-        (() => {
-            let min = new Date('2020-01-01').getTime();
-            let max = new Date('2030-12-31').getTime();
-            let current = new Date('2024-01-01').getTime();
-            const disp = document.getElementById('dateDisplay');
-            const clicks = document.getElementById('dateClicks');
-            let count = 0;
-
-            const update = () => {
-                disp.textContent = new Date(current).toISOString().split('T')[0];
-                clicks.textContent = count;
-            };
-
-            document.getElementById('beforeBtn').onclick = () => {
-                count++;
-                max = current; // Minska fönstret
-                current = min + (max - min) / 2;
-                update();
-            };
-            document.getElementById('afterBtn').onclick = () => {
-                count++;
-                min = current; // Öka fönstret
-                current = min + (max - min) / 2;
-                update();
-            };
-            document.getElementById('exactBtn').onclick = () => {
-                count++;
-                disp.style.color = "#2ecc71";
-                setTimeout(() => disp.style.color = "#003366", 600);
-                update();
-            };
-        })();
-
-
-        // --- 3. KOSTNADSSTÄLLE ---
-        [1,2,3,4].forEach(id => {
-            const cvs = document.getElementById('digit'+id);
-            const ctx = cvs.getContext('2d');
-            const out = document.getElementById('value'+id);
-            let rot = Math.random() * Math.PI * 2;
-            let speed = 0.05 + Math.random() * 0.05;
-            const cx = 25, cy = 35;
-
-            function draw() {
-                ctx.clearRect(0, 0, 50, 70);
-                ctx.save();
-                ctx.translate(cx, cy);
-                ctx.rotate(rot);
-                
-                for(let n=0; n<10; n++) {
-                    ctx.save();
-                    const theta = n * (Math.PI * 2) / 10;
-                    ctx.rotate(theta);
-                    ctx.translate(0, -25);
-                    ctx.rotate(-theta - rot); // Håll texten upprätt-ish
-                    
-                    ctx.fillStyle = n===0 ? "red" : "#ccc";
-                    ctx.font = "bold 16px Arial";
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-                    ctx.fillText(n.toString(), 0, 0);
-                    ctx.restore();
-                }
-                ctx.restore();
-                
-                // Pil
-                ctx.fillStyle = "#003366";
-                ctx.beginPath(); ctx.moveTo(cx-5, 0); ctx.lineTo(cx+5, 0); ctx.lineTo(cx, 5); ctx.fill();
-
-                rot += speed;
-                requestAnimFrame(draw);
-            }
-            draw();
-
-            cvs.addEventListener('mousedown', () => {
-                // Vilken siffra är uppe (klockan 12, -Y)?
-                const norm = (rot % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-                const seg = (Math.PI*2)/10;
-                // Justerad matematik för att matcha visuell "upp"
-                let digit = Math.floor(((Math.PI*2 - norm) + seg/2) / seg) % 10;
-                out.textContent = digit;
-            });
-        });
-
-
-        // --- 3b. AVDELNING SHUFFLE ---
-        const dSel = document.getElementById('departmentSelect');
-        dSel.addEventListener('mousedown', (e) => {
-            // Om vi redan har fokus, gör inget för att tillåta val.
-            // Men för att vara dryga, shufflar vi vid varje focus/click-försök om dropdownen inte är öppen.
-            if (document.activeElement !== dSel) {
-                const opts = Array.from(dSel.options);
-                const head = opts.shift(); // "Välj enhet..."
-                opts.sort(() => Math.random() - 0.5);
-                dSel.innerHTML = "";
-                dSel.appendChild(head);
-                opts.forEach(o => dSel.appendChild(o));
-            }
-        });
-
-
-        // --- 4. OUIJA EMAIL ---
-        (() => {
-            const board = document.getElementById('ouijaBoard');
-            const planchette = document.getElementById('planchette');
-            const lettersDiv = document.getElementById('ouijaLetters');
-            const result = document.getElementById('ouijaResult');
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@.".split("");
-            const targets = [];
-
-            // Skapa bokstäver
-            chars.forEach(c => {
-                const el = document.createElement('div');
-                el.className = 'spirit-char';
-                el.textContent = c;
-                lettersDiv.appendChild(el);
-                targets.push({ el, char: c });
-            });
-
-            // Fysik-variabler
-            let pX = 50, pY = 50; // Procent
-            let vX = 0, vY = 0;   // Velocity
-            let mouseX = 50, mouseY = 50; // Target procent
-            
-            // Uppdatera musposition relativt brädet
-            board.addEventListener('mousemove', (e) => {
-                const rect = board.getBoundingClientRect();
-                mouseX = ((e.clientX - rect.left) / rect.width) * 100;
-                mouseY = ((e.clientY - rect.top) / rect.height) * 100;
-            });
-
-            let hoverTimer = null;
-            let lastChar = null;
-
-            function updatePhysics() {
-                // Grundrörelse mot musen (slö)
-                const dx = mouseX - pX;
-                const dy = mouseY - pY;
-                
-                // Lägg till lite brus/skakningar
-                const noiseX = (Math.random() - 0.5) * 0.8;
-                const noiseY = (Math.random() - 0.5) * 0.8;
-
-                // Attraktion mot bokstäver
-                let attractX = 0, attractY = 0;
-                let closestDist = 1000;
-                let closestChar = null;
-
-                // Hitta närmaste bokstav
-                const boardRect = board.getBoundingClientRect();
-                targets.forEach(t => {
-                    const tRect = t.el.getBoundingClientRect();
-                    // Konvertera target center till % av board
-                    const tCx = ((tRect.left + tRect.width/2 - boardRect.left) / boardRect.width) * 100;
-                    const tCy = ((tRect.top + tRect.height/2 - boardRect.top) / boardRect.height) * 100;
-                    
-                    const dist = Math.hypot(pX - tCx, pY - tCy);
-                    if (dist < 10) { // Om vi är nära (i %)
-                        // Stark attraktion
-                        attractX += (tCx - pX) * 0.15;
-                        attractY += (tCy - pY) * 0.15;
-                        if (dist < closestDist) {
-                            closestDist = dist;
-                            closestChar = t.char;
-                        }
-                    }
-                });
-
-                // Uppdatera hastighet
-                vX += (dx * 0.02) + attractX + noiseX;
-                vY += (dy * 0.02) + attractY + noiseY;
-                
-                // Friktion
-                vX *= 0.85;
-                vY *= 0.85;
-
-                // Uppdatera position
-                pX += vX;
-                pY += vY;
-
-                // Boundary check
-                pX = Math.max(0, Math.min(100, pX));
-                pY = Math.max(0, Math.min(100, pY));
-
-                planchette.style.left = pX + "%";
-                planchette.style.top = pY + "%";
-
-                // Detektera "val"
-                if (closestDist < 3) { // Mycket nära
-                    if (closestChar !== lastChar) {
-                        lastChar = closestChar;
-                        // Starta timer
-                        if (hoverTimer) clearTimeout(hoverTimer);
-                        hoverTimer = setTimeout(() => {
-                            if (result.innerText.includes('(')) result.innerText = "";
-                            result.innerText += closestChar;
-                            // Visuell feedback
-                            result.style.color = "#cc0000";
-                            setTimeout(() => result.style.color = "#444", 200);
-                        }, 1000); // 1 sek hålltid
-                    }
-                } else {
-                    if (hoverTimer && closestDist > 5) {
-                        clearTimeout(hoverTimer);
-                        hoverTimer = null;
-                        lastChar = null;
-                    }
-                }
-
-                requestAnimFrame(updatePhysics);
-            }
-            updatePhysics();
-        })();
-
-
-        // --- 5. ETCH-A-PHONE ---
-        (() => {
-            const canvas = document.getElementById('etchCanvas');
-            const ctx = canvas.getContext('2d');
-            const overlay = document.getElementById('etchOverlay');
-            const output = document.getElementById('etchResult');
-            let px = 150, py = 75; // Pen position
-            let path = [{x:150, y:75}];
-            
-            // Initiera Grid
-            const numbers = [1,2,3,4,5,6,7,8,9,0];
-            numbers.forEach(n => {
-                const d = document.createElement('div');
-                d.className = 'etch-digit';
-                d.textContent = n;
-                overlay.appendChild(d);
-            });
-
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.strokeStyle = "#333";
-
-            function draw() {
-                // Rita om allt varje gång (ineffektivt men säkert)
-                ctx.clearRect(0,0,300,150);
+                // Hjuldesign
                 ctx.beginPath();
-                if(path.length > 0) {
-                    ctx.moveTo(path[0].x, path[0].y);
-                    for(let i=1; i<path.length; i++) ctx.lineTo(path[i].x, path[i].y);
-                }
+                ctx.arc(0, 0, 70, 0, Math.PI * 2);
+                ctx.fillStyle = "#f8f9fa";
+                ctx.fill();
+                ctx.strokeStyle = "#343a40";
+                ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // Markör
-                ctx.fillStyle = "rgba(204, 0, 0, 0.5)";
-                ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI*2); ctx.fill();
-            }
-            draw();
-
-            // Kollision
-            let hoverDigit = null;
-            let hoverTimer = null;
-
-            function checkCollision() {
-                // Grid är 5 kolumner (60px), 2 rader (75px)
-                const col = Math.floor(px / 60);
-                const row = Math.floor(py / 75);
-                const idx = row * 5 + col;
-
-                if (idx >= 0 && idx < 10) {
-                    const val = numbers[idx];
-                    if (val !== hoverDigit) {
-                        hoverDigit = val;
-                        if(hoverTimer) clearTimeout(hoverTimer);
-                        hoverTimer = setTimeout(() => {
-                            output.textContent += val;
-                            // Feedback
-                            ctx.save();
-                            ctx.fillStyle = "rgba(0,255,0,0.3)";
-                            ctx.fillRect(col*60, row*75, 60, 75);
-                            ctx.restore();
-                            setTimeout(draw, 300); // Rensa feedback
-                        }, 1500);
-                    }
-                } else {
-                    if(hoverTimer) clearTimeout(hoverTimer);
-                    hoverDigit = null;
+                // Text
+                ctx.fillStyle = "#212529";
+                ctx.font = "bold 12px monospace";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                
+                for (let i = 0; i < chars.length; i++) {
+                    ctx.save();
+                    const theta = i * segmentAngle;
+                    ctx.rotate(theta);
+                    ctx.translate(0, -55); // Radie för text
+                    ctx.rotate(-angle - theta); // Motrotera text så den alltid är läsbar? Nej, låt den snurra.
+                    ctx.rotate(angle + theta + Math.PI/2); // Orientera mot mitten
+                    ctx.fillText(chars[i], 0, 0);
+                    
+                    // Streck
+                    ctx.beginPath();
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(0, 20);
+                    ctx.stroke();
+                    ctx.restore();
                 }
-            }
+                
+                ctx.restore();
+                
+                // Uppdatera RPM mätare (visuellt max ca 0.5 rad/frame)
+                const rpmPct = Math.min(100, (Math.abs(velocity) / 0.3) * 100);
+                rpmMeter.style.width = rpmPct + "%";
+                rpmMeter.style.background = rpmPct > 10 ? (rpmPct > 80 ? "#dc3545" : "#ffc107") : "#28a745"; // Grönt om säkert att stämpla
 
-            // Rattar Logic (Infinite Rotation)
+                requestAnimationFrame(loop);
+            }
+            loop();
+
+            // Stämpla
+            document.getElementById('stampBtn').addEventListener('click', () => {
+                // Måste stå nästan stilla
+                if (Math.abs(velocity) > 0.02) {
+                    alert("SÄKERHETSVARNING: Försök att interagera med roterande maskineri. Vänta tills hjulet stannat.");
+                    return;
+                }
+
+                // Beräkna vilken bokstav som är klockan 12
+                // Vinkel normaliseras 0 till 2PI
+                let normAngle = (angle % (Math.PI * 2));
+                if (normAngle < 0) normAngle += Math.PI * 2;
+                
+                // Eftersom vi ritar medurs, och 0 är klockan 3 (i canvas default), men vi roterade texten...
+                // Vi gör det enkelt: Invertera rotationen för att hitta index.
+                // Hjulet roterar medurs (positiv vinkel). Index 0 är vid 12-slaget vid start?
+                // Vid start (angle 0), 'A' (index 0) är ritad vid -90 grader (kl 12) via translate(0, -55).
+                
+                // Indexet som är högst upp:
+                // Vi måste kompensera för rotationen.
+                const totalSegments = chars.length;
+                // Hur många segment har vi roterat "bakåt" från 12-slaget?
+                const rotationSteps = Math.round(normAngle / segmentAngle);
+                
+                // Index rör sig moturs när hjulet snurrar medurs.
+                let index = (chars.length - rotationSteps) % chars.length;
+                
+                const char = chars[index];
+                if (char === "_") output.textContent += " ";
+                else output.textContent += char;
+                
+                // Liten "kick" när man stämplar
+                velocity += (Math.random() - 0.5) * 0.05;
+            });
+        })();
+
+
+        // --- 2. DRIFT PHONE (Velocity Control) ---
+        (() => {
+            const cursor = document.getElementById('driftCursor');
+            const grid = document.getElementById('driftGrid');
+            const output = document.getElementById('phoneOutput');
+            
+            // Grid setup (0-9)
+            const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+            digits.forEach(d => {
+                const el = document.createElement('div');
+                el.className = 'drift-cell';
+                el.textContent = d;
+                grid.appendChild(el);
+            });
+
+            // Fysik
+            let posX = 50; // %
+            let posY = 50; // %
+            let velX = 0;
+            let velY = 0;
+            
+            // Ratt-värden (Acceleration request)
+            let thrustX = 0;
+            let thrustY = 0;
+
+            function updatePhysics() {
+                // Applicera thrust till velocity
+                velX += thrustX * 0.005;
+                velY += thrustY * 0.005;
+                
+                // Uppdatera position
+                posX += velX;
+                posY += velY;
+                
+                // Studsa mot väggar (elastisk kollision)
+                if (posX < 0) { posX = 0; velX *= -0.8; }
+                if (posX > 100) { posX = 100; velX *= -0.8; }
+                if (posY < 0) { posY = 0; velY *= -0.8; }
+                if (posY > 100) { posY = 100; velY *= -0.8; }
+                
+                // Rendera markör
+                cursor.style.left = posX + "%";
+                cursor.style.top = posY + "%";
+                
+                // Visualisera velocity på mätare
+                const barX = document.getElementById('velBarX');
+                const barY = document.getElementById('velBarY');
+                
+                // Mappa thrust (-10 till 10) till visuell bar
+                const setBar = (el, val) => {
+                    // val är thrust (-10 to 10 approx)
+                    let pct = (val / 20) * 100; // width from center
+                    if (val > 0) {
+                        el.style.left = "50%";
+                        el.style.width = Math.min(50, val * 5) + "%";
+                    } else {
+                        let w = Math.min(50, Math.abs(val) * 5);
+                        el.style.left = (50 - w) + "%";
+                        el.style.width = w + "%";
+                    }
+                };
+                
+                setBar(barX, thrustX);
+                setBar(barY, thrustY);
+
+                requestAnimationFrame(updatePhysics);
+            }
+            updatePhysics();
+
+            // Knob Logic (Infinite Scroll styr Thrust)
             function setupKnob(id, axis) {
                 const knob = document.getElementById(id);
                 let startY = 0;
-                let currentRotation = 0;
+                let currentRot = 0;
 
                 knob.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     startY = e.clientY;
                     
-                    const onMove = (ev) => {
+                    const move = (ev) => {
                         const delta = startY - ev.clientY;
-                        currentRotation += delta * 2; 
-                        knob.style.transform = `rotate(${currentRotation}deg)`;
+                        currentRot += delta;
+                        knob.style.transform = `rotate(${currentRot}deg)`;
                         startY = ev.clientY;
-
-                        // Uppdatera position
-                        if (axis === 'x') px = Math.max(0, Math.min(300, px + delta * 0.5));
-                        if (axis === 'y') py = Math.max(0, Math.min(150, py + delta * 0.5));
-
-                        path.push({x:px, y:py});
-                        draw();
-                        checkCollision();
+                        
+                        // Ändra thrust
+                        if (axis === 'x') thrustX = Math.max(-10, Math.min(10, thrustX + delta * 0.05));
+                        if (axis === 'y') thrustY = Math.max(-10, Math.min(10, thrustY + delta * 0.05));
                     };
-
-                    const onUp = () => {
-                        document.removeEventListener('mousemove', onMove);
-                        document.removeEventListener('mouseup', onUp);
+                    
+                    const up = () => {
+                        document.removeEventListener('mousemove', move);
+                        document.removeEventListener('mouseup', up);
                     };
-
-                    document.addEventListener('mousemove', onMove);
-                    document.addEventListener('mouseup', onUp);
+                    document.addEventListener('mousemove', move);
+                    document.addEventListener('mouseup', up);
                 });
             }
+            setupKnob('knobX', 'x');
+            setupKnob('knobY', 'y');
 
-            setupKnob('knobLeft', 'x');
-            setupKnob('knobRight', 'y');
+            // Select Logic
+            document.getElementById('driftSelectBtn').addEventListener('click', () => {
+                // Måste vara stabil för att låsa
+                const speed = Math.hypot(velX, velY);
+                if (speed > 0.1) {
+                    alert("SIGNAL OTYDLIG: Målet rör sig för snabbt för triangulering. Stabilisera drönaren.");
+                    return;
+                }
 
-            document.getElementById('etchClear').onclick = () => {
-                path = [{x:px, y:py}]; // Behåll position men rensa historik
-                output.textContent = "";
-                draw();
-            };
+                // Hitta cell
+                // Grid 5x2.
+                // Col bredd = 20%, Row höjd = 50%
+                const col = Math.floor(posX / 20);
+                const row = Math.floor(posY / 50);
+                
+                // index map:
+                // 0 1 2 3 4
+                // 5 6 7 8 9
+                // Men arrayen är [1,2,3,4,5,6,7,8,9,0]
+                // Row 0: index 0-4 -> 1-5
+                // Row 1: index 5-9 -> 6-0
+                
+                const gridIdx = row * 5 + col;
+                if (gridIdx >= 0 && gridIdx < 10) {
+                    output.textContent += digits[gridIdx];
+                }
+            });
         })();
 
 
-        // --- 6. SÄKERHETSKOD ---
+        // --- 3. KINETIC SIGNING (Heat/Friction) ---
         (() => {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#";
-            const spinner = document.getElementById('charSpinner');
-            const out = document.getElementById('pwdResult');
-            const bar = document.getElementById('entropyBar');
-            let idx = 0;
-            let delay = 100;
-            let timer = null;
-            let pwd = "";
+            const pad = document.getElementById('heatPad');
+            const overlay = document.getElementById('heatOverlay');
+            const meter = document.getElementById('heatMeter');
+            const status = document.getElementById('heatStatus');
+            const submit = document.getElementById('submitBtn');
+            
+            let heat = 0; // 0-100
+            let successTimer = 0;
+            let lastX = 0;
+            let lastY = 0;
+            let isRubbing = false;
+            
+            // Konstanter
+            const HEAT_GAIN_FACTOR = 0.15; // Hur mycket värme per pixel rörelse
+            const COOLING_RATE = 0.8; // Hur mycket värme tappas per frame
+            const TARGET_MIN = 80;
+            const TARGET_MAX = 98;
+
+            pad.addEventListener('mousedown', (e) => {
+                isRubbing = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+            });
+            
+            window.addEventListener('mouseup', () => isRubbing = false);
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isRubbing) return;
+                
+                const delta = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+                heat += delta * HEAT_GAIN_FACTOR;
+                
+                lastX = e.clientX;
+                lastY = e.clientY;
+            });
 
             function loop() {
-                idx = (idx + 1) % chars.length;
-                spinner.textContent = chars[idx];
-                timer = setTimeout(loop, delay);
+                // Kylning (alltid aktiv)
+                heat -= COOLING_RATE;
+                if (heat < 0) heat = 0;
+                
+                // Överhettning
+                if (heat >= 100) {
+                    heat = 0;
+                    status.textContent = "⚠️ OVERHEAT! EMERGENCY VENTING!";
+                    status.style.color = "red";
+                    successTimer = 0;
+                }
+
+                // UI Uppdatering
+                meter.style.width = heat + "%";
+                overlay.style.height = heat + "%";
+                
+                // Färgkodning
+                if (heat < TARGET_MIN) {
+                    meter.style.background = "#dc3545"; // Kall
+                } else if (heat > TARGET_MAX) {
+                    meter.style.background = "#b31312"; // Varning
+                } else {
+                    meter.style.background = "#28a745"; // Perfekt
+                }
+
+                // Logik för succé
+                if (heat >= TARGET_MIN && heat <= TARGET_MAX) {
+                    successTimer += 1/60; // 60fps approx
+                    status.textContent = `KRYPTERAR... ${(successTimer/3 * 100).toFixed(0)}%`;
+                    status.style.color = "#28a745";
+                    
+                    if (successTimer >= 3) {
+                        // KLAR
+                        status.textContent = "SIGNATUR VERIFIERAD";
+                        pad.style.background = "#d4edda";
+                        submit.disabled = false;
+                        submit.classList.add('active');
+                        // Lås modulen (fusk: sluta loopa eller sätt flagga)
+                        return; 
+                    }
+                } else {
+                    // Reset om man hamnar utanför zonen
+                    if (successTimer > 0) {
+                         status.textContent = "KRYPTERING AVBRUTEN (TEMP OSTABIL)";
+                         status.style.color = "#fd7e14";
+                    }
+                    successTimer = 0;
+                    if (heat < TARGET_MIN && heat > 0 && status.textContent !== "⚠️ OVERHEAT! EMERGENCY VENTING!") {
+                        status.textContent = "SYSTEM COLD - ÖKA FRIKTION";
+                        status.style.color = "#0f2c59";
+                    }
+                }
+
+                requestAnimationFrame(loop);
             }
             loop();
 
-            document.getElementById('lockCharBtn').onclick = () => {
-                pwd += chars[idx];
-                out.textContent = pwd;
-                bar.style.width = Math.min(100, pwd.length * 12) + "%";
-                
-                // Öka hastigheten!
-                delay = Math.max(10, delay * 0.85);
-                clearTimeout(timer);
-                loop();
-            };
-            document.getElementById('resetPwdBtn').onclick = () => {
-                pwd = "";
-                out.textContent = "_";
-                delay = 100;
-                bar.style.width = "0%";
-                clearTimeout(timer);
-                loop();
-            };
-        })();
-
-
-        // --- 7. GEO / VIND ---
-        (() => {
-            const pin = document.getElementById('geoPin');
-            const latS = document.getElementById('latSlider');
-            const lonS = document.getElementById('longSlider');
-            const wText = document.getElementById('windInd');
-            
-            // Drift värden
-            let lat = 59.3293;
-            let lon = 18.0686;
-            let windLat = 0.0001;
-            let windLon = 0.0002;
-
-            setInterval(() => {
-                // Slumpa vindbyar
-                if(Math.random() > 0.96) {
-                    windLat = (Math.random() - 0.5) * 0.008;
-                    windLon = (Math.random() - 0.5) * 0.008;
-                    wText.textContent = `VARNING: VIND ${(Math.abs(windLat)*10000).toFixed(0)} m/s`;
-                    wText.style.color = "#d35400";
-                }
-
-                // Applicera drift
-                lat += windLat;
-                lon += windLon;
-                
-                // Uppdatera sliders (användaren kämpar mot detta)
-                // Notera: Vi uppdaterar INTE slider-värdet om användaren håller i den just nu (för komplicerat utan events), 
-                // så istället "glider" värdet i bakgrunden och slidern hoppar när man släpper eller via JS
-                latS.value = lat;
-                lonS.value = lon;
-
-                // Uppdatera UI
-                document.getElementById('latVal').textContent = lat.toFixed(4);
-                document.getElementById('longVal').textContent = lon.toFixed(4);
-
-                // Map position %
-                // Lat 69(top 0%) -> 55(bottom 100%)
-                let top = ((69 - lat) / (69 - 55)) * 100;
-                let left = ((lon - 11) / (24 - 11)) * 100;
-                
-                // Clamp visual
-                top = Math.max(-5, Math.min(105, top));
-                left = Math.max(-5, Math.min(105, left));
-
-                pin.style.top = top + "%";
-                pin.style.left = left + "%";
-
-            }, 100);
-
-            // Låt användaren påverka
-            const onInput = () => {
-                lat = parseFloat(latS.value);
-                lon = parseFloat(lonS.value);
-            };
-            latS.oninput = onInput;
-            lonS.oninput = onInput;
-        })();
-
-
-        // --- 8. GRAVITATIONS VOLYM ---
-        (() => {
-            const handle = document.getElementById('volumeHandle');
-            const val = document.getElementById('volumeValue');
-            const track = document.getElementById('gravityTrack');
-            
-            let y = 110; // px
-            let vel = 0;
-
-            window.addEventListener('mousemove', (e) => {
-                const rect = track.getBoundingClientRect();
-                const cx = rect.left + rect.width/2;
-                const dist = e.clientX - cx;
-                
-                // Fysik: Musen till höger = antigravitation (uppåt/negativ Y)
-                // Musen till vänster = gravitation (nedåt/positiv Y)
-                // Avstånd avgör kraft
-                if (Math.abs(dist) < 400) {
-                    // force mellan -1 och 1
-                    const force = dist / 400; 
-                    // Lägg till velocity (inverterad Y-axel på skärmen: upp är minus)
-                    vel -= force * 0.8;
-                }
-            });
-
-            function update() {
-                y += vel;
-                // Friktion
-                vel *= 0.96;
-                
-                // Gränser (Track height 220, Handle 40 -> 180 rörligt utrymme)
-                if (y < 0) { y = 0; vel *= -0.5; }
-                if (y > 180) { y = 180; vel *= -0.5; }
-
-                handle.style.top = y + "px";
-                
-                // Beräkna % (0px = 100%, 180px = 0%)
-                const pct = Math.round(100 - (y / 180 * 100));
-                val.textContent = pct + "%";
-                
-                requestAnimFrame(update);
-            }
-            update();
-        })();
-
-
-        // --- 9. RESURSER (3-Click) ---
-        document.querySelectorAll('.service-card').forEach(card => {
-            let clicks = 0;
-            const dot = card.querySelector('.status-dot');
-            card.onclick = () => {
-                clicks++;
-                if(clicks === 1) { dot.style.background = "#f1c40f"; } // Gul
-                else if(clicks === 2) { dot.style.background = "#e67e22"; } // Orange
-                else if(clicks === 3) { 
-                    dot.style.background = "#2ecc71"; // Grön
-                    dot.style.boxShadow = "0 0 5px #2ecc71";
-                    setTimeout(() => {
-                        clicks = 0;
-                        dot.style.background = "#eee";
-                        dot.style.boxShadow = "none";
-                    }, 2000);
-                }
-            };
-        });
-
-
-        // --- 10. GODKÄNNANDE SLIDER ---
-        (() => {
-            const handle = document.getElementById('dragHandle');
-            const container = document.getElementById('approvalContainer');
-            const status = document.getElementById('approvalStatus');
-            const btn = document.getElementById('submitBtn');
-            
-            let isDragging = false;
-            let hoverTime = 0;
-            let checkInt = null;
-
-            handle.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                e.preventDefault();
-            });
-
-            window.addEventListener('mouseup', () => {
-                if (isDragging) {
-                    isDragging = false;
-                    // Reset
-                    handle.style.left = "3px";
-                    hoverTime = 0;
-                    clearInterval(checkInt);
-                    status.textContent = "VERIFIERING AVBRUTEN";
-                    status.style.color = "#c0392b";
-                }
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                
-                const rect = container.getBoundingClientRect();
-                // Centrera handtag
-                let x = e.clientX - rect.left - 27; 
-                // Clamp (Container width approx 100%, handle 54px)
-                // Vi gör en grov uppskattning av maxbredd dynamiskt
-                const max = rect.width - 57;
-                x = Math.max(3, Math.min(x, max));
-                
-                handle.style.left = x + "px";
-
-                // Kolla zonen (68% start)
-                const pct = x / rect.width;
-                
-                // Återställ om vi rör oss utanför
-                if (pct < 0.65 || pct > 0.75) {
-                    clearInterval(checkInt);
-                    checkInt = null;
-                    hoverTime = 0;
-                    handle.style.borderColor = "#bbb";
-                } else {
-                    // Vi är i zonen!
-                    if (!checkInt) {
-                        handle.style.borderColor = "#2ecc71";
-                        checkInt = setInterval(() => {
-                            hoverTime += 0.1;
-                            status.textContent = `VERIFIERAR BIOMETRI... ${hoverTime.toFixed(1)}s`;
-                            status.style.color = "#f39c12";
-                            
-                            if (hoverTime >= 3.0) {
-                                clearInterval(checkInt);
-                                isDragging = false; // Lås
-                                handle.textContent = "OK";
-                                handle.style.background = "#2ecc71";
-                                handle.style.color = "white";
-                                status.textContent = "GODKÄND";
-                                status.style.color = "green";
-                                btn.disabled = false;
-                                btn.style.background = "#003366";
-                                btn.style.color = "white";
-                                btn.style.cursor = "pointer";
-                            }
-                        }, 100);
-                    }
-                }
-            });
-            
-            btn.onclick = () => {
-                alert("Tack för din ansökan. Din förväntade väntetid i kön är: 412 dagar.");
+            submit.addEventListener('click', () => {
+                alert("REKVISITION MOTTAGEN.\n\nDin plats i kön: 4,392.\nBeräknad handläggningstid: 18-24 månader.");
                 location.reload();
-            };
+            });
+
         })();
 
     </script>
