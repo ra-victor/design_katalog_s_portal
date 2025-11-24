@@ -1,708 +1,734 @@
+Du har helt rätt. För att humorn ska fungera bäst (och för att likna r/baduibattles) måste sidan ta sig själv på 100% allvar. Ingen meta-humor i texten, inga "vi skojar med dig"-texter. Det ska se ut som att en byråkratisk IT-avdelning har beställt det dyraste, "säkraste" systemet i världen, men som är omöjligt att använda.
+
+Angående GitHub Pages:
+Ja, koden är 100% kompatibel. Det är ren HTML, CSS och JavaScript utan externa beroenden. Om du inte ser ändringarna beror det nästan alltid på webbläsarcache.
+
+När du pushar till GitHub, vänta 1-2 minuter.
+
+Gå till sidan och tryck Ctrl + F5 (eller Cmd + Shift + R på Mac) för att tvinga fram en omladdning.
+
+Här är den uppdaterade versionen. Tonen är nu extremt torr, byråkratisk och "korrekt", vilket gör funktionerna ännu mer frustrerande.
+
+code
+Html
+play_circle
+download
+content_copy
+expand_less
 <!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT-Serviceportalen | Ny Beställning</title>
+    <title>Koncernportal | Rekvisition Systemåtkomst</title>
     <style>
-        /* GRUNDLÄGGANDE STIL (Corporate Look) */
+        /* BYRÅKRATISK DESIGN - CLEAN MEN STEL */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; color: #2c3e50; overflow-x: hidden; font-size: 14px; }
         
         /* HEADER */
-        .header { background: white; border-bottom: 3px solid #0078d4; padding: 0 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; }
-        .logo { font-size: 22px; font-weight: 600; color: #0078d4; }
-        .user-menu { display: flex; align-items: center; gap: 25px; }
-        .user-name { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: #f3f3f3; border-radius: 4px; cursor: pointer; }
+        .header { background: #003366; border-bottom: 4px solid #002244; padding: 0 40px; color: white; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .logo { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .logo span { font-weight: 300; opacity: 0.8; }
+        .user-info { font-size: 12px; text-align: right; }
 
-        /* LAYOUT */
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; padding-bottom: 100px; }
-        .breadcrumb { font-size: 14px; color: #666; margin-bottom: 30px; }
-        .page-title { font-size: 32px; font-weight: 600; margin-bottom: 10px; color: #1a1a1a; }
-        .page-subtitle { font-size: 16px; color: #666; margin-bottom: 40px; }
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; padding-bottom: 80px; }
+        .page-header { border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 30px; }
+        h1 { font-size: 24px; font-weight: 600; color: #003366; margin-bottom: 5px; }
+        p.ingress { color: #666; font-size: 13px; max-width: 700px; line-height: 1.5; }
+
+        /* FORMULÄR MODULER */
+        .module { background: white; border: 1px solid #dce1e6; border-radius: 3px; padding: 25px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .module-title { font-size: 15px; font-weight: 700; color: #444; text-transform: uppercase; }
+        .module-id { font-size: 11px; color: #999; font-family: monospace; }
+
+        .form-row { margin-bottom: 25px; }
+        label { display: block; font-weight: 600; font-size: 12px; color: #333; margin-bottom: 8px; text-transform: uppercase; }
+        .required { color: #cc0000; }
+        .help-text { font-size: 11px; color: #7f8c8d; margin-top: 6px; font-style: italic; }
+
+        /* UI KOMPONENTER (BAD UI) */
         
-        /* CARDS & FORMS */
-        .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border: 1px solid #eaeaea; }
-        .card-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #1a1a1a; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .card-subtitle { font-size: 14px; color: #666; margin-bottom: 25px; margin-top: 5px; }
-        .form-group { margin-bottom: 30px; }
-        .form-label { display: block; font-weight: 500; margin-bottom: 12px; color: #333; }
-        .required { color: #d13438; }
-        .form-input { width: 100%; padding: 12px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 14px; transition: border-color 0.2s; }
-        .form-hint { font-size: 13px; color: #666; margin-top: 8px; font-style: italic; }
-
-        /* KNAPPAR */
-        .btn { padding: 12px 24px; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-        .btn-primary { background: #0078d4; color: white; }
-        .btn-primary:hover { background: #106ebe; }
-        .btn-secondary { background: white; color: #333; border: 1px solid #d1d1d1; }
-        .btn-secondary:hover { background: #f3f3f3; }
-
-        /* --- KOMPONENT: NAMN-VÄLJARE (ALFABETHJUL) --- */
-        .name-selector { display: flex; gap: 30px; align-items: flex-start; padding: 20px; background: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 8px; flex-wrap: wrap; }
-        .alphabet-wheel-container { text-align: center; }
-        .alphabet-wheel { border: 2px solid #0078d4; border-radius: 50%; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; }
-        .name-output { flex: 1; min-width: 200px; }
-        .name-display { background: white; border: 2px solid #0078d4; border-radius: 4px; padding: 20px; min-height: 60px; font-size: 20px; font-family: 'Courier New', monospace; word-break: break-all; margin-bottom: 15px; }
-        .name-controls { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        /* --- KOMPONENT: TELEFON (PRECISION SLIDER) --- */
-        .phone-input-modern { padding: 20px; background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%); border: 1px solid #e1e1e1; border-radius: 8px; }
-        .phone-display { text-align: center; font-size: 28px; font-family: 'Courier New', monospace; color: #0078d4; font-weight: 600; padding: 15px; background: white; border: 2px solid #0078d4; border-radius: 8px; margin-bottom: 20px; letter-spacing: 2px; }
-        .phone-slider { width: 100%; height: 8px; background: #e1e1e1; outline: none; -webkit-appearance: none; border-radius: 4px; }
-        .phone-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: white; border: 3px solid #0078d4; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-
-        /* --- KOMPONENT: DATUM (BINÄR SÖKNING) --- */
-        .date-picker-optimized { padding: 20px; background: white; border: 2px solid #0078d4; border-radius: 8px; text-align: center; }
-        .date-display { font-size: 32px; font-weight: 700; color: #0078d4; margin: 20px 0; font-family: 'Courier New', monospace; }
-        .date-buttons { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
-        .date-btn { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; }
-        .date-btn-before { background: #ff6b6b; color: white; }
-        .date-btn-after { background: #51cf66; color: white; }
-        .date-btn-exact { background: #0078d4; color: white; }
-
-        /* --- KOMPONENT: KOSTNADSSTÄLLE (SNURROR) --- */
-        .cost-center-visual { display: flex; gap: 15px; padding: 20px; background: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 8px; justify-content: center; flex-wrap: wrap; }
-        .digit-spinner { text-align: center; }
-        .digit-canvas { border: 2px solid #0078d4; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: block; margin: 0 auto; background: white; }
-        .digit-value { margin-top: 10px; font-size: 24px; font-weight: 700; color: #0078d4; font-family: 'Courier New', monospace; }
-
-        /* --- KOMPONENT: LÖSENORD (ROULETTE) --- */
-        .password-roulette-container { background: #2b2b2b; padding: 20px; border-radius: 8px; color: white; text-align: center; }
-        .roulette-display { background: #000; font-family: 'Courier New', monospace; font-size: 24px; padding: 15px; margin-bottom: 20px; border: 1px solid #444; min-height: 60px; letter-spacing: 3px; color: #00ff00; word-break: break-all; }
-        .roulette-active-char-box { width: 80px; height: 80px; background: white; color: black; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: bold; border: 4px solid #0078d4; border-radius: 10px; }
-        .password-strength-meter { height: 6px; background: #444; margin-top: 15px; border-radius: 3px; overflow: hidden; }
-        .strength-bar { height: 100%; width: 0%; background: #d13438; transition: width 0.3s, background 0.3s; }
-        .roulette-controls { display: flex; justify-content: center; gap: 10px; }
-
-        /* --- KOMPONENT: LEVERANS (GEO + VIND) --- */
-        .geo-picker { padding: 20px; background: #eef6fb; border: 1px solid #b3d6f2; border-radius: 8px; }
-        .geo-display { font-family: monospace; text-align: center; margin-bottom: 15px; font-size: 16px; color: #0078d4; font-weight: bold; }
-        .geo-map-placeholder { height: 250px; background: #fff; border: 2px dashed #ccc; position: relative; margin-bottom: 20px; overflow: hidden; border-radius: 4px; }
-        /* Rutnät för "karta"-känsla */
-        .geo-map-placeholder::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(#e5e5e5 1px, transparent 1px), linear-gradient(90deg, #e5e5e5 1px, transparent 1px); background-size: 20px 20px; }
-        .geo-pin { font-size: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); transition: top 0.1s linear, left 0.1s linear; z-index: 10; }
-        .wind-indicator { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 5px 10px; font-size: 12px; border-radius: 4px; border: 1px solid #ccc; z-index: 20; font-weight: bold; }
-        .geo-slider { width: 100%; margin: 10px 0; }
-
-        /* --- KOMPONENT: VOLYM (GRAVITATION) --- */
-        .volume-control { padding: 25px; background: white; border: 2px solid #0078d4; border-radius: 8px; position: relative; }
-        /* Volymen styrs av globala event, stil fixas i HTML-sektionen */
-
-        /* --- KOMPONENT: TJÄNSTER (MULTI-CLICK) --- */
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .service-item { background: white; border: 1px solid #e1e1e1; border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; }
-        .service-item:hover { border-color: #0078d4; box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
-        .service-icon { font-size: 28px; margin-bottom: 10px; }
-        .click-counter { position: absolute; top: 10px; right: 10px; background: #0078d4; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
-
-        /* --- KOMPONENT: VILLKOR (SCROLL & BALANS) --- */
-        .terms-scroll-box { height: 150px; overflow-y: scroll; border: 1px solid #ccc; padding: 15px; background: #f9f9f9; margin-bottom: 20px; font-size: 12px; color: #666; line-height: 1.6; }
-        .approval-container { margin-top: 15px; height: 60px; background: #e1e1e1; border-radius: 30px; position: relative; user-select: none; border: 1px solid #ccc; }
-        .approval-zone { position: absolute; left: 72%; top: 0; bottom: 0; width: 30px; background: rgba(186, 216, 10, 0.4); border-left: 1px dashed #999; border-right: 1px dashed #999; }
-        .approval-thumb { position: absolute; left: 10px; top: 4px; width: 50px; height: 50px; background: white; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: grab; font-weight: bold; color: #666; border: 2px solid #999; z-index: 5; transition: background 0.2s; }
-        .approval-thumb:active { cursor: grabbing; background: #0078d4; color: white; border-color: #005a9e; }
-        .approval-timer { position: absolute; top: -25px; right: 0; font-family: monospace; font-weight: bold; color: #333; }
+        /* Namnhjul */
+        .input-wrapper-wheel { background: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; display: flex; gap: 20px; align-items: flex-start; }
+        .wheel-canvas { border: 1px solid #ccc; background: white; cursor: crosshair; border-radius: 50%; }
+        .name-readout { background: #fff; border: 1px solid #ced4da; padding: 10px; min-height: 40px; flex: 1; font-family: monospace; font-size: 16px; display: flex; align-items: center; }
         
-        .notification-banner { background: #fff4ce; border: 1px solid #ffb900; border-radius: 4px; padding: 15px 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+        /* Telefon Slider */
+        .phone-control-panel { background: #eef2f7; padding: 15px; border: 1px solid #d1d9e6; }
+        .phone-screen { background: #000; color: #0f0; font-family: 'Consolas', monospace; font-size: 20px; text-align: center; padding: 10px; margin-bottom: 15px; border-radius: 2px; }
+        input[type=range] { width: 100%; cursor: pointer; }
 
-        @media (max-width: 768px) {
-            .name-selector { flex-direction: column; }
-            .service-grid { grid-template-columns: 1fr; }
-            .header-content { padding: 0 20px; }
-        }
+        /* Datum Binär */
+        .binary-date-picker { text-align: center; border: 1px solid #ccc; padding: 20px; background: #fff; }
+        .current-date-display { font-size: 22px; font-weight: bold; color: #003366; margin: 15px 0; font-family: monospace; }
+        .btn-group { display: flex; gap: 5px; justify-content: center; }
+        .btn { padding: 8px 16px; border: 1px solid #ccc; background: #f8f9fa; font-size: 12px; cursor: pointer; font-weight: 600; border-radius: 2px; }
+        .btn:hover { background: #e2e6ea; }
+        .btn-primary { background: #003366; color: white; border-color: #002a55; }
+        .btn-primary:hover { background: #002244; }
+
+        /* Kostnadsställe */
+        .spinner-container { display: flex; gap: 10px; justify-content: center; background: #f8f9fa; padding: 15px; border: 1px solid #e9ecef; }
+        .digit-box { text-align: center; }
+        .digit-canvas { background: white; border: 1px solid #ced4da; cursor: pointer; }
+
+        /* Lösenord */
+        .security-box { background: #2c3e50; color: #ecf0f1; padding: 20px; text-align: center; border-radius: 3px; }
+        .char-display { font-size: 36px; font-family: monospace; border: 2px solid #34495e; display: inline-block; width: 60px; height: 60px; line-height: 60px; margin-bottom: 10px; background: #34495e; }
+        .pwd-output { font-family: monospace; font-size: 18px; letter-spacing: 2px; min-height: 24px; margin-bottom: 10px; color: #2ecc71; }
+        .entropy-meter { height: 4px; background: #34495e; margin-top: 10px; width: 100%; }
+        .entropy-fill { height: 100%; width: 0%; background: #e74c3c; transition: width 0.3s; }
+
+        /* Geo/Leverans */
+        .geo-panel { background: #e0e5ec; padding: 15px; border: 1px solid #ced4da; position: relative; }
+        .coord-display { font-family: monospace; font-size: 12px; color: #003366; margin-bottom: 10px; text-align: center; }
+        .map-grid { height: 200px; background: white; border: 1px solid #999; position: relative; overflow: hidden; background-image: radial-gradient(#ccc 1px, transparent 1px); background-size: 20px 20px; }
+        .map-pin { position: absolute; width: 10px; height: 10px; background: red; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .weather-warning { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.9); padding: 4px 8px; font-size: 10px; border: 1px solid #ccc; color: #d35400; font-weight: bold; }
+
+        /* Volym */
+        .slider-track-vertical { position: relative; width: 40px; height: 200px; background: #e9ecef; border: 1px solid #ced4da; margin: 0 auto; border-radius: 20px; }
+        .slider-handle { position: absolute; left: 2px; width: 34px; height: 34px; background: #003366; border-radius: 50%; cursor: grab; top: 50%; }
+        .vol-value { text-align: center; font-size: 24px; font-weight: bold; margin-top: 10px; color: #003366; }
+
+        /* Avdelning */
+        select.shuffling-select { padding: 10px; width: 100%; border: 1px solid #ced4da; background: white; }
+
+        /* Tjänster */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .service-card { border: 1px solid #eee; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+        .service-card:hover { border-color: #003366; }
+        .status-dot { width: 10px; height: 10px; background: #eee; border-radius: 50%; margin: 0 auto 10px; border: 1px solid #ccc; }
+        
+        /* Villkor & Slider */
+        .legal-text { height: 100px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; font-size: 10px; color: #555; background: #fff; margin-bottom: 15px; text-align: justify; }
+        .confirmation-slider-container { height: 50px; background: #e9ecef; border-radius: 25px; position: relative; border: 1px solid #ced4da; margin-top: 20px; overflow: hidden; }
+        .confirmation-zone { position: absolute; left: 65%; top: 0; bottom: 0; width: 40px; background: rgba(0, 51, 102, 0.1); border-left: 1px dashed #003366; border-right: 1px dashed #003366; }
+        .drag-handle { width: 46px; height: 46px; background: white; border: 2px solid #999; border-radius: 50%; position: absolute; top: 1px; left: 2px; cursor: grab; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #666; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .status-message { text-align: center; font-weight: bold; margin-top: 10px; font-size: 12px; color: #cc0000; text-transform: uppercase; }
+
+        .btn-submit { width: 100%; padding: 15px; background: #ccc; color: #666; border: none; font-weight: bold; text-transform: uppercase; cursor: not-allowed; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <div class="header">
         <div class="header-content">
-            <div class="logo">IT-Serviceportalen</div>
-            <div class="user-menu">
-                <div class="user-name">
-                    <span>👤</span>
-                    <span>Anna Andersson</span>
-                </div>
-            </div>
+            <div class="logo">Koncern<span>IT</span></div>
+            <div class="user-info">Inloggad: A. Andersson (ID: 8842-B)</div>
         </div>
     </div>
 
     <div class="container">
-        <div class="breadcrumb">Hem > Tjänster > Ny beställning</div>
-        
-        <h1 class="page-title">Beställ behörighet & Utrustning</h1>
-        <p class="page-subtitle">Fyll i formuläret noggrant. Felaktiga uppgifter raderas automatiskt.</p>
-
-        <div class="notification-banner">
-            <span style="font-size: 20px;">💡</span>
-            <div>
-                <strong>Uppdatering:</strong> Vi har infört "friktionsbaserad design" för att säkerställa att du verkligen tänker igenom din beställning.
-            </div>
+        <div class="page-header">
+            <h1>Rekvisition: Hårdvara & Behörighet</h1>
+            <p class="ingress">
+                Använd detta formulär för att initiera beställning av IT-resurser. Observera att samtliga fält måste fyllas i enligt gällande policy (rev. 2024.1). Felaktigt inmatad data leder till automatisk avslag och låsning av användarkonto i 24 timmar.
+            </p>
         </div>
 
-        <!-- KORT 1: PERSONUPPGIFTER -->
-        <div class="card">
-            <h2 class="card-title">Personuppgifter</h2>
-            <p class="card-subtitle">Identifiera dig själv.</p>
+        <!-- MODUL 1: IDENTIFIERING -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">1. Sökande</span>
+                <span class="module-id">REF-ID: USER_INIT_01</span>
+            </div>
             
-            <!-- Namn -->
-            <div class="form-group">
-                <label class="form-label">Fullständigt namn <span class="required">*</span></label>
-                <div class="name-selector">
-                    <div class="alphabet-wheel-container">
-                        <canvas class="alphabet-wheel" id="alphabetWheel" width="140" height="140"></canvas>
-                        <p class="form-hint">Klicka för att välja bokstav</p>
-                    </div>
-                    <div class="name-output">
-                        <div class="name-display" id="nameDisplay"></div>
-                        <div class="name-controls">
-                            <button type="button" class="btn btn-secondary" id="nameSpace">Mellanslag</button>
-                            <button type="button" class="btn btn-secondary" id="nameBackspace">⌫ Radera</button>
-                            <button type="button" class="btn btn-secondary" id="nameClear">Rensa allt</button>
+            <div class="form-row">
+                <label>Fullständigt namn (Enligt folkbokföringen) <span class="required">*</span></label>
+                <div class="input-wrapper-wheel">
+                    <canvas id="alphabetWheel" class="wheel-canvas" width="120" height="120"></canvas>
+                    <div style="flex:1">
+                        <div id="nameDisplay" class="name-readout"></div>
+                        <div class="btn-group" style="justify-content: flex-start; margin-top: 10px;">
+                            <button class="btn" id="nameSpace">MELLANSLAG</button>
+                            <button class="btn" id="nameBackspace">KORRIGERA</button>
+                            <button class="btn" id="nameClear">NOLLSTÄLL</button>
                         </div>
                     </div>
                 </div>
-                <div class="form-hint">Hjulet snurrar med varierande hastighet för säkerhets skull.</div>
+                <div class="help-text">Använd den roterande väljaren för att mata in tecken. Systemet kalibrerar rotationshastigheten automatiskt baserat på CPU-belastning.</div>
             </div>
 
-            <!-- Telefon -->
-            <div class="form-group">
-                <label class="form-label">Mobiltelefon <span class="required">*</span></label>
-                <div class="phone-input-modern">
-                    <div class="phone-display" id="phoneDisplay">07X-XXX XX XX</div>
-                    <input type="range" class="phone-slider" id="phoneSlider" min="700000000" max="799999999" value="700000000" step="1">
-                    <div class="form-hint">Finjustera numret med reglaget. Vi rekommenderar en stadig handmus.</div>
+            <div class="form-row">
+                <label>Kontaktnummer (Mobil) <span class="required">*</span></label>
+                <div class="phone-control-panel">
+                    <div id="phoneDisplay" class="phone-screen">070-000 00 00</div>
+                    <input type="range" id="phoneSlider" min="700000000" max="799999999" value="700000000" step="1">
+                    <div class="help-text">Ställ in frekvensen för ditt telefonnummer. Känslighet: +/- 1 siffra per pixel.</div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">E-postadress <span class="required">*</span></label>
-                <input type="email" class="form-input" id="emailInput" placeholder="namn@foretag.se">
             </div>
         </div>
 
-        <!-- KORT 2: ANSTÄLLNING -->
-        <div class="card">
-            <h2 class="card-title">Anställningsuppgifter</h2>
-            <p class="card-subtitle">Organisatorisk placering.</p>
+        <!-- MODUL 2: ORGANISATORISK PLACERING -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">2. Organisation & Tid</span>
+                <span class="module-id">REF-ID: ORG_TIME_SYNC</span>
+            </div>
 
-            <!-- Datum -->
-            <div class="form-group">
-                <label class="form-label">Startdatum <span class="required">*</span></label>
-                <div class="date-picker-optimized">
-                    <p style="margin-bottom: 20px; color: #666;">Binär datumväljare - Matematiskt överlägsen!</p>
-                    <div class="date-display" id="dateDisplay">2020-01-01</div>
-                    <div class="date-buttons">
-                        <button class="date-btn date-btn-before" id="beforeBtn">Tidigare ←</button>
-                        <button class="date-btn date-btn-exact" id="exactBtn">Bekräfta ✓</button>
-                        <button class="date-btn date-btn-after" id="afterBtn">→ Senare</button>
+            <div class="form-row">
+                <label>Önskat leveransdatum <span class="required">*</span></label>
+                <div class="binary-date-picker">
+                    <div id="dateDisplay" class="current-date-display">2024-01-01</div>
+                    <div class="btn-group">
+                        <button class="btn" id="beforeBtn">FÖREGÅENDE PERIOD</button>
+                        <button class="btn btn-primary" id="exactBtn">BEKRÄFTA DATUM</button>
+                        <button class="btn" id="afterBtn">NÄSTKOMMANDE PERIOD</button>
                     </div>
-                    <div style="font-size: 12px; color: #999; margin-top: 10px;">Antal klick: <span id="dateClicks">0</span></div>
+                    <div class="help-text">Datumväljare baserad på binär sökalgoritm för ökad precision. Klick hittills: <span id="dateClicks">0</span></div>
                 </div>
             </div>
 
-            <!-- Kostnadsställe -->
-            <div class="form-group">
-                <label class="form-label">Kostnadsställe (4 siffror)</label>
-                <div class="cost-center-visual">
-                    <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit1" width="60" height="80"></canvas>
-                        <div class="digit-value" id="value1">0</div>
+            <div class="form-row">
+                <label>Kostnadsställe (4 siffror) <span class="required">*</span></label>
+                <div class="spinner-container">
+                    <div class="digit-box">
+                        <canvas id="digit1" class="digit-canvas" width="50" height="70"></canvas>
+                        <div id="value1" style="font-weight:bold; margin-top:5px;">0</div>
                     </div>
-                    <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit2" width="60" height="80"></canvas>
-                        <div class="digit-value" id="value2">0</div>
+                    <div class="digit-box">
+                        <canvas id="digit2" class="digit-canvas" width="50" height="70"></canvas>
+                        <div id="value2" style="font-weight:bold; margin-top:5px;">0</div>
                     </div>
-                    <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit3" width="60" height="80"></canvas>
-                        <div class="digit-value" id="value3">0</div>
+                    <div class="digit-box">
+                        <canvas id="digit3" class="digit-canvas" width="50" height="70"></canvas>
+                        <div id="value3" style="font-weight:bold; margin-top:5px;">0</div>
                     </div>
-                    <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit4" width="60" height="80"></canvas>
-                        <div class="digit-value" id="value4">0</div>
+                    <div class="digit-box">
+                        <canvas id="digit4" class="digit-canvas" width="50" height="70"></canvas>
+                        <div id="value4" style="font-weight:bold; margin-top:5px;">0</div>
                     </div>
                 </div>
-                <div class="form-hint">Klicka på siffran när den roterar till rätt position.</div>
+                <div class="help-text">Klicka för att låsa roterande index för debitering.</div>
             </div>
 
-            <!-- Avdelning -->
-            <div class="form-group">
-                <label class="form-label">Avdelning <span class="required">*</span></label>
-                <select class="form-input" id="departmentSelect">
-                    <option value="">Välj avdelning</option>
-                    <option value="it">IT</option>
-                    <option value="hr">HR</option>
-                    <option value="sales">Försäljning</option>
-                    <option value="support">Support</option>
-                    <option value="finance">Ekonomi</option>
+            <div class="form-row">
+                <label>Avdelningstillhörighet <span class="required">*</span></label>
+                <select id="departmentSelect" class="shuffling-select">
+                    <option value="">Välj enhet...</option>
+                    <option value="it">IT Drift</option>
+                    <option value="hr">Human Resources</option>
+                    <option value="fin">Finans</option>
+                    <option value="log">Logistik</option>
                 </select>
-                <div class="form-hint">Listan sorteras om slumpmässigt för att ge alla avdelningar en rättvis chans.</div>
+                <div class="help-text">Listan omorganiseras dynamiskt för att motverka favorisering av alfabetiska topp-positioner.</div>
             </div>
         </div>
 
-        <!-- KORT 3: SÄKERHET (NY) -->
-        <div class="card">
-            <h2 class="card-title">Säkerhet & Konto</h2>
-            <p class="card-subtitle">Skapa ett säkert lösenord med vår slumpgenerator-modul.</p>
+        <!-- MODUL 3: SÄKERHETSKLASSIFICERING -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">3. Autentisering</span>
+                <span class="module-id">REF-ID: SEC_AUTH_V4</span>
+            </div>
 
-            <div class="form-group">
-                <label class="form-label">Nytt lösenord <span class="required">*</span></label>
-                <div class="password-roulette-container">
-                    <div class="roulette-display">
-                        <span id="pwd-result" class="pwd-text">_</span>
+            <div class="form-row">
+                <label>Temporär behörighetskod <span class="required">*</span></label>
+                <div class="security-box">
+                    <div class="pwd-output" id="pwdResult">_</div>
+                    <div>
+                        <div id="charSpinner" class="char-display">A</div>
                     </div>
-                    
-                    <div class="roulette-active-char-box">
-                        <div id="charSpinner">A</div>
+                    <div class="btn-group" style="margin-top: 15px;">
+                        <button class="btn btn-primary" id="lockCharBtn">LÅS TECKEN</button>
+                        <button class="btn" id="resetPwdBtn">ÅTERSTÄLL</button>
                     </div>
-
-                    <div class="roulette-controls">
-                        <button type="button" class="btn btn-primary" id="lockCharBtn">LÅS TECKEN</button>
-                        <button type="button" class="btn btn-secondary" id="resetPwdBtn">Börja om</button>
-                    </div>
-                    
-                    <div class="form-hint" style="margin-top: 15px; color: #ccc;">
-                        Vänta tills önskat tecken visas och klicka "Lås". Hastigheten ökar för varje tecken för att förhindra hacking.
-                    </div>
-                    <div class="password-strength-meter">
-                        <div class="strength-bar" id="strengthBar"></div>
-                    </div>
-                    <div id="strengthText" style="font-size: 12px; text-align: right; margin-top: 5px;">Oskyddad</div>
+                    <div class="entropy-meter"><div id="entropyBar" class="entropy-fill"></div></div>
+                    <div class="help-text" style="color: #bdc3c7;">Generera kod med hög entropi. Rotationshastigheten ökar exponentiellt per tecken för att förhindra "shoulder surfing".</div>
                 </div>
             </div>
         </div>
 
-        <!-- KORT 4: LEVERANS (NY) -->
-        <div class="card">
-            <h2 class="card-title">Leverans av hårdvara</h2>
-            <p class="card-subtitle">Ange exakt geografisk position där du vill möta budet.</p>
-
-            <div class="geo-picker">
-                <div class="geo-display">
-                    Lat: <span id="latVal">59.3293</span> | Long: <span id="longVal">18.0686</span>
-                </div>
-                
-                <div class="geo-map-placeholder" id="geoMap">
-                    <div class="geo-pin" id="geoPin">📍</div>
-                    <div class="wind-indicator" id="windInd">Vind: Stilla 💨</div>
-                </div>
-
-                <div class="geo-controls">
-                    <label class="form-label">Latitud (Nord/Syd)</label>
-                    <input type="range" min="55" max="69" step="0.0001" value="59.3293" class="geo-slider" id="latSlider">
-                    
-                    <label class="form-label" style="margin-top: 15px;">Longitud (Väst/Öst)</label>
-                    <input type="range" min="11" max="24" step="0.0001" value="18.0686" class="geo-slider" id="longSlider">
-                </div>
-                <div class="form-hint">
-                    Varning: Starka digitala vindar kan få markören att driva. Korrigera positionen kontinuerligt.
-                </div>
+        <!-- MODUL 4: LOGISTIK -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">4. Leveranskoordinater</span>
+                <span class="module-id">REF-ID: GEO_DRONE_NET</span>
             </div>
-        </div>
 
-        <!-- KORT 5: INSTÄLLNINGAR (VOLYM) -->
-        <div class="card">
-            <h2 class="card-title">Inställningar</h2>
-            <p class="card-subtitle">Anpassa din upplevelse.</p>
-
-            <div class="form-group">
-                <label class="form-label">Notifikationsvolym</label>
-                <div class="volume-control">
-                    <p style="text-align: center; color: #666; margin-bottom: 20px;">Gravitationsbaserad volymkontroll</p>
-                    <div style="display: flex; gap: 40px; align-items: center; justify-content: center;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 30px;">🔊</div>
-                        </div>
-                        <!-- Slider container -->
-                        <div style="position: relative; width: 60px; height: 300px; background: linear-gradient(to top, #e1e1e1 0%, #0078d4 100%); border-radius: 30px; border: 3px solid #0078d4;">
-                            <div id="volumeSlider" style="position: absolute; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; background: white; border: 4px solid #0078d4; border-radius: 50%; cursor: grab; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"></div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 30px;">🔇</div>
-                        </div>
+            <div class="form-row">
+                <label>Mottagarplats (WGS84) <span class="required">*</span></label>
+                <div class="geo-panel">
+                    <div class="weather-warning" id="windInd">KALIBRERAR SENSORER...</div>
+                    <div class="coord-display">
+                        LAT: <span id="latVal">59.3293</span> | LON: <span id="longVal">18.0686</span>
                     </div>
-                    <div style="text-align: center; margin-top: 25px;">
-                        <div style="font-size: 32px; font-weight: 700; color: #0078d4;" id="volumeValueGravity">50%</div>
-                        <div class="form-hint">För musen åt vänster för att sänka volym, åt höger för att höja. Fysiklagar gäller.</div>
+                    <div class="map-grid" id="geoMap">
+                        <div id="geoPin" class="map-pin" style="top: 50%; left: 50%;"></div>
                     </div>
+                    <div style="margin-top: 15px;">
+                        <label style="font-size: 10px;">Latitudjustering</label>
+                        <input type="range" id="latSlider" min="55" max="69" step="0.0001" value="59.3293">
+                        <label style="font-size: 10px; margin-top: 10px;">Longitudjustering</label>
+                        <input type="range" id="longSlider" min="11" max="24" step="0.0001" value="18.0686">
+                    </div>
+                    <div class="help-text">Positionen påverkas av simulerat atmosfäriskt tryck (vindavdrift). Korrigera manuellt i realtid.</div>
                 </div>
             </div>
         </div>
 
-        <!-- KORT 6: TJÄNSTER -->
-        <div class="card">
-            <h2 class="card-title">Välj Tjänster</h2>
-            <p class="card-subtitle">Klicka 3 gånger på varje kort för att bekräfta val.</p>
-            <div class="service-grid">
-                <div class="service-item">
-                    <div class="click-counter">0/3</div>
-                    <div class="service-icon">💻</div>
-                    <div class="service-title">Laptop</div>
-                    <div class="service-desc">Standard PC.</div>
-                </div>
-                <div class="service-item">
-                    <div class="click-counter">0/3</div>
-                    <div class="service-icon">🔐</div>
-                    <div class="service-title">VPN-token</div>
-                    <div class="service-desc">För distansarbete.</div>
-                </div>
-                <div class="service-item">
-                    <div class="click-counter">0/3</div>
-                    <div class="service-icon">📱</div>
-                    <div class="service-title">iPhone 8</div>
-                    <div class="service-desc">Från lagret.</div>
-                </div>
+        <!-- MODUL 5: SYSTEMNOTIFIERINGAR -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">5. Notifieringsnivå</span>
+                <span class="module-id">REF-ID: AUDIO_LEVEL_PHY</span>
             </div>
-        </div>
-
-        <!-- KORT 7: VILLKOR & GODKÄNNANDE (NY) -->
-        <div class="card" style="border: 2px solid #d13438;">
-            <h2 class="card-title">Slutgiltigt Godkännande</h2>
             
-            <div class="terms-scroll-box" id="termsBox">
-                <strong>ALLMÄNNA VILLKOR FÖR IT-SERVICE</strong><br><br>
-                1. Genom att använda detta formulär godkänner du att IT-avdelningen har rätt men inte skyldighet att lösa dina problem.<br><br>
-                2. "Starta om datorn" är alltid det första steget, oavsett om du beställer en musmatta eller behörighet.<br><br>
-                3. Scrollhastigheten i denna ruta har begränsats för att simulera känslan av att läsa ett juridiskt dokument noggrant. Vi vet att du inte läser det ändå.<br><br>
-                4. Hårdvara levereras till angivna koordinater. Om vinden tar koordinaterna levereras hårdvaran till vinden.<br><br>
-                5. Lösenordet du genererade nyss har redan gått ut. Vänligen byt det inom 3 minuter efter inloggning.<br><br>
-                6. Kaffe vid IT-avdelningen är endast för IT-personal.<br><br>
-                7. Har du läst hit? Bra jobbat. Fortsätt scrolla. Lite till.<br><br>
-                8. Snart klar...<br><br>
-                9. Okej, du är redo att balansera slidern nedan.
-            </div>
-
-            <div class="form-group" style="margin-top: 20px;">
-                <label class="form-label">Dra reglaget till den dolda zonen och <span style="text-decoration: underline;">håll kvar i 3 sekunder</span> för att godkänna</label>
-                <div class="approval-container">
-                    <div class="approval-zone"></div> <!-- Den osynliga zonen -->
-                    <div class="approval-thumb" id="approvalThumb">DRA</div>
-                    <div class="approval-timer" id="approvalTimer">0.0s</div>
+            <div class="form-row">
+                <label>Alert-volym (Gravitationsstyrd)</label>
+                <div style="text-align: center; background: #f8f9fa; padding: 20px; border: 1px solid #eee;">
+                    <div class="slider-track-vertical" id="gravityTrack">
+                        <div id="volumeHandle" class="slider-handle"></div>
+                    </div>
+                    <div id="volumeValue" class="vol-value">50%</div>
+                    <div class="help-text">Reglaget styrs av muspekarens gravitationsfält. Håll musen till höger för att lyfta, vänster för att sänka.</div>
                 </div>
-                <div class="form-hint" id="approvalStatus" style="color: #d13438; font-weight: bold; text-align: center; margin-top: 10px;">EJ GODKÄND</div>
+            </div>
+        </div>
+
+        <!-- MODUL 6: RESURSVAL -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">6. Resurser</span>
+                <span class="module-id">REF-ID: ITEM_SELECT</span>
+            </div>
+            <p class="help-text" style="margin-bottom: 15px;">Verifiera val genom tre-faktors-interaktion (3 klick krävs per objekt).</p>
+            <div class="service-grid">
+                <div class="service-card">
+                    <div class="status-dot"></div>
+                    <strong>Laptop Standard</strong><br>
+                    <span style="font-size:11px; color:#666;">Dell Latitude (Begagnad)</span>
+                </div>
+                <div class="service-card">
+                    <div class="status-dot"></div>
+                    <strong>VPN Token</strong><br>
+                    <span style="font-size:11px; color:#666;">RSA SecurID</span>
+                </div>
+                <div class="service-card">
+                    <div class="status-dot"></div>
+                    <strong>Mobiltelefon</strong><br>
+                    <span style="font-size:11px; color:#666;">Nokia 3310 (Re-issue)</span>
+                </div>
+                <div class="service-card">
+                    <div class="status-dot"></div>
+                    <strong>Office 365</strong><br>
+                    <span style="font-size:11px; color:#666;">Licens typ E1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODUL 7: AVTAL & SIGNERING -->
+        <div class="module" style="border-top: 4px solid #cc0000;">
+            <div class="module-header">
+                <span class="module-title">7. Slutgiltigt Godkännande</span>
+                <span class="module-id">REF-ID: FINAL_SIG</span>
             </div>
 
-            <div style="margin-top: 40px; display: flex; gap: 15px; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="location.reload()">Avbryt (Ladda om)</button>
-                <button class="btn btn-primary" id="submitBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Skicka beställning</button>
+            <div class="legal-text" id="legalText">
+                <strong>ALLMÄNNA VILLKOR FÖR ANVÄNDNING AV KONCERNENS IT-RESURSER (REV 42.b)</strong><br><br>
+                1. DEFINITIONER<br>
+                "Användaren" avser den fysiska person som fyller i detta formulär. "Koncernen" avser arbetsgivaren. "Lidande" avser den tid som spenderas i detta system.<br><br>
+                2. ANSVARSFRISKRIVNING<br>
+                Koncernen tar inget ansvar för dataförlust, håravfall eller psykisk påfrestning orsakad av formulärets UX-design. Genom att fortsätta medger användaren att alla inmatade uppgifter kan komma att raderas slumpmässigt vid serverunderhåll (som sker var 15:e minut).<br><br>
+                3. BIOMETRISK DATA<br>
+                Genom att använda namnhjulet godkänner du att vi sparar din musrörelse-profil för framtida AI-träning.<br><br>
+                4. LEVERANS<br>
+                Leverans sker endast om koordinaterna matchar exakt vid leveranstillfället. Då drönare är känsliga för vindavdrift (se Modul 4) rekommenderas användaren att stå på en öppen yta och springa i motsatt riktning mot vinden för att möta leveransen.<br><br>
+                5. LÄSHASTIGHET<br>
+                Detta textfält har en inbyggd fördröjning av scrollfunktionen för att säkerställa att texten faktiskt läses. Att scrolla snabbare än 20px per sekund anses vara ett brott mot användaravtalet.<br><br>
+                [SLUT PÅ DOKUMENT]
             </div>
+
+            <div class="form-row">
+                <label>Signering (Balansera reglaget i verifieringszonen)</label>
+                <div class="confirmation-slider-container" id="approvalContainer">
+                    <div class="confirmation-zone"></div>
+                    <div class="drag-handle" id="dragHandle">DRAG</div>
+                </div>
+                <div class="status-message" id="approvalStatus">AVVAKTAR VERIFIERING...</div>
+            </div>
+
+            <button id="submitBtn" class="btn-submit" disabled>Skicka Rekvisition</button>
         </div>
 
     </div>
 
     <script>
-        // --- LOGIK FÖR ALFABETHJUL ---
-        const alphabetWheel = document.getElementById('alphabetWheel');
-        const alphabetCtx = alphabetWheel.getContext('2d');
+        /* 
+         * KONCERN IT - INTERN SCRIPTFIL
+         * VERSION: 2024.2.1 (STABLE?)
+         */
+
+        // --- 1. NAMN-HJUL LOGIK ---
+        const wheelCanvas = document.getElementById('alphabetWheel');
+        const wheelCtx = wheelCanvas.getContext('2d');
         const nameDisplay = document.getElementById('nameDisplay');
-        let currentName = '';
-        let alphabetRotation = 0;
-        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ '; // Inkluderar ett mellanslag
+        let wheelAngle = 0;
+        let wheelSpeed = 0.02;
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ ";
         
-        function drawAlphabetWheel() {
-            alphabetCtx.clearRect(0, 0, 140, 140);
-            alphabetCtx.save();
-            alphabetCtx.translate(70, 70);
-            alphabetCtx.rotate(alphabetRotation);
+        function drawWheel() {
+            wheelCtx.clearRect(0, 0, 120, 120);
+            wheelCtx.save();
+            wheelCtx.translate(60, 60);
+            wheelCtx.rotate(wheelAngle);
+            
+            wheelCtx.font = "bold 14px Arial";
+            wheelCtx.textAlign = "center";
+            wheelCtx.textBaseline = "middle";
             
             for (let i = 0; i < alphabet.length; i++) {
-                alphabetCtx.save();
-                alphabetCtx.rotate((i * Math.PI * 2) / alphabet.length);
-                alphabetCtx.textAlign = 'center';
-                alphabetCtx.font = 'bold 16px Arial';
-                alphabetCtx.fillStyle = i === 0 ? '#0078d4' : '#333';
-                alphabetCtx.fillText(alphabet[i], 0, -52);
-                alphabetCtx.restore();
+                const angle = (i * Math.PI * 2) / alphabet.length;
+                wheelCtx.save();
+                wheelCtx.rotate(angle);
+                wheelCtx.translate(0, -45);
+                wheelCtx.rotate(-angle + -wheelAngle); // Keep text upright relative to view? No, spin it.
+                wheelCtx.rotate(wheelAngle + angle); // Actually let's have text radiate
+                
+                wheelCtx.fillStyle = i === 0 ? "#cc0000" : "#333"; // Markören
+                wheelCtx.fillText(alphabet[i], 0, 0);
+                wheelCtx.restore();
             }
-            alphabetCtx.restore();
-            // Oregelbunden hastighet
-            alphabetRotation += 0.03 + (Math.sin(Date.now() / 500) * 0.02);
-            requestAnimationFrame(drawAlphabetWheel);
+            
+            // Markör (Fixed)
+            wheelCtx.restore();
+            wheelCtx.beginPath();
+            wheelCtx.moveTo(60, 10);
+            wheelCtx.lineTo(55, 0);
+            wheelCtx.lineTo(65, 0);
+            wheelCtx.fillStyle = "#003366";
+            wheelCtx.fill();
+
+            // Variera hastighet irriterande
+            wheelSpeed = 0.03 + (Math.sin(Date.now() / 800) * 0.025);
+            wheelAngle += wheelSpeed;
+            
+            requestAnimationFrame(drawWheel);
         }
-        drawAlphabetWheel();
-        
-        alphabetWheel.addEventListener('click', () => {
-            const index = Math.floor(((-alphabetRotation % (Math.PI * 2)) + Math.PI * 2) / (Math.PI * 2) * alphabet.length) % alphabet.length;
-            const letter = alphabet[index];
-            currentName += letter;
-            nameDisplay.textContent = currentName;
+        drawWheel();
+
+        wheelCanvas.addEventListener('mousedown', () => {
+            // Beräkna vilken bokstav som är "klockan 12"
+            // Detta är avsiktligt dålig matematik för att göra det svårt
+            const total = Math.PI * 2;
+            const normalizedAngle = (wheelAngle % total + total) % total;
+            // Invertera för att matcha rotation
+            const segment = total / alphabet.length;
+            // Justera index baserat på visuell position (ca)
+            let index = Math.floor(((total - normalizedAngle) + (segment/2)) / segment) % alphabet.length;
+            
+            nameDisplay.textContent += alphabet[index];
         });
         
-        document.getElementById('nameSpace').addEventListener('click', () => currentName += ' ', nameDisplay.textContent = currentName);
-        document.getElementById('nameBackspace').addEventListener('click', () => { currentName = currentName.slice(0, -1); nameDisplay.textContent = currentName; });
-        document.getElementById('nameClear').addEventListener('click', () => { currentName = ''; nameDisplay.textContent = currentName; });
+        document.getElementById('nameSpace').onclick = () => nameDisplay.textContent += " ";
+        document.getElementById('nameBackspace').onclick = () => nameDisplay.textContent = nameDisplay.textContent.slice(0, -1);
+        document.getElementById('nameClear').onclick = () => nameDisplay.textContent = "";
 
-        // --- LOGIK FÖR TELEFON SLIDER ---
-        const phoneSlider = document.getElementById('phoneSlider');
-        const phoneDisplay = document.getElementById('phoneDisplay');
-        phoneSlider.addEventListener('input', (e) => {
-            const str = '0' + e.target.value;
-            phoneDisplay.textContent = str.substring(0, 3) + '-' + str.substring(3, 6) + ' ' + str.substring(6, 8) + ' ' + str.substring(8);
-        });
 
-        // --- LOGIK FÖR DATUM ---
-        const dateDisplay = document.getElementById('dateDisplay');
-        const dateClicks = document.getElementById('dateClicks');
-        let minDate = new Date('2000-01-01');
-        let maxDate = new Date('2030-12-31');
-        let currentDate = new Date('2020-01-01');
-        let clickCount = 0;
-        
-        function updateDate() {
-            const midTime = minDate.getTime() + (maxDate.getTime() - minDate.getTime()) / 2;
-            currentDate = new Date(midTime);
-            dateDisplay.textContent = currentDate.toISOString().split('T')[0];
-            clickCount++;
-            dateClicks.textContent = clickCount;
+        // --- 2. TELEFON SLIDER ---
+        const phSlider = document.getElementById('phoneSlider');
+        const phDisp = document.getElementById('phoneDisplay');
+        phSlider.oninput = function() {
+            // Formatera som svenskt nummer
+            let val = "0" + this.value;
+            let formatted = val.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1-$2 $3 $4");
+            phDisp.innerText = formatted;
         }
-        
-        document.getElementById('beforeBtn').addEventListener('click', () => { maxDate = new Date(currentDate.getTime() - 86400000); updateDate(); });
-        document.getElementById('afterBtn').addEventListener('click', () => { minDate = new Date(currentDate.getTime() + 86400000); updateDate(); });
-        document.getElementById('exactBtn').addEventListener('click', () => { dateDisplay.style.color = '#107c10'; setTimeout(() => dateDisplay.style.color = '#0078d4', 1000); });
 
-        // --- LOGIK FÖR KOSTNADSSTÄLLE ---
-        const digitConfigs = [
-            { canvas: document.getElementById('digit1'), value: document.getElementById('value1'), rotation: 0, speed: 0.03 },
-            { canvas: document.getElementById('digit2'), value: document.getElementById('value2'), rotation: 1, speed: 0.04 },
-            { canvas: document.getElementById('digit3'), value: document.getElementById('value3'), rotation: 2, speed: 0.05 },
-            { canvas: document.getElementById('digit4'), value: document.getElementById('value4'), rotation: 3, speed: 0.035 }
-        ];
-        
-        digitConfigs.forEach(config => {
-            const ctx = config.canvas.getContext('2d');
-            function drawDigit() {
-                ctx.clearRect(0, 0, 60, 80);
-                ctx.save(); ctx.translate(30, 40); ctx.rotate(config.rotation);
-                for (let i = 0; i < 10; i++) {
-                    ctx.save(); ctx.rotate((i * Math.PI * 2) / 10);
-                    ctx.font = 'bold 18px Arial'; ctx.fillStyle = i===0?'#0078d4':'#ccc';
-                    ctx.fillText(i, 0, -25); ctx.restore();
+
+        // --- 3. DATUM BINÄR SÖKNING ---
+        let minDate = new Date('2020-01-01').getTime();
+        let maxDate = new Date('2030-12-31').getTime();
+        let currDateVal = new Date('2024-01-01').getTime();
+        const dateDisp = document.getElementById('dateDisplay');
+        const clickCountSpan = document.getElementById('dateClicks');
+        let dClicks = 0;
+
+        function updateDateDisp() {
+            dateDisp.innerText = new Date(currDateVal).toISOString().split('T')[0];
+            clickCountSpan.innerText = dClicks;
+        }
+
+        document.getElementById('beforeBtn').onclick = () => {
+            dClicks++;
+            maxDate = currDateVal;
+            currDateVal = minDate + (maxDate - minDate) / 2;
+            updateDateDisp();
+        };
+        document.getElementById('afterBtn').onclick = () => {
+            dClicks++;
+            minDate = currDateVal;
+            currDateVal = minDate + (maxDate - minDate) / 2;
+            updateDateDisp();
+        };
+        document.getElementById('exactBtn').onclick = () => {
+            dClicks++;
+            dateDisp.style.color = "#2ecc71";
+            setTimeout(()=> dateDisp.style.color = "#003366", 500);
+            updateDateDisp();
+        };
+
+
+        // --- 4. KOSTNADSSTÄLLE SPINNERS ---
+        [1,2,3,4].forEach(id => {
+            const cvs = document.getElementById('digit'+id);
+            const ctx = cvs.getContext('2d');
+            const valDiv = document.getElementById('value'+id);
+            let rot = Math.random() * Math.PI * 2;
+            let speed = 0.05 + (Math.random() * 0.05);
+
+            function loop() {
+                ctx.clearRect(0,0,50,70);
+                ctx.save();
+                ctx.translate(25,35);
+                ctx.rotate(rot);
+                for(let n=0; n<10; n++) {
+                    ctx.save();
+                    ctx.rotate(n * (Math.PI*2)/10);
+                    ctx.fillStyle = n===0 ? "red" : "#ccc";
+                    ctx.font = "bold 16px Arial";
+                    ctx.fillText(n.toString(), 0, -20);
+                    ctx.restore();
                 }
                 ctx.restore();
-                config.rotation += config.speed;
-                requestAnimationFrame(drawDigit);
+                rot += speed;
+                requestAnimationFrame(loop);
             }
-            drawDigit();
-            config.canvas.addEventListener('click', () => {
-                const digit = Math.floor(((-config.rotation % (Math.PI * 2)) + Math.PI * 2) / (Math.PI * 2) * 10) % 10;
-                config.value.textContent = digit;
-            });
-        });
-
-        // --- LOGIK FÖR LÖSENORD ROULETTE ---
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
-        const spinner = document.getElementById('charSpinner');
-        const pwdResult = document.getElementById('pwd-result');
-        const lockBtn = document.getElementById('lockCharBtn');
-        const resetBtn = document.getElementById('resetPwdBtn');
-        const strengthBar = document.getElementById('strengthBar');
-        
-        let charIndex = 0;
-        let currentPassword = "";
-        let spinSpeed = 120; 
-        let spinInterval;
-
-        function spinChar() {
-            charIndex = (charIndex + 1) % chars.length;
-            spinner.textContent = chars[charIndex];
-        }
-        function startSpinner() {
-            if(spinInterval) clearInterval(spinInterval);
-            spinInterval = setInterval(spinChar, spinSpeed);
-        }
-        startSpinner();
-
-        lockBtn.addEventListener('click', () => {
-            const lockedChar = spinner.textContent;
-            currentPassword += lockedChar;
-            pwdResult.textContent = currentPassword;
-            spinSpeed = Math.max(15, spinSpeed - 10); // Ökar hastigheten!
-            startSpinner();
+            loop();
             
-            const width = Math.min(100, currentPassword.length * 8);
-            strengthBar.style.width = width + '%';
-            if(currentPassword.length > 12) {
-                strengthBar.style.background = '#d13438'; // Blir rött om för långt (overflow)
-                document.getElementById('strengthText').textContent = "BUFFERTÖVERFLÖDE!";
-            } else {
-                document.getElementById('strengthText').textContent = "Styrka: " + width + "%";
+            cvs.onclick = () => {
+                // Vilken siffra är uppåt?
+                const norm = (rot % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+                // Matematisk gissning för användaren
+                let digit = Math.floor(10 - (norm / (Math.PI*2) * 10)) % 10;
+                valDiv.innerText = digit;
             }
         });
 
-        resetBtn.addEventListener('click', () => {
-            currentPassword = ""; pwdResult.textContent = "_"; spinSpeed = 120; strengthBar.style.width = "0%"; startSpinner();
-        });
 
-        // --- LOGIK FÖR GEO LEVERANS MED VIND ---
-        const latSlider = document.getElementById('latSlider');
-        const longSlider = document.getElementById('longSlider');
-        const latVal = document.getElementById('latVal');
-        const longVal = document.getElementById('longVal');
-        const geoPin = document.getElementById('geoPin');
-        const windInd = document.getElementById('windInd');
-        
-        let windX = 0.0001; let windY = 0.0001;
-        
-        function updateMap() {
-            const latPercent = 100 - ((latSlider.value - 55) / (69 - 55) * 100);
-            const longPercent = (longSlider.value - 11) / (24 - 11) * 100;
-            geoPin.style.top = latPercent + '%';
-            geoPin.style.left = longPercent + '%';
-            latVal.textContent = parseFloat(latSlider.value).toFixed(4);
-            longVal.textContent = parseFloat(longSlider.value).toFixed(4);
+        // --- 5. AVDELNING SHUFFLE ---
+        const deptSel = document.getElementById('departmentSelect');
+        deptSel.onfocus = function() {
+            const opts = Array.from(this.options);
+            // Ta bort första
+            const first = opts.shift();
+            // Blanda resten
+            opts.sort(() => Math.random() - 0.5);
+            // Sätt tillbaka
+            this.innerHTML = "";
+            this.appendChild(first);
+            opts.forEach(o => this.appendChild(o));
         }
 
-        // Vindsimulering
+
+        // --- 6. SÄKERHET / LÖSENORD ---
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#";
+        const spinnerDiv = document.getElementById('charSpinner');
+        const pwdOut = document.getElementById('pwdResult');
+        const entropyBar = document.getElementById('entropyBar');
+        let charIdx = 0;
+        let pwdSpeed = 100;
+        let spinInt;
+        let currentPwd = "";
+
+        function spinPwd() {
+            charIdx = (charIdx + 1) % chars.length;
+            spinnerDiv.innerText = chars[charIdx];
+        }
+        function startPwdSpin() {
+            if(spinInt) clearInterval(spinInt);
+            spinInt = setInterval(spinPwd, pwdSpeed);
+        }
+        startPwdSpin();
+
+        document.getElementById('lockCharBtn').onclick = () => {
+            currentPwd += chars[charIdx];
+            pwdOut.innerText = currentPwd;
+            // Öka hastighet drastiskt
+            pwdSpeed = Math.max(5, pwdSpeed * 0.8);
+            startPwdSpin();
+            // Uppdatera bar
+            entropyBar.style.width = Math.min(100, currentPwd.length * 10) + "%";
+        };
+        document.getElementById('resetPwdBtn').onclick = () => {
+            currentPwd = "";
+            pwdOut.innerText = "_";
+            pwdSpeed = 100;
+            entropyBar.style.width = "0%";
+            startPwdSpin();
+        };
+
+
+        // --- 7. GEO / VIND ---
+        const geoPin = document.getElementById('geoPin');
+        const latS = document.getElementById('latSlider');
+        const lonS = document.getElementById('longSlider');
+        const wInd = document.getElementById('windInd');
+        let windX = 0.0002;
+        let windY = 0.0001;
+        let driftLat = 59.3293;
+        let driftLon = 18.0686;
+
+        function updateMap() {
+            // Mappa coords till % (Lat 55-69, Lon 11-24)
+            // Lat är inverterad i CSS top (69 är uppe, 55 nere)
+            let topP = 100 - ((driftLat - 55) / (69-55) * 100);
+            let leftP = ((driftLon - 11) / (24-11) * 100);
+            
+            // Clampa visuellt så det inte ser trasigt ut, bara fel
+            topP = Math.max(0, Math.min(100, topP));
+            leftP = Math.max(0, Math.min(100, leftP));
+
+            geoPin.style.top = topP + "%";
+            geoPin.style.left = leftP + "%";
+            
+            document.getElementById('latVal').innerText = driftLat.toFixed(4);
+            document.getElementById('longVal').innerText = driftLon.toFixed(4);
+        }
+
+        // Vindloop
         setInterval(() => {
-            if(Math.random() > 0.9) { // Byt vind ibland
-                windX = (Math.random() - 0.5) * 0.002;
-                windY = (Math.random() - 0.5) * 0.002;
-                const speed = Math.round(Math.abs(windX * 5000));
-                windInd.textContent = `Vind: ${windX > 0 ? 'Öst' : 'Väst'} ${speed} m/s 💨`;
+            // Slumpa vind ibland
+            if(Math.random() > 0.95) {
+                windX = (Math.random() - 0.5) * 0.005;
+                windY = (Math.random() - 0.5) * 0.005;
+                wInd.innerText = `VARNING: VIND ${Math.abs(windX*10000).toFixed(0)} m/s`;
+                wInd.style.color = "red";
             }
-            // Flytta sliders
-            latSlider.value = parseFloat(latSlider.value) + windY;
-            longSlider.value = parseFloat(longSlider.value) + windX;
+            
+            // Applicera drift på variablerna
+            driftLat = parseFloat(latS.value) + windY;
+            driftLon = parseFloat(lonS.value) + windX;
+            
+            // Flytta sliders för att visa att de "rör sig" (extremt irriterande)
+            latS.value = driftLat;
+            lonS.value = driftLon;
+            
             updateMap();
         }, 100);
-        latSlider.addEventListener('input', updateMap);
-        longSlider.addEventListener('input', updateMap);
 
-        // --- LOGIK FÖR GODKÄNNANDE SLIDER ---
-        const thumb = document.getElementById('approvalThumb');
-        const appContainer = document.querySelector('.approval-container');
-        const timerDisplay = document.getElementById('approvalTimer');
-        const statusDisplay = document.getElementById('approvalStatus');
+
+        // --- 8. VOLYM (GRAVITATION) ---
+        const volHandle = document.getElementById('volumeHandle');
+        const volVal = document.getElementById('volumeValue');
+        let volPos = 100; // Y position (0-160ish)
+        let volVel = 0;
+        let draggingVol = false;
+
+        volHandle.addEventListener('mousedown', () => draggingVol = true);
+        window.addEventListener('mouseup', () => draggingVol = false);
+
+        window.addEventListener('mousemove', (e) => {
+            if(draggingVol) {
+                // Låt användaren dra den om de vill, men den är hal
+                // Implementeras ej fullt för att öka frustrationen, låt gravitationen styra
+            }
+            
+            const rect = document.getElementById('gravityTrack').getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            
+            // Avstånd från mitten horisontellt
+            const dist = e.clientX - centerX;
+            
+            // Om musen är nära
+            if(Math.abs(dist) < 300) {
+                // Höger sida (dist > 0) = Lyftkraft (Negativ Y)
+                // Vänster sida (dist < 0) = Tyngdkraft (Positiv Y)
+                const force = dist * 0.05;
+                volVel -= force * 0.01; 
+            }
+        });
+
+        function physicsVol() {
+            volPos += volVel;
+            // Gränser (Track height ca 200, handle 34 -> 166 max)
+            if(volPos < 0) { volPos = 0; volVel *= -0.5; } // Studsa
+            if(volPos > 166) { volPos = 166; volVel *= -0.5; }
+            
+            volVel *= 0.95; // Friktion
+            
+            volHandle.style.top = volPos + "px";
+            // Mappa till % (0px = 100%, 166px = 0%)
+            let pct = Math.round(100 - (volPos / 166 * 100));
+            volVal.innerText = pct + "%";
+            
+            requestAnimationFrame(physicsVol);
+        }
+        physicsVol();
+
+
+        // --- 9. TJÄNSTER KLICK ---
+        document.querySelectorAll('.service-card').forEach(card => {
+            let clicks = 0;
+            const dot = card.querySelector('.status-dot');
+            card.onclick = () => {
+                clicks++;
+                if(clicks === 1) dot.style.background = "orange";
+                if(clicks === 2) dot.style.background = "yellow";
+                if(clicks === 3) {
+                    dot.style.background = "#2ecc71"; // Green
+                    // Reset efter stund
+                    setTimeout(() => {
+                        clicks = 0;
+                        dot.style.background = "#eee";
+                    }, 3000);
+                }
+            }
+        });
+
+
+        // --- 10. SIGNERING SLIDER ---
+        const dragHandle = document.getElementById('dragHandle');
+        const dragCont = document.getElementById('approvalContainer');
+        const appStatus = document.getElementById('approvalStatus');
         const submitBtn = document.getElementById('submitBtn');
         
-        let isDraggingApproval = false;
-        let approvedTime = 0;
-        let checkInterval;
+        let draggingSign = false;
+        let hoverTime = 0;
+        let checkInt;
 
-        thumb.addEventListener('mousedown', (e) => { isDraggingApproval = true; e.preventDefault(); });
-        
-        document.addEventListener('mouseup', () => {
-            if(isDraggingApproval) {
-                isDraggingApproval = false;
-                thumb.style.left = '10px';
-                approvedTime = 0;
-                timerDisplay.textContent = "0.0s";
-                clearInterval(checkInterval);
-                if(statusDisplay.textContent !== "GODKÄND!") {
-                     statusDisplay.textContent = "EJ GODKÄND (Tappad)";
-                }
+        dragHandle.onmousedown = (e) => { draggingSign = true; e.preventDefault(); }
+        window.onmouseup = () => {
+            if(draggingSign) {
+                draggingSign = false;
+                dragHandle.style.left = "2px"; // Reset
+                hoverTime = 0;
+                appStatus.innerText = "VERIFIERING MISSLYCKADES - FÖRSÖK IGEN";
+                appStatus.style.color = "#cc0000";
+                clearInterval(checkInt);
             }
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDraggingApproval) return;
-            const rect = appContainer.getBoundingClientRect();
-            let x = e.clientX - rect.left - 25; 
-            x = Math.max(0, Math.min(x, rect.width - 50));
-            thumb.style.left = x + 'px';
-
-            const percent = x / (rect.width - 50);
-            clearInterval(checkInterval);
-            
-            // Zonen är runt 72% (se CSS left: 72%)
-            if (percent > 0.70 && percent < 0.76) { 
-                thumb.style.borderColor = "#bad80a";
-                checkInterval = setInterval(() => {
-                    approvedTime += 0.1;
-                    timerDisplay.textContent = approvedTime.toFixed(1) + "s";
-                    if (approvedTime >= 3.0) {
-                        statusDisplay.textContent = "GODKÄND!";
-                        statusDisplay.style.color = "#107c10";
-                        thumb.style.background = "#107c10";
-                        thumb.textContent = "✓";
-                        submitBtn.disabled = false;
-                        submitBtn.style.opacity = 1;
-                        submitBtn.style.cursor = "pointer";
-                        clearInterval(checkInterval);
-                        isDraggingApproval = false; // Lås den
-                    }
-                }, 100);
-            } else {
-                thumb.style.borderColor = "#999";
-                approvedTime = 0;
-                timerDisplay.textContent = "0.0s";
-            }
-        });
-
-        // --- LOGIK FÖR VOLYM GRAVITATION ---
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumeValueGravity = document.getElementById('volumeValueGravity');
-        let sliderPos = 150; 
-        let sliderVel = 0;
-        let isDraggingVolume = false;
-        let startY, startPos;
-        
-        volumeSlider.addEventListener('mousedown', (e) => { isDraggingVolume = true; startY = e.clientY; startPos = sliderPos; volumeSlider.style.cursor = 'grabbing'; sliderVel = 0; });
-        document.addEventListener('mouseup', () => { if(isDraggingVolume) volumeSlider.style.cursor = 'grab'; isDraggingVolume = false; });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (isDraggingVolume) {
-                const deltaY = e.clientY - startY;
-                sliderPos = Math.max(0, Math.min(260, startPos + deltaY));
-            } else {
-                const rect = volumeSlider.getBoundingClientRect();
-                const cx = rect.left + rect.width/2;
-                const cy = rect.top + rect.height/2;
-                const dx = e.clientX - cx;
-                const dy = Math.abs(e.clientY - cy);
-                
-                if (dy < 300 && Math.abs(dx) < 500) {
-                    const grav = (500 - Math.abs(dx))/500 * 0.8;
-                    sliderVel += (dx < 0) ? grav : -grav; // Vänster = ner, Höger = upp
-                }
-            }
-        });
-
-        function physicsLoop() {
-            if (!isDraggingVolume) {
-                sliderPos += sliderVel;
-                sliderPos = Math.max(0, Math.min(260, sliderPos));
-                sliderVel *= 0.96; // Friktion
-            }
-            volumeSlider.style.top = sliderPos + 'px';
-            const vol = Math.round((1 - sliderPos/260) * 100);
-            volumeValueGravity.textContent = vol + '%';
-            requestAnimationFrame(physicsLoop);
         }
-        physicsLoop();
-
-        // --- LOGIK FÖR AVDELNING DROPDOWN ---
-        const deptSelect = document.getElementById('departmentSelect');
-        deptSelect.addEventListener('focus', () => {
-            const opts = Array.from(deptSelect.options).slice(1); // Spara alternativen
-            deptSelect.innerHTML = '<option value="">Laddar...</option>';
-            setTimeout(() => {
-                opts.sort(() => Math.random() - 0.5);
-                deptSelect.innerHTML = '<option value="">Välj avdelning</option>';
-                opts.forEach(o => deptSelect.appendChild(o));
-            }, 500);
-        });
-
-        // --- LOGIK FÖR SERVICE CLICK ---
-        document.querySelectorAll('.service-item').forEach(item => {
-            const cnt = item.querySelector('.click-counter');
-            let c = 0;
-            item.addEventListener('click', () => {
-                c++; cnt.textContent = c + '/3';
-                if(c>=3) { 
-                    item.style.borderColor='#107c10'; item.style.background='#f0fff4'; 
-                    setTimeout(() => { item.style.borderColor='#e1e1e1'; item.style.background='white'; c=0; cnt.textContent='0/3'; }, 2000);
-                }
-            });
-        });
-
-        // --- SUBMIT ---
-        document.getElementById('submitBtn').addEventListener('click', () => {
-            alert("Tack! Din beställning behandlas nu av våra algoritmer (förväntad väntetid: 6-8 år).");
-        });
-
-    </script>
-</body>
-</html>
+        
+        window.onmousemove = (e) => {
+            if(!draggingSign) return;
+            const rect = dragCont.getBoundingClientRect();
+            let x = e.clientX - rect.left - 23; // Center handle
+            
+            // Clamp
+            x = Math.max(2, Math.min(x, rect.width - 48));
+            dragHandle.style.left = x + "px";
+            
+            // Check zone (65% to approx 75%)
+            const pct = x / rect.width;
+            
+            // Reset timer if moving
+            clearInterval(checkInt);
+            
+            if(pct > 0.62 && pct < 0.72) {
+                dragHandle.style.borderColor = "#2ecc71";
+                checkInt = setInterval(() => {
+                    hoverTime += 0.1;
+                    appStatus.innerText = `VERIFIERAR BIOMETRI... ${hoverTime.toFixed(1)}s`;
+                    appStatus.style.color = "#f39c12";
+                    
+                    if(hoverTime > 3.0) {
+                        clearInterval(checkInt);
+                        draggingSign = false; // Lock
+                        dragHandle.style.background = "#2ecc71";
+                        dragHandle.style.color = "white";
+                        dragHandle.innerText = "
