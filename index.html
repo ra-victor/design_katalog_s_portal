@@ -1,20 +1,3 @@
-Du har helt rätt. För att humorn ska fungera bäst (och för att likna r/baduibattles) måste sidan ta sig själv på 100% allvar. Ingen meta-humor i texten, inga "vi skojar med dig"-texter. Det ska se ut som att en byråkratisk IT-avdelning har beställt det dyraste, "säkraste" systemet i världen, men som är omöjligt att använda.
-
-Angående GitHub Pages:
-Ja, koden är 100% kompatibel. Det är ren HTML, CSS och JavaScript utan externa beroenden. Om du inte ser ändringarna beror det nästan alltid på webbläsarcache.
-
-När du pushar till GitHub, vänta 1-2 minuter.
-
-Gå till sidan och tryck Ctrl + F5 (eller Cmd + Shift + R på Mac) för att tvinga fram en omladdning.
-
-Här är den uppdaterade versionen. Tonen är nu extremt torr, byråkratisk och "korrekt", vilket gör funktionerna ännu mer frustrerande.
-
-code
-Html
-play_circle
-download
-content_copy
-expand_less
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -731,4 +714,27 @@ expand_less
                         draggingSign = false; // Lock
                         dragHandle.style.background = "#2ecc71";
                         dragHandle.style.color = "white";
-                        dragHandle.innerText = "
+                        dragHandle.innerText = "OK";
+                        appStatus.innerText = "VERIFIERING GODKÄND";
+                        appStatus.style.color = "green";
+                        submitBtn.disabled = false;
+                        submitBtn.style.background = "#003366";
+                        submitBtn.style.color = "white";
+                        submitBtn.style.cursor = "pointer";
+                        submitBtn.innerText = "SKICKA REKVISITION (SLUTLIG)";
+                    }
+                }, 100);
+            } else {
+                dragHandle.style.borderColor = "#999";
+                hoverTime = 0;
+            }
+        }
+        
+        submitBtn.onclick = () => {
+            alert("SYSTEMFEL 503: Servern svarar inte. Vänligen fyll i pappersblankett 4B och posta till Kiruna-kontoret.");
+            location.reload();
+        };
+
+    </script>
+</body>
+</html>
