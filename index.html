@@ -5,24 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koncernportal | Rekvisition Systemåtkomst</title>
     <style>
-        /* BYRÅKRATISK DESIGN - CLEAN MEN STEL */
+        /* --- CORE CORPORATE DESIGN --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; color: #2c3e50; overflow-x: hidden; font-size: 14px; }
         
         /* HEADER */
         .header { background: #003366; border-bottom: 4px solid #002244; padding: 0 40px; color: white; }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 60px; }
         .logo { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         .logo span { font-weight: 300; opacity: 0.8; }
         .user-info { font-size: 12px; text-align: right; }
 
         /* CONTAINER */
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; padding-bottom: 80px; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; padding-bottom: 100px; }
         .page-header { border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 30px; }
         h1 { font-size: 24px; font-weight: 600; color: #003366; margin-bottom: 5px; }
         p.ingress { color: #666; font-size: 13px; max-width: 700px; line-height: 1.5; }
 
-        /* FORMULÄR MODULER */
+        /* MODULES */
         .module { background: white; border: 1px solid #dce1e6; border-radius: 3px; padding: 25px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .module-title { font-size: 15px; font-weight: 700; color: #444; text-transform: uppercase; }
@@ -33,68 +33,81 @@
         .required { color: #cc0000; }
         .help-text { font-size: 11px; color: #7f8c8d; margin-top: 6px; font-style: italic; }
 
-        /* UI KOMPONENTER (BAD UI) */
-        
-        /* Namnhjul */
-        .input-wrapper-wheel { background: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; display: flex; gap: 20px; align-items: flex-start; }
-        .wheel-canvas { border: 1px solid #ccc; background: white; cursor: crosshair; border-radius: 50%; }
-        .name-readout { background: #fff; border: 1px solid #ced4da; padding: 10px; min-height: 40px; flex: 1; font-family: monospace; font-size: 16px; display: flex; align-items: center; }
-        
-        /* Telefon Slider */
-        .phone-control-panel { background: #eef2f7; padding: 15px; border: 1px solid #d1d9e6; }
-        .phone-screen { background: #000; color: #0f0; font-family: 'Consolas', monospace; font-size: 20px; text-align: center; padding: 10px; margin-bottom: 15px; border-radius: 2px; }
-        input[type=range] { width: 100%; cursor: pointer; }
-
-        /* Datum Binär */
-        .binary-date-picker { text-align: center; border: 1px solid #ccc; padding: 20px; background: #fff; }
-        .current-date-display { font-size: 22px; font-weight: bold; color: #003366; margin: 15px 0; font-family: monospace; }
-        .btn-group { display: flex; gap: 5px; justify-content: center; }
+        /* BUTTONS */
+        .btn-group { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
         .btn { padding: 8px 16px; border: 1px solid #ccc; background: #f8f9fa; font-size: 12px; cursor: pointer; font-weight: 600; border-radius: 2px; }
         .btn:hover { background: #e2e6ea; }
         .btn-primary { background: #003366; color: white; border-color: #002a55; }
         .btn-primary:hover { background: #002244; }
+        .btn-submit { width: 100%; padding: 15px; background: #ccc; color: #666; border: none; font-weight: bold; text-transform: uppercase; cursor: not-allowed; margin-top: 20px; }
 
-        /* Kostnadsställe */
+        /* --- MODULE STYLES --- */
+        
+        /* 1. Name Wheel */
+        .input-wrapper-wheel { background: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; display: flex; gap: 20px; align-items: flex-start; }
+        .wheel-canvas { border: 1px solid #ccc; background: white; cursor: crosshair; border-radius: 50%; }
+        .name-readout { background: #fff; border: 1px solid #ced4da; padding: 10px; min-height: 40px; flex: 1; font-family: monospace; font-size: 16px; display: flex; align-items: center; word-break: break-all; }
+
+        /* 2. Binary Date */
+        .binary-date-picker { text-align: center; border: 1px solid #ccc; padding: 20px; background: #fff; }
+        .current-date-display { font-size: 22px; font-weight: bold; color: #003366; margin: 15px 0; font-family: monospace; }
+
+        /* 3. Cost Center Spinners */
         .spinner-container { display: flex; gap: 10px; justify-content: center; background: #f8f9fa; padding: 15px; border: 1px solid #e9ecef; }
         .digit-box { text-align: center; }
         .digit-canvas { background: white; border: 1px solid #ced4da; cursor: pointer; }
 
-        /* Lösenord */
+        /* 4. Etch-a-Sketch Phone */
+        .etch-container { background: #cc0000; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; position: relative; max-width: 340px; margin: 0 auto; }
+        #etchCanvas { background: #e8e8e8; border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); cursor: none; }
+        .etch-overlay { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 300px; height: 150px; pointer-events: none; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); }
+        .etch-digit { display: flex; align-items: center; justify-content: center; font-size: 24px; color: rgba(0,0,0,0.05); font-weight: bold; }
+        .etch-controls { display: flex; justify-content: space-between; padding: 15px 20px 0; }
+        .knob-wrapper { display: flex; flex-direction: column; align-items: center; color: white; font-size: 10px; font-weight: bold; }
+        .knob { width: 50px; height: 50px; background: white; border-radius: 50%; border: 4px solid #ddd; margin-bottom: 5px; position: relative; cursor: grab; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+        .knob::after { content: ''; position: absolute; top: 5px; left: 50%; width: 4px; height: 20px; background: #ccc; transform: translateX(-50%); }
+        .current-number-display { background: #222; color: #0f0; font-family: 'Courier New', monospace; padding: 10px; margin-top: 15px; border-radius: 4px; min-height: 40px; font-size: 18px; word-break: break-all; }
+
+        /* 5. Ouija Email */
+        .ouija-board { background: #d2b48c; border: 5px solid #5d4037; padding: 20px; position: relative; height: 250px; cursor: crosshair; overflow: hidden; border-radius: 4px; background-image: radial-gradient(#c89b72 1px, transparent 1px); background-size: 10px 10px; }
+        .ouija-letters { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 10px; }
+        .spirit-char { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 18px; color: #3e2723; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; user-select: none; }
+        .planchette { position: absolute; width: 50px; height: 60px; background: rgba(255,255,255,0.8); border: 2px solid #333; border-radius: 50% 50% 5px 5px; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; transition: top 0.5s ease-out, left 0.5s ease-out; z-index: 10; }
+        .planchette::after { content: ''; position: absolute; top: 20px; left: 50%; width: 12px; height: 12px; background: rgba(255,255,255,0.2); border-radius: 50%; transform: translateX(-50%); border: 1px solid #000; }
+        .ouija-output { margin-top: 10px; font-family: 'Times New Roman', serif; font-size: 24px; text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 5px; min-height: 30px; }
+
+        /* 6. Geo / Wind */
+        .geo-panel { background: #e0e5ec; padding: 15px; border: 1px solid #ced4da; position: relative; }
+        .coord-display { font-family: monospace; font-size: 12px; color: #003366; margin-bottom: 10px; text-align: center; }
+        .map-grid { height: 200px; background: white; border: 1px solid #999; position: relative; overflow: hidden; background-image: radial-gradient(#ccc 1px, transparent 1px); background-size: 20px 20px; }
+        .map-pin { position: absolute; width: 10px; height: 10px; background: red; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: top 0.1s, left 0.1s; }
+        .weather-warning { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.9); padding: 4px 8px; font-size: 10px; border: 1px solid #ccc; color: #d35400; font-weight: bold; }
+        input[type=range] { width: 100%; margin: 10px 0; }
+
+        /* 7. Password */
         .security-box { background: #2c3e50; color: #ecf0f1; padding: 20px; text-align: center; border-radius: 3px; }
         .char-display { font-size: 36px; font-family: monospace; border: 2px solid #34495e; display: inline-block; width: 60px; height: 60px; line-height: 60px; margin-bottom: 10px; background: #34495e; }
         .pwd-output { font-family: monospace; font-size: 18px; letter-spacing: 2px; min-height: 24px; margin-bottom: 10px; color: #2ecc71; }
         .entropy-meter { height: 4px; background: #34495e; margin-top: 10px; width: 100%; }
         .entropy-fill { height: 100%; width: 0%; background: #e74c3c; transition: width 0.3s; }
 
-        /* Geo/Leverans */
-        .geo-panel { background: #e0e5ec; padding: 15px; border: 1px solid #ced4da; position: relative; }
-        .coord-display { font-family: monospace; font-size: 12px; color: #003366; margin-bottom: 10px; text-align: center; }
-        .map-grid { height: 200px; background: white; border: 1px solid #999; position: relative; overflow: hidden; background-image: radial-gradient(#ccc 1px, transparent 1px); background-size: 20px 20px; }
-        .map-pin { position: absolute; width: 10px; height: 10px; background: red; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .weather-warning { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.9); padding: 4px 8px; font-size: 10px; border: 1px solid #ccc; color: #d35400; font-weight: bold; }
-
-        /* Volym */
+        /* 8. Volume Gravity */
         .slider-track-vertical { position: relative; width: 40px; height: 200px; background: #e9ecef; border: 1px solid #ced4da; margin: 0 auto; border-radius: 20px; }
         .slider-handle { position: absolute; left: 2px; width: 34px; height: 34px; background: #003366; border-radius: 50%; cursor: grab; top: 50%; }
         .vol-value { text-align: center; font-size: 24px; font-weight: bold; margin-top: 10px; color: #003366; }
 
-        /* Avdelning */
-        select.shuffling-select { padding: 10px; width: 100%; border: 1px solid #ced4da; background: white; }
-
-        /* Tjänster */
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .service-card { border: 1px solid #eee; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
-        .service-card:hover { border-color: #003366; }
-        .status-dot { width: 10px; height: 10px; background: #eee; border-radius: 50%; margin: 0 auto 10px; border: 1px solid #ccc; }
-        
-        /* Villkor & Slider */
+        /* 9. Approval Slider */
         .legal-text { height: 100px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; font-size: 10px; color: #555; background: #fff; margin-bottom: 15px; text-align: justify; }
         .confirmation-slider-container { height: 50px; background: #e9ecef; border-radius: 25px; position: relative; border: 1px solid #ced4da; margin-top: 20px; overflow: hidden; }
         .confirmation-zone { position: absolute; left: 65%; top: 0; bottom: 0; width: 40px; background: rgba(0, 51, 102, 0.1); border-left: 1px dashed #003366; border-right: 1px dashed #003366; }
         .drag-handle { width: 46px; height: 46px; background: white; border: 2px solid #999; border-radius: 50%; position: absolute; top: 1px; left: 2px; cursor: grab; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #666; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .status-message { text-align: center; font-weight: bold; margin-top: 10px; font-size: 12px; color: #cc0000; text-transform: uppercase; }
 
-        .btn-submit { width: 100%; padding: 15px; background: #ccc; color: #666; border: none; font-weight: bold; text-transform: uppercase; cursor: not-allowed; margin-top: 20px; }
+        /* Services */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .service-card { border: 1px solid #eee; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+        .service-card:hover { border-color: #003366; }
+        .status-dot { width: 10px; height: 10px; background: #eee; border-radius: 50%; margin: 0 auto 10px; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
@@ -135,15 +148,6 @@
                     </div>
                 </div>
                 <div class="help-text">Använd den roterande väljaren för att mata in tecken. Systemet kalibrerar rotationshastigheten automatiskt baserat på CPU-belastning.</div>
-            </div>
-
-            <div class="form-row">
-                <label>Kontaktnummer (Mobil) <span class="required">*</span></label>
-                <div class="phone-control-panel">
-                    <div id="phoneDisplay" class="phone-screen">070-000 00 00</div>
-                    <input type="range" id="phoneSlider" min="700000000" max="799999999" value="700000000" step="1">
-                    <div class="help-text">Ställ in frekvensen för ditt telefonnummer. Känslighet: +/- 1 siffra per pixel.</div>
-                </div>
             </div>
         </div>
 
@@ -192,7 +196,7 @@
 
             <div class="form-row">
                 <label>Avdelningstillhörighet <span class="required">*</span></label>
-                <select id="departmentSelect" class="shuffling-select">
+                <select id="departmentSelect" style="width:100%; padding:10px;">
                     <option value="">Välj enhet...</option>
                     <option value="it">IT Drift</option>
                     <option value="hr">Human Resources</option>
@@ -203,10 +207,61 @@
             </div>
         </div>
 
-        <!-- MODUL 3: SÄKERHETSKLASSIFICERING -->
+        <!-- MODUL 3: KOMMUNIKATION (OUIJA & ETCH) -->
         <div class="module">
             <div class="module-header">
-                <span class="module-title">3. Autentisering</span>
+                <span class="module-title">3. Kontaktvägar</span>
+                <span class="module-id">REF-ID: SPIRIT_XY_PLOT</span>
+            </div>
+
+            <div class="form-row">
+                <label>E-postadress (Seans-inmatning) <span class="required">*</span></label>
+                <div class="ouija-board" id="ouijaBoard">
+                    <div class="ouija-letters" id="ouijaLetters">
+                        <!-- JS genererar bokstäver -->
+                    </div>
+                    <div class="planchette" id="planchette"></div>
+                </div>
+                <div class="ouija-output">
+                    <span id="ouijaResult" style="opacity: 0.5;">(Väntar på signal...)</span>
+                </div>
+                <div class="help-text">
+                    För musen över brädet. Andarna (CSS-simulerade) drar markören. Motstå kraften för att stava adressen.
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-top: 40px;">
+                <label>Kontaktnummer (Manuell Plotting) <span class="required">*</span></label>
+                <div class="etch-container">
+                    <canvas id="etchCanvas" width="300" height="150"></canvas>
+                    <div class="etch-overlay" id="etchOverlay">
+                        <!-- JS genererar grid -->
+                    </div>
+                    <div class="etch-controls">
+                        <div class="knob-wrapper">
+                            <div class="knob" id="knobLeft"></div>
+                            <span>X-AXEL</span>
+                        </div>
+                        <div class="knob-wrapper">
+                            <div class="knob" id="knobRight"></div>
+                            <span>Y-AXEL</span>
+                        </div>
+                    </div>
+                    <div class="current-number-display">
+                        VALT: <span id="etchResult"></span>
+                    </div>
+                    <button class="btn" id="etchClear" style="width: 100%; margin-top: 10px;">RENSA</button>
+                </div>
+                <div class="help-text">
+                    Vrid på rattarna för att rita fram till siffrorna. Stanna pennan ovanför en siffra i 2 sekunder för att välja.
+                </div>
+            </div>
+        </div>
+
+        <!-- MODUL 4: SÄKERHETSKLASSIFICERING -->
+        <div class="module">
+            <div class="module-header">
+                <span class="module-title">4. Autentisering</span>
                 <span class="module-id">REF-ID: SEC_AUTH_V4</span>
             </div>
 
@@ -222,15 +277,15 @@
                         <button class="btn" id="resetPwdBtn">ÅTERSTÄLL</button>
                     </div>
                     <div class="entropy-meter"><div id="entropyBar" class="entropy-fill"></div></div>
-                    <div class="help-text" style="color: #bdc3c7;">Generera kod med hög entropi. Rotationshastigheten ökar exponentiellt per tecken för att förhindra "shoulder surfing".</div>
+                    <div class="help-text" style="color: #bdc3c7;">Generera kod med hög entropi. Rotationshastigheten ökar exponentiellt per tecken.</div>
                 </div>
             </div>
         </div>
 
-        <!-- MODUL 4: LOGISTIK -->
+        <!-- MODUL 5: LOGISTIK -->
         <div class="module">
             <div class="module-header">
-                <span class="module-title">4. Leveranskoordinater</span>
+                <span class="module-title">5. Leveranskoordinater</span>
                 <span class="module-id">REF-ID: GEO_DRONE_NET</span>
             </div>
 
@@ -255,10 +310,10 @@
             </div>
         </div>
 
-        <!-- MODUL 5: SYSTEMNOTIFIERINGAR -->
+        <!-- MODUL 6: SYSTEMNOTIFIERINGAR -->
         <div class="module">
             <div class="module-header">
-                <span class="module-title">5. Notifieringsnivå</span>
+                <span class="module-title">6. Notifieringsnivå</span>
                 <span class="module-id">REF-ID: AUDIO_LEVEL_PHY</span>
             </div>
             
@@ -274,10 +329,10 @@
             </div>
         </div>
 
-        <!-- MODUL 6: RESURSVAL -->
+        <!-- MODUL 7: RESURSVAL -->
         <div class="module">
             <div class="module-header">
-                <span class="module-title">6. Resurser</span>
+                <span class="module-title">7. Resurser</span>
                 <span class="module-id">REF-ID: ITEM_SELECT</span>
             </div>
             <p class="help-text" style="margin-bottom: 15px;">Verifiera val genom tre-faktors-interaktion (3 klick krävs per objekt).</p>
@@ -305,10 +360,10 @@
             </div>
         </div>
 
-        <!-- MODUL 7: AVTAL & SIGNERING -->
+        <!-- MODUL 8: AVTAL & SIGNERING -->
         <div class="module" style="border-top: 4px solid #cc0000;">
             <div class="module-header">
-                <span class="module-title">7. Slutgiltigt Godkännande</span>
+                <span class="module-title">8. Slutgiltigt Godkännande</span>
                 <span class="module-id">REF-ID: FINAL_SIG</span>
             </div>
 
@@ -321,9 +376,7 @@
                 3. BIOMETRISK DATA<br>
                 Genom att använda namnhjulet godkänner du att vi sparar din musrörelse-profil för framtida AI-träning.<br><br>
                 4. LEVERANS<br>
-                Leverans sker endast om koordinaterna matchar exakt vid leveranstillfället. Då drönare är känsliga för vindavdrift (se Modul 4) rekommenderas användaren att stå på en öppen yta och springa i motsatt riktning mot vinden för att möta leveransen.<br><br>
-                5. LÄSHASTIGHET<br>
-                Detta textfält har en inbyggd fördröjning av scrollfunktionen för att säkerställa att texten faktiskt läses. Att scrolla snabbare än 20px per sekund anses vara ett brott mot användaravtalet.<br><br>
+                Leverans sker endast om koordinaterna matchar exakt vid leveranstillfället. Då drönare är känsliga för vindavdrift rekommenderas användaren att stå på en öppen yta och springa i motsatt riktning mot vinden.<br><br>
                 [SLUT PÅ DOKUMENT]
             </div>
 
@@ -342,11 +395,6 @@
     </div>
 
     <script>
-        /* 
-         * KONCERN IT - INTERN SCRIPTFIL
-         * VERSION: 2024.2.1 (STABLE?)
-         */
-
         // --- 1. NAMN-HJUL LOGIK ---
         const wheelCanvas = document.getElementById('alphabetWheel');
         const wheelCtx = wheelCanvas.getContext('2d');
@@ -360,7 +408,6 @@
             wheelCtx.save();
             wheelCtx.translate(60, 60);
             wheelCtx.rotate(wheelAngle);
-            
             wheelCtx.font = "bold 14px Arial";
             wheelCtx.textAlign = "center";
             wheelCtx.textBaseline = "middle";
@@ -370,41 +417,25 @@
                 wheelCtx.save();
                 wheelCtx.rotate(angle);
                 wheelCtx.translate(0, -45);
-                wheelCtx.rotate(-angle + -wheelAngle); // Keep text upright relative to view? No, spin it.
-                wheelCtx.rotate(wheelAngle + angle); // Actually let's have text radiate
-                
-                wheelCtx.fillStyle = i === 0 ? "#cc0000" : "#333"; // Markören
+                wheelCtx.rotate(wheelAngle + angle);
+                wheelCtx.fillStyle = i === 0 ? "#cc0000" : "#333";
                 wheelCtx.fillText(alphabet[i], 0, 0);
                 wheelCtx.restore();
             }
-            
-            // Markör (Fixed)
             wheelCtx.restore();
-            wheelCtx.beginPath();
-            wheelCtx.moveTo(60, 10);
-            wheelCtx.lineTo(55, 0);
-            wheelCtx.lineTo(65, 0);
-            wheelCtx.fillStyle = "#003366";
-            wheelCtx.fill();
+            wheelCtx.beginPath(); wheelCtx.moveTo(60, 10); wheelCtx.lineTo(55, 0); wheelCtx.lineTo(65, 0); wheelCtx.fillStyle = "#003366"; wheelCtx.fill();
 
-            // Variera hastighet irriterande
             wheelSpeed = 0.03 + (Math.sin(Date.now() / 800) * 0.025);
             wheelAngle += wheelSpeed;
-            
             requestAnimationFrame(drawWheel);
         }
         drawWheel();
 
         wheelCanvas.addEventListener('mousedown', () => {
-            // Beräkna vilken bokstav som är "klockan 12"
-            // Detta är avsiktligt dålig matematik för att göra det svårt
             const total = Math.PI * 2;
             const normalizedAngle = (wheelAngle % total + total) % total;
-            // Invertera för att matcha rotation
             const segment = total / alphabet.length;
-            // Justera index baserat på visuell position (ca)
             let index = Math.floor(((total - normalizedAngle) + (segment/2)) / segment) % alphabet.length;
-            
             nameDisplay.textContent += alphabet[index];
         });
         
@@ -412,19 +443,7 @@
         document.getElementById('nameBackspace').onclick = () => nameDisplay.textContent = nameDisplay.textContent.slice(0, -1);
         document.getElementById('nameClear').onclick = () => nameDisplay.textContent = "";
 
-
-        // --- 2. TELEFON SLIDER ---
-        const phSlider = document.getElementById('phoneSlider');
-        const phDisp = document.getElementById('phoneDisplay');
-        phSlider.oninput = function() {
-            // Formatera som svenskt nummer
-            let val = "0" + this.value;
-            let formatted = val.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1-$2 $3 $4");
-            phDisp.innerText = formatted;
-        }
-
-
-        // --- 3. DATUM BINÄR SÖKNING ---
+        // --- 2. DATUM BINÄR SÖKNING ---
         let minDate = new Date('2020-01-01').getTime();
         let maxDate = new Date('2030-12-31').getTime();
         let currDateVal = new Date('2024-01-01').getTime();
@@ -437,303 +456,264 @@
             clickCountSpan.innerText = dClicks;
         }
 
-        document.getElementById('beforeBtn').onclick = () => {
-            dClicks++;
-            maxDate = currDateVal;
-            currDateVal = minDate + (maxDate - minDate) / 2;
-            updateDateDisp();
-        };
-        document.getElementById('afterBtn').onclick = () => {
-            dClicks++;
-            minDate = currDateVal;
-            currDateVal = minDate + (maxDate - minDate) / 2;
-            updateDateDisp();
-        };
-        document.getElementById('exactBtn').onclick = () => {
-            dClicks++;
-            dateDisp.style.color = "#2ecc71";
-            setTimeout(()=> dateDisp.style.color = "#003366", 500);
-            updateDateDisp();
-        };
+        document.getElementById('beforeBtn').onclick = () => { dClicks++; maxDate = currDateVal; currDateVal = minDate + (maxDate - minDate) / 2; updateDateDisp(); };
+        document.getElementById('afterBtn').onclick = () => { dClicks++; minDate = currDateVal; currDateVal = minDate + (maxDate - minDate) / 2; updateDateDisp(); };
+        document.getElementById('exactBtn').onclick = () => { dClicks++; dateDisp.style.color = "#2ecc71"; setTimeout(()=> dateDisp.style.color = "#003366", 500); updateDateDisp(); };
 
-
-        // --- 4. KOSTNADSSTÄLLE SPINNERS ---
+        // --- 3. KOSTNADSSTÄLLE ---
         [1,2,3,4].forEach(id => {
             const cvs = document.getElementById('digit'+id);
             const ctx = cvs.getContext('2d');
             const valDiv = document.getElementById('value'+id);
             let rot = Math.random() * Math.PI * 2;
             let speed = 0.05 + (Math.random() * 0.05);
-
             function loop() {
-                ctx.clearRect(0,0,50,70);
-                ctx.save();
-                ctx.translate(25,35);
-                ctx.rotate(rot);
+                ctx.clearRect(0,0,50,70); ctx.save(); ctx.translate(25,35); ctx.rotate(rot);
                 for(let n=0; n<10; n++) {
-                    ctx.save();
-                    ctx.rotate(n * (Math.PI*2)/10);
-                    ctx.fillStyle = n===0 ? "red" : "#ccc";
-                    ctx.font = "bold 16px Arial";
-                    ctx.fillText(n.toString(), 0, -20);
-                    ctx.restore();
+                    ctx.save(); ctx.rotate(n * (Math.PI*2)/10); ctx.fillStyle = n===0 ? "red" : "#ccc"; ctx.font = "bold 16px Arial"; ctx.fillText(n.toString(), 0, -20); ctx.restore();
                 }
-                ctx.restore();
-                rot += speed;
-                requestAnimationFrame(loop);
+                ctx.restore(); rot += speed; requestAnimationFrame(loop);
             }
             loop();
-            
             cvs.onclick = () => {
-                // Vilken siffra är uppåt?
                 const norm = (rot % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-                // Matematisk gissning för användaren
                 let digit = Math.floor(10 - (norm / (Math.PI*2) * 10)) % 10;
                 valDiv.innerText = digit;
             }
         });
 
-
-        // --- 5. AVDELNING SHUFFLE ---
+        // --- 4. AVDELNING SHUFFLE ---
         const deptSel = document.getElementById('departmentSelect');
         deptSel.onfocus = function() {
-            const opts = Array.from(this.options);
-            // Ta bort första
-            const first = opts.shift();
-            // Blanda resten
-            opts.sort(() => Math.random() - 0.5);
-            // Sätt tillbaka
-            this.innerHTML = "";
-            this.appendChild(first);
-            opts.forEach(o => this.appendChild(o));
+            const opts = Array.from(this.options); const first = opts.shift(); opts.sort(() => Math.random() - 0.5);
+            this.innerHTML = ""; this.appendChild(first); opts.forEach(o => this.appendChild(o));
         }
 
+        // --- 5. OUIJA EMAIL ---
+        const board = document.getElementById('ouijaBoard');
+        const planchette = document.getElementById('planchette');
+        const ouijaResult = document.getElementById('ouijaResult');
+        const letterContainer = document.getElementById('ouijaLetters');
+        const spirits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@.";
+        let spiritEls = [];
+        spirits.split('').forEach(char => {
+            const s = document.createElement('div'); s.className = 'spirit-char'; s.innerText = char;
+            letterContainer.appendChild(s); spiritEls.push({ el: s, char: char });
+        });
 
-        // --- 6. SÄKERHET / LÖSENORD ---
+        board.addEventListener('mousemove', (e) => {
+            const rect = board.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const noiseX = (Math.random() - 0.5) * 50;
+            const noiseY = (Math.random() - 0.5) * 50;
+            
+            let closestDist = 9999;
+            let closestEl = null;
+            spiritEls.forEach(item => {
+                const itemRect = item.el.getBoundingClientRect();
+                const itemX = itemRect.left - rect.left + 12;
+                const itemY = itemRect.top - rect.top + 12;
+                const dist = Math.hypot(mouseX - itemX, mouseY - itemY);
+                if(dist < closestDist) { closestDist = dist; closestEl = item; }
+            });
+            
+            let targetX = mouseX;
+            let targetY = mouseY;
+            if(closestDist < 60) {
+                const itemRect = closestEl.el.getBoundingClientRect();
+                targetX = (itemRect.left - rect.left + 12);
+                targetY = (itemRect.top - rect.top + 12);
+                if(Math.random() > 0.98) { 
+                    if(ouijaResult.innerText.includes('(')) ouijaResult.innerText = "";
+                    ouijaResult.innerText += closestEl.char; 
+                }
+            }
+            planchette.style.left = (targetX + noiseX) + 'px';
+            planchette.style.top = (targetY + noiseY) + 'px';
+        });
+
+        // --- 6. ETCH-A-PHONE ---
+        const etchCanvas = document.getElementById('etchCanvas');
+        const etchCtx = etchCanvas.getContext('2d');
+        const etchResult = document.getElementById('etchResult');
+        const etchOverlay = document.getElementById('etchOverlay');
+        
+        let etchX = 150; let etchY = 75;
+        let path = [{x: etchX, y: etchY}];
+        let currentDigit = null;
+        let hoverTimer = null;
+        
+        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+        numbers.forEach((num) => {
+            const div = document.createElement('div'); div.className = 'etch-digit'; div.innerText = num; etchOverlay.appendChild(div);
+        });
+
+        etchCtx.lineWidth = 2; etchCtx.lineCap = 'round'; etchCtx.strokeStyle = '#333';
+
+        function drawEtch() {
+            etchCtx.clearRect(0, 0, 300, 150); etchCtx.beginPath();
+            if(path.length > 0) {
+                etchCtx.moveTo(path[0].x, path[0].y);
+                for(let i=1; i<path.length; i++) etchCtx.lineTo(path[i].x, path[i].y);
+            }
+            etchCtx.stroke();
+            etchCtx.fillStyle = 'rgba(0,0,0,0.5)'; etchCtx.beginPath(); etchCtx.arc(etchX, etchY, 3, 0, Math.PI*2); etchCtx.fill();
+        }
+
+        function checkEtchCollision() {
+            const col = Math.floor(etchX / 60);
+            const row = Math.floor(etchY / 75);
+            const index = row * 5 + col;
+            if (index >= 0 && index < numbers.length) {
+                const val = numbers[index];
+                if (currentDigit !== val) {
+                    currentDigit = val;
+                    clearTimeout(hoverTimer);
+                    hoverTimer = setTimeout(() => {
+                        etchResult.innerText += val;
+                        etchCtx.fillStyle = 'rgba(0,255,0,0.3)'; etchCtx.fillRect(col*60, row*75, 60, 75);
+                        setTimeout(drawEtch, 200);
+                    }, 2000);
+                }
+            } else {
+                clearTimeout(hoverTimer); currentDigit = null;
+            }
+        }
+
+        const knobL = document.getElementById('knobLeft');
+        const knobR = document.getElementById('knobRight');
+        function setupKnob(element, axis) {
+            let startPos = 0;
+            element.addEventListener('mousedown', (e) => {
+                e.preventDefault(); startPos = e.clientY;
+                const moveHandler = (ev) => {
+                    const delta = startPos - ev.clientY;
+                    element.style.transform = `rotate(${delta * 5}deg)`;
+                    if(axis === 'x') etchX = Math.max(0, Math.min(300, etchX + delta * 0.5));
+                    if(axis === 'y') etchY = Math.max(0, Math.min(150, etchY + delta * 0.5));
+                    path.push({x: etchX, y: etchY});
+                    drawEtch(); checkEtchCollision();
+                    startPos = ev.clientY;
+                };
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', () => { document.removeEventListener('mousemove', moveHandler); }, {once:true});
+            });
+        }
+        setupKnob(knobL, 'x'); setupKnob(knobR, 'y'); drawEtch();
+        document.getElementById('etchClear').onclick = () => { path = [{x: etchX, y: etchY}]; etchResult.innerText = ''; drawEtch(); };
+
+        // --- 7. PASSWORD ---
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#";
         const spinnerDiv = document.getElementById('charSpinner');
         const pwdOut = document.getElementById('pwdResult');
         const entropyBar = document.getElementById('entropyBar');
-        let charIdx = 0;
-        let pwdSpeed = 100;
-        let spinInt;
-        let currentPwd = "";
-
-        function spinPwd() {
-            charIdx = (charIdx + 1) % chars.length;
-            spinnerDiv.innerText = chars[charIdx];
-        }
-        function startPwdSpin() {
-            if(spinInt) clearInterval(spinInt);
-            spinInt = setInterval(spinPwd, pwdSpeed);
-        }
+        let charIdx = 0; let pwdSpeed = 100; let spinInt; let currentPwd = "";
+        function spinPwd() { charIdx = (charIdx + 1) % chars.length; spinnerDiv.innerText = chars[charIdx]; }
+        function startPwdSpin() { if(spinInt) clearInterval(spinInt); spinInt = setInterval(spinPwd, pwdSpeed); }
         startPwdSpin();
-
         document.getElementById('lockCharBtn').onclick = () => {
-            currentPwd += chars[charIdx];
-            pwdOut.innerText = currentPwd;
-            // Öka hastighet drastiskt
-            pwdSpeed = Math.max(5, pwdSpeed * 0.8);
-            startPwdSpin();
-            // Uppdatera bar
+            currentPwd += chars[charIdx]; pwdOut.innerText = currentPwd;
+            pwdSpeed = Math.max(5, pwdSpeed * 0.8); startPwdSpin();
             entropyBar.style.width = Math.min(100, currentPwd.length * 10) + "%";
         };
-        document.getElementById('resetPwdBtn').onclick = () => {
-            currentPwd = "";
-            pwdOut.innerText = "_";
-            pwdSpeed = 100;
-            entropyBar.style.width = "0%";
-            startPwdSpin();
-        };
+        document.getElementById('resetPwdBtn').onclick = () => { currentPwd = ""; pwdOut.innerText = "_"; pwdSpeed = 100; entropyBar.style.width = "0%"; startPwdSpin(); };
 
-
-        // --- 7. GEO / VIND ---
+        // --- 8. GEO & WIND ---
         const geoPin = document.getElementById('geoPin');
-        const latS = document.getElementById('latSlider');
-        const lonS = document.getElementById('longSlider');
+        const latS = document.getElementById('latSlider'); const lonS = document.getElementById('longSlider');
         const wInd = document.getElementById('windInd');
-        let windX = 0.0002;
-        let windY = 0.0001;
-        let driftLat = 59.3293;
-        let driftLon = 18.0686;
-
+        let windX = 0.0002; let windY = 0.0001; let driftLat = 59.3293; let driftLon = 18.0686;
+        
         function updateMap() {
-            // Mappa coords till % (Lat 55-69, Lon 11-24)
-            // Lat är inverterad i CSS top (69 är uppe, 55 nere)
             let topP = 100 - ((driftLat - 55) / (69-55) * 100);
             let leftP = ((driftLon - 11) / (24-11) * 100);
-            
-            // Clampa visuellt så det inte ser trasigt ut, bara fel
-            topP = Math.max(0, Math.min(100, topP));
-            leftP = Math.max(0, Math.min(100, leftP));
-
-            geoPin.style.top = topP + "%";
-            geoPin.style.left = leftP + "%";
-            
+            topP = Math.max(0, Math.min(100, topP)); leftP = Math.max(0, Math.min(100, leftP));
+            geoPin.style.top = topP + "%"; geoPin.style.left = leftP + "%";
             document.getElementById('latVal').innerText = driftLat.toFixed(4);
             document.getElementById('longVal').innerText = driftLon.toFixed(4);
         }
-
-        // Vindloop
         setInterval(() => {
-            // Slumpa vind ibland
-            if(Math.random() > 0.95) {
-                windX = (Math.random() - 0.5) * 0.005;
-                windY = (Math.random() - 0.5) * 0.005;
-                wInd.innerText = `VARNING: VIND ${Math.abs(windX*10000).toFixed(0)} m/s`;
-                wInd.style.color = "red";
-            }
-            
-            // Applicera drift på variablerna
-            driftLat = parseFloat(latS.value) + windY;
-            driftLon = parseFloat(lonS.value) + windX;
-            
-            // Flytta sliders för att visa att de "rör sig" (extremt irriterande)
-            latS.value = driftLat;
-            lonS.value = driftLon;
-            
-            updateMap();
+            if(Math.random() > 0.95) { windX = (Math.random() - 0.5) * 0.005; windY = (Math.random() - 0.5) * 0.005; wInd.innerText = `VARNING: VIND ${Math.abs(windX*10000).toFixed(0)} m/s`; wInd.style.color = "red"; }
+            driftLat = parseFloat(latS.value) + windY; driftLon = parseFloat(lonS.value) + windX;
+            latS.value = driftLat; lonS.value = driftLon; updateMap();
         }, 100);
 
-
-        // --- 8. VOLYM (GRAVITATION) ---
+        // --- 9. VOLUME GRAVITY ---
         const volHandle = document.getElementById('volumeHandle');
         const volVal = document.getElementById('volumeValue');
-        let volPos = 100; // Y position (0-160ish)
-        let volVel = 0;
-        let draggingVol = false;
-
-        volHandle.addEventListener('mousedown', () => draggingVol = true);
-        window.addEventListener('mouseup', () => draggingVol = false);
-
+        let volPos = 100; let volVel = 0;
         window.addEventListener('mousemove', (e) => {
-            if(draggingVol) {
-                // Låt användaren dra den om de vill, men den är hal
-                // Implementeras ej fullt för att öka frustrationen, låt gravitationen styra
-            }
-            
             const rect = document.getElementById('gravityTrack').getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
-            
-            // Avstånd från mitten horisontellt
             const dist = e.clientX - centerX;
-            
-            // Om musen är nära
             if(Math.abs(dist) < 300) {
-                // Höger sida (dist > 0) = Lyftkraft (Negativ Y)
-                // Vänster sida (dist < 0) = Tyngdkraft (Positiv Y)
-                const force = dist * 0.05;
-                volVel -= force * 0.01; 
+                const force = dist * 0.05; volVel -= force * 0.01; 
             }
         });
-
         function physicsVol() {
             volPos += volVel;
-            // Gränser (Track height ca 200, handle 34 -> 166 max)
-            if(volPos < 0) { volPos = 0; volVel *= -0.5; } // Studsa
-            if(volPos > 166) { volPos = 166; volVel *= -0.5; }
-            
-            volVel *= 0.95; // Friktion
-            
+            if(volPos < 0) { volPos = 0; volVel *= -0.5; } if(volPos > 166) { volPos = 166; volVel *= -0.5; }
+            volVel *= 0.95;
             volHandle.style.top = volPos + "px";
-            // Mappa till % (0px = 100%, 166px = 0%)
             let pct = Math.round(100 - (volPos / 166 * 100));
             volVal.innerText = pct + "%";
-            
             requestAnimationFrame(physicsVol);
         }
         physicsVol();
 
-
-        // --- 9. TJÄNSTER KLICK ---
+        // --- 10. SERVICES CLICK ---
         document.querySelectorAll('.service-card').forEach(card => {
-            let clicks = 0;
-            const dot = card.querySelector('.status-dot');
+            let clicks = 0; const dot = card.querySelector('.status-dot');
             card.onclick = () => {
                 clicks++;
                 if(clicks === 1) dot.style.background = "orange";
                 if(clicks === 2) dot.style.background = "yellow";
-                if(clicks === 3) {
-                    dot.style.background = "#2ecc71"; // Green
-                    // Reset efter stund
-                    setTimeout(() => {
-                        clicks = 0;
-                        dot.style.background = "#eee";
-                    }, 3000);
-                }
+                if(clicks === 3) { dot.style.background = "#2ecc71"; setTimeout(() => { clicks = 0; dot.style.background = "#eee"; }, 3000); }
             }
         });
 
-
-        // --- 10. SIGNERING SLIDER ---
+        // --- 11. APPROVAL SLIDER ---
         const dragHandle = document.getElementById('dragHandle');
         const dragCont = document.getElementById('approvalContainer');
         const appStatus = document.getElementById('approvalStatus');
         const submitBtn = document.getElementById('submitBtn');
-        
-        let draggingSign = false;
-        let hoverTime = 0;
-        let checkInt;
+        let draggingSign = false; let hoverTime = 0; let checkInt;
 
         dragHandle.onmousedown = (e) => { draggingSign = true; e.preventDefault(); }
-        window.onmouseup = () => {
+        window.addEventListener('mouseup', () => {
             if(draggingSign) {
-                draggingSign = false;
-                dragHandle.style.left = "2px"; // Reset
-                hoverTime = 0;
-                appStatus.innerText = "VERIFIERING MISSLYCKADES - FÖRSÖK IGEN";
-                appStatus.style.color = "#cc0000";
-                clearInterval(checkInt);
+                draggingSign = false; dragHandle.style.left = "2px"; hoverTime = 0;
+                appStatus.innerText = "VERIFIERING MISSLYCKADES"; appStatus.style.color = "#cc0000"; clearInterval(checkInt);
             }
-        }
-        
-        window.onmousemove = (e) => {
+        });
+        window.addEventListener('mousemove', (e) => {
             if(!draggingSign) return;
             const rect = dragCont.getBoundingClientRect();
-            let x = e.clientX - rect.left - 23; // Center handle
-            
-            // Clamp
+            let x = e.clientX - rect.left - 23;
             x = Math.max(2, Math.min(x, rect.width - 48));
             dragHandle.style.left = x + "px";
-            
-            // Check zone (65% to approx 75%)
             const pct = x / rect.width;
-            
-            // Reset timer if moving
             clearInterval(checkInt);
-            
             if(pct > 0.62 && pct < 0.72) {
                 dragHandle.style.borderColor = "#2ecc71";
                 checkInt = setInterval(() => {
                     hoverTime += 0.1;
                     appStatus.innerText = `VERIFIERAR BIOMETRI... ${hoverTime.toFixed(1)}s`;
                     appStatus.style.color = "#f39c12";
-                    
                     if(hoverTime > 3.0) {
-                        clearInterval(checkInt);
-                        draggingSign = false; // Lock
-                        dragHandle.style.background = "#2ecc71";
-                        dragHandle.style.color = "white";
-                        dragHandle.innerText = "OK";
-                        appStatus.innerText = "VERIFIERING GODKÄND";
-                        appStatus.style.color = "green";
-                        submitBtn.disabled = false;
-                        submitBtn.style.background = "#003366";
-                        submitBtn.style.color = "white";
-                        submitBtn.style.cursor = "pointer";
-                        submitBtn.innerText = "SKICKA REKVISITION (SLUTLIG)";
+                        clearInterval(checkInt); draggingSign = false;
+                        dragHandle.style.background = "#2ecc71"; dragHandle.style.color = "white"; dragHandle.innerText = "OK";
+                        appStatus.innerText = "VERIFIERING GODKÄND"; appStatus.style.color = "green";
+                        submitBtn.disabled = false; submitBtn.style.background = "#003366"; submitBtn.style.color = "white"; submitBtn.style.cursor = "pointer";
                     }
                 }, 100);
             } else {
-                dragHandle.style.borderColor = "#999";
-                hoverTime = 0;
+                dragHandle.style.borderColor = "#999"; hoverTime = 0;
             }
-        }
-        
-        submitBtn.onclick = () => {
-            alert("SYSTEMFEL 503: Servern svarar inte. Vänligen fyll i pappersblankett 4B och posta till Kiruna-kontoret.");
-            location.reload();
-        };
+        });
+
+        submitBtn.onclick = () => { alert("SYSTEMFEL 503: Servern svarar inte. Vänligen fyll i pappersblankett 4B."); location.reload(); };
 
     </script>
 </body>
