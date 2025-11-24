@@ -3,741 +3,1274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intranät | Koncernövergripande Resursallokering (SECURE)</title>
+    <title>Beställningsformulär - Nordic Business Solutions AB</title>
     <style>
-        :root {
-            --bg-body: #e0e5ec;
-            --bg-panel: #ecf0f3;
-            --text-main: #4a5568;
-            --text-muted: #a0aec0;
-            --border-light: #ffffff;
-            --border-shadow: #b8b9be;
-            --accent: #4a90e2;
-            --danger: #e53e3e;
-            --success: #38a169;
-            --warning: #d69e2e;
-            --mono: 'Menlo', 'Monaco', 'Courier New', monospace;
-            --sans: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        /* --- NEUMORPHIC BASE --- */
-        body {
-            background-color: var(--bg-body);
-            font-family: var(--sans);
-            color: var(--text-main);
+        * {
             margin: 0;
-            padding: 20px 0 100px 0;
-            line-height: 1.5;
+            padding: 0;
+            box-sizing: border-box;
         }
-
-        .container { max-width: 850px; margin: 0 auto; padding: 0 15px; }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 2px solid #cbd5e0;
-            padding-bottom: 20px;
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .header h1 { font-size: 1.25rem; text-transform: uppercase; letter-spacing: 2px; margin: 0; color: #2d3748; }
-        .header .meta { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; }
-
-        .module {
-            background: var(--bg-panel);
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
             border-radius: 12px;
-            box-shadow: 9px 9px 16px var(--border-shadow), -9px -9px 16px var(--border-light);
-            margin-bottom: 30px;
-            padding: 25px;
-            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
-
-        .module-head {
-            display: flex; justify-content: space-between; align-items: baseline;
-            margin-bottom: 20px; border-bottom: 1px solid #cbd5e0; padding-bottom: 10px;
+        
+        .header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
         }
-        .label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; }
-        .status-led { height: 8px; width: 8px; border-radius: 50%; background: #cbd5e0; display: inline-block; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
-        .status-led.active { background: var(--success); box-shadow: 0 0 8px var(--success); }
-
-        .control-panel {
-            background: #e6e9ef;
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .form-content {
+            padding: 50px;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: #667eea;
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .required {
+            color: #e53e3e;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
             border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 6px;
+            font-style: italic;
+        }
+        
+        /* Gyroscope Name Input */
+        .gyro-container {
+            position: relative;
+            min-height: 300px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f7fafc;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .name-display {
+            padding: 12px 16px;
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 15px;
+            min-height: 46px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .gyro-play-area {
+            height: 250px;
+            position: relative;
+            cursor: crosshair;
+        }
+        
+        .letter-floating {
+            position: absolute;
+            font-size: 40px;
+            font-weight: bold;
+            color: #667eea;
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none; /* Let clicks pass through */
+        }
+        
+        .letter-floating.show {
+            opacity: 1;
+        }
+        
+        .drop-zone {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px dashed #cbd5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #718096;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .drop-zone.use {
+            background: rgba(72, 187, 120, 0.1);
+            border-color: #48bb78;
+        }
+        
+        .drop-zone.discard {
+            background: rgba(245, 101, 101, 0.1);
+            border-color: #f56565;
+        }
+        
+        /* Slider for each letter */
+        .letter-sliders {
+            padding: 20px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .slider-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .slider-output {
+            width: 30px;
+            font-weight: bold;
+            color: #2d3748;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .add-letter-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .add-letter-btn:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+        
+        /* Quantity with logarithmic slider */
+        .quantity-slider-container {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .quantity-display {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        /* Checkbox that fails */
+        .terms-container {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        
+        .terms-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        
+        .status-message {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: none;
+        }
+        
+        .status-message.show {
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .status-message.success {
+            background: #c6f6d5;
+            color: #2f855a;
+        }
+        
+        /* Date picker - only days */
+        .date-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .day-cell {
+            aspect-ratio: 1;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.2s;
+        }
+        
+        .day-cell:hover {
+            background: #e2e8f0;
+            transform: scale(1.05);
+        }
+        
+        .day-cell.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        /* Analog clock */
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .clock-face {
+            width: 250px;
+            height: 250px;
+            border: 4px solid #2d3748;
+            border-radius: 50%;
+            position: relative;
+            background: white;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        .clock-center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #2d3748;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+        
+        .clock-hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            background: #2d3748;
+            border-radius: 4px 4px 0 0;
+            transition: transform 0.3s cubic-bezier(0.4, 2.08, 0.55, 0.44);
+        }
+        
+        .hour-hand {
+            width: 6px;
+            height: 70px;
+            margin-left: -3px;
+            z-index: 2;
+        }
+        
+        .minute-hand {
+            width: 4px;
+            height: 100px;
+            margin-left: -2px;
+            z-index: 1;
+            background: #667eea;
+        }
+        
+        .clock-numbers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .clock-number {
+            position: absolute;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .time-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        /* Phone with binary search */
+        .phone-binary-container {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .phone-display {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .binary-question {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #4a5568;
+            min-height: 27px;
+        }
+        
+        .binary-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .binary-btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .binary-btn.higher {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .binary-btn.lower {
+            background: #f56565;
+            color: white;
+        }
+        
+        .binary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .binary-info {
+            margin-top: 15px;
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        /* Rotating CAPTCHA */
+        .captcha-container {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .captcha-code {
+            display: inline-block;
+            font-size: 48px;
+            letter-spacing: 12px;
+            font-weight: bold;
+            color: #2d3748;
+            background: white;
+            padding: 20px 40px;
+            border: 3px solid #cbd5e0;
+            border-radius: 8px;
+            margin: 20px 0;
+            user-select: none;
+            transition: transform 0.1s;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* EULA type area */
+        .eula-container {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .eula-reference {
+            background: white;
             padding: 15px;
-            box-shadow: inset 3px 3px 7px rgba(163,177,198, 0.6), inset -3px -3px 7px rgba(255,255,255, 0.5);
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #4a5568;
+            max-height: 120px;
+            overflow-y: auto;
+            user-select: none;
         }
-
-        /* --- COMPONENTS --- */
-        button {
-            font-family: var(--mono); font-weight: bold; font-size: 0.8rem;
-            color: var(--text-main); background: var(--bg-panel);
-            border: none; border-radius: 6px; padding: 10px 15px;
-            box-shadow: 4px 4px 8px var(--border-shadow), -4px -4px 8px var(--border-light);
-            cursor: pointer; transition: all 0.1s ease; outline: none; text-transform: uppercase;
-        }
-        button:active { box-shadow: inset 2px 2px 5px var(--border-shadow), inset -2px -2px 5px var(--border-light); transform: translateY(1px); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        button.primary { color: var(--accent); }
-        button.danger { color: var(--danger); }
-
-        .display-field {
-            font-family: var(--mono); background: #2d3748; color: #63b3ed;
-            padding: 10px; border-radius: 4px; text-align: center;
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5); margin-bottom: 15px;
-            min-height: 40px; display: flex; align-items: center; justify-content: center;
-            letter-spacing: 2px; white-space: pre-wrap; word-break: break-all;
-        }
-
-        /* --- 1. FLYWHEEL --- */
-        .flywheel-wrap { display: flex; gap: 20px; align-items: center; }
-        .wheel-container { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
-        .marker { position: absolute; top: -5px; left: 50%; transform: translateX(-50%); border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid var(--danger); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
         
-        /* --- 2. DRIFT --- */
-        .radar-screen { 
-            width: 100%; height: 180px; background: #000; position: relative; 
-            overflow: hidden; cursor: crosshair; margin-bottom: 10px; border: 2px solid #4a5568;
+        .eula-progress {
+            margin: 10px 0;
+            font-size: 13px;
+            color: #718096;
         }
-        .radar-grid { 
-            width: 100%; height: 100%; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr);
-            background-image: linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .radar-cell { display: flex; align-items: center; justify-content: center; color: rgba(0,255,0,0.3); font-family: var(--mono); font-size: 1.5rem; border: 1px solid rgba(0,255,0,0.1); }
-        .blip { width: 8px; height: 8px; background: #0f0; border-radius: 50%; position: absolute; box-shadow: 0 0 10px #0f0; transform: translate(-50%, -50%); }
-        .knob-row { display: flex; justify-content: space-around; align-items: center; margin-top: 15px; }
-        .knob { 
-            width: 50px; height: 50px; border-radius: 50%; background: var(--bg-panel);
-            box-shadow: 5px 5px 10px var(--border-shadow), -5px -5px 10px var(--border-light);
-            position: relative; cursor: ns-resize; transform: rotate(0deg);
-        }
-        .knob::after { content: ''; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 4px; height: 12px; background: var(--text-muted); border-radius: 2px; }
         
-        /* --- 4. SPINNER --- */
-        .char-slot { font-size: 3rem; color: var(--text-main); font-weight: bold; height: 80px; display: flex; align-items: center; justify-content: center; background: #e2e8f0; border-radius: 6px; margin-bottom: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
-        
-        /* --- 5. GEO --- */
-        .map-frame { height: 180px; background: #fff; border: 1px solid #cbd5e0; position: relative; overflow: hidden; margin-bottom: 15px; background-image: radial-gradient(#cbd5e0 1px, transparent 1px); background-size: 20px 20px; }
-        .drone-pin { width: 12px; height: 12px; background: var(--danger); position: absolute; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: translate(-50%, -50%); transition: top 0.2s linear, left 0.2s linear; }
-        .slider-group { display: flex; flex-direction: column; gap: 10px; }
-        input[type="range"] { -webkit-appearance: none; width: 100%; background: transparent; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--bg-panel); border: 1px solid var(--border-shadow); box-shadow: 2px 2px 4px var(--border-shadow), -2px -2px 4px var(--border-light); margin-top: -6px; cursor: pointer; }
-        input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #cbd5e0; border-radius: 2px; }
-
-        /* --- 7. GRAVITY --- */
-        .gravity-well { height: 200px; background: #edf2f7; border-radius: 50px; width: 60px; margin: 0 auto; position: relative; border: 1px solid #cbd5e0; box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1); }
-        .mercury-bead { width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #fff, #718096); border-radius: 50%; position: absolute; left: 9px; cursor: grab; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .mercury-bead:active { cursor: grabbing; }
-
-        /* --- 8. OUIJA --- */
-        .spectral-pad { background: #2d3748; padding: 10px; border-radius: 6px; height: 200px; position: relative; cursor: none; overflow: hidden; }
-        .spectral-char { position: absolute; color: rgba(255,255,255,0.2); font-family: serif; font-size: 14px; user-select: none; }
-        .planchette { width: 40px; height: 50px; border: 2px solid rgba(255,255,255,0.8); border-radius: 50% 50% 5px 5px; position: absolute; transform: translate(-50%, -50%); pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; }
-        .planchette::after { content: ''; width: 6px; height: 6px; border: 1px solid #fff; border-radius: 50%; }
-
-        /* --- 10. HEAT --- */
-        .rub-zone { 
-            height: 120px; background: repeating-linear-gradient(45deg, #e2e8f0, #e2e8f0 10px, #edf2f7 10px, #edf2f7 20px);
-            border: 2px dashed #cbd5e0; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            cursor: grab; margin-bottom: 15px; position: relative; overflow: hidden; user-select: none;
+        .progress-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
         }
-        .rub-zone:active { cursor: grabbing; border-color: var(--accent); border-style: solid; }
-        .heat-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, rgba(229,62,62,0.8), transparent); pointer-events: none; transition: height 0.05s; }
-        .temp-gauge { height: 10px; background: #cbd5e0; border-radius: 5px; overflow: hidden; position: relative; margin-top: 5px; }
-        .temp-fill { height: 100%; background: linear-gradient(90deg, #3498db, #e74c3c); width: 0%; transition: width 0.1s linear; }
-        .target-zone { position: absolute; left: 75%; width: 15%; height: 100%; background: rgba(56, 161, 105, 0.5); border-left: 1px solid #fff; border-right: 1px solid #fff; }
-
-        .submit-block { margin-top: 50px; padding: 20px; text-align: center; opacity: 0.5; pointer-events: none; transition: all 0.5s; filter: grayscale(1); }
-        .submit-block.ready { opacity: 1; pointer-events: all; filter: grayscale(0); }
-        .final-btn { width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 2px; background: var(--success); color: white; border: none; }
+        
+        .progress-fill {
+            height: 100%;
+            background: #48bb78;
+            transition: width 0.3s;
+            width: 0%;
+        }
+        
+        /* Submit button */
+        .submit-section {
+            text-align: center;
+            padding-top: 30px;
+        }
+        
+        .submit-btn {
+            padding: 16px 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #a0aec0;
+            box-shadow: none;
+        }
+        
+        .feature-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-content {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <div class="container">
-            <h1>HR-Portal v7.0.2 (RC4)</h1>
-            <div class="meta">Protokoll: SEC-HARDENED | Session ID: 0x9F3A</div>
-        </div>
-    </div>
-
     <div class="container">
-
-        <!-- 1. NAME - INERTIA -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">1. Användaridentitet (Roterande Inmatning)</span>
-                <span class="status-led" id="led1"></span>
-            </div>
-            <div class="control-panel flywheel-wrap">
-                <div class="wheel-container">
-                    <div class="marker"></div>
-                    <canvas id="canvasWheel" width="140" height="140"></canvas>
-                </div>
-                <div style="flex:1;">
-                    <div class="display-field" id="outName"></div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                        <button class="primary" id="btnSpin">Inducera</button>
-                        <button class="danger" id="btnBrake">Friktion</button>
-                    </div>
-                    <button style="width:100%" id="btnStamp">Stämpla Tecken</button>
-                </div>
-            </div>
+        <div class="header">
+            <h1>NORDIC BUSINESS SOLUTIONS AB</h1>
+            <p>Premium Enterprise Order Management System v3.7</p>
         </div>
-
-        <!-- 2. PHONE - VECTOR -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">2. Kontaktvektor (XY-Låsning)</span>
-                <span class="status-led" id="led2"></span>
-            </div>
-            <div class="control-panel">
-                <div class="display-field" id="outPhone">__-_______</div>
-                <div class="radar-screen" id="radar">
-                    <div class="radar-grid" id="radarGrid"></div>
-                    <div class="blip" id="blip"></div>
-                </div>
-                <div class="knob-row">
-                    <div style="text-align:center">
-                        <div class="knob" id="knobX"></div>
-                        <span class="label" style="margin-top:5px; display:block">LAT</span>
-                    </div>
-                    <button style="height:60px; width:60px; border-radius:50%; font-size:10px;" id="btnPing">LÅS<br>SIGNAL</button>
-                    <div style="text-align:center">
-                        <div class="knob" id="knobY"></div>
-                        <span class="label" style="margin-top:5px; display:block">LONG</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. DATE - BINARY -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">3. Period (Binär Sortering)</span>
-                <span class="status-led" id="led3"></span>
-            </div>
-            <div class="control-panel" style="text-align:center;">
-                <div class="display-field" id="dateDisp" style="font-size:1.5rem; color:#4a5568; background:#cbd5e0;">2024-06-15</div>
-                <div style="font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); margin-bottom:15px;">ITERATIONER: <span id="dateIter">0</span></div>
-                <div style="display:flex; gap:10px; justify-content:center;">
-                    <button id="btnLess">&lt; FÖREGÅENDE</button>
-                    <button class="success" style="color:var(--success)" id="btnConfirmDate">BEKRÄFTA</button>
-                    <button id="btnMore">NÄSTKOMMANDE &gt;</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. CODE - ROULETTE -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">4. Auktoriseringskod (Sekventiell)</span>
-                <span class="status-led" id="led4"></span>
-            </div>
-            <div class="control-panel" style="text-align:center;">
-                <div class="display-field" id="codeOut" style="letter-spacing:5px;">_ _ _ _</div>
-                <div class="char-slot" id="charSpinner">A</div>
-                <div style="height:4px; background:#cbd5e0; width:100%; margin-bottom:15px;"><div id="spinTimeBar" style="height:100%; width:100%; background:var(--accent);"></div></div>
-                <button class="primary" style="width:100%" id="btnLockChar">LÅS TECKEN (EXAKT)</button>
-            </div>
-        </div>
-
-        <!-- 5. GEO - WIND -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">5. Leveranskoordinater (Atmosfärisk Kompensation)</span>
-                <span class="status-led" id="led5"></span>
-            </div>
-            <div class="control-panel">
-                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span class="label">DRÖNARE: ONLINE</span>
-                    <span class="label" id="windLabel" style="color:var(--danger)">VIND: 12 m/s NV</span>
-                </div>
-                <div class="map-frame" id="geoMap">
-                    <div class="drone-pin" id="dronePin"></div>
-                </div>
-                <div class="display-field" style="font-size:0.8rem; height:auto; padding:5px;">LAT: <span id="latVal">0.000</span> | LON: <span id="lonVal">0.000</span></div>
-                <div class="slider-group">
-                    <input type="range" id="slideLat" min="0" max="100" step="0.1">
-                    <input type="range" id="slideLon" min="0" max="100" step="0.1">
-                </div>
-                <button style="width:100%; margin-top:15px;" id="btnDrop">BEGÄR LEVERANS HÄR</button>
-            </div>
-        </div>
-
-        <!-- 7. VOLUME - GRAVITY -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">6. Notisvolym (Kvicksilver)</span>
-                <span class="status-led" id="led7"></span>
-            </div>
-            <div class="control-panel" style="display:flex; align-items:center; gap:30px;">
-                <div class="gravity-well" id="gravTrack">
-                    <div class="mercury-bead" id="bead"></div>
-                </div>
-                <div style="flex:1; text-align:center;">
-                    <span class="label">NIVÅ</span>
-                    <div class="display-field" id="volDisplay" style="font-size:2rem; margin-top:10px;">50%</div>
-                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:10px;">Håll musen stilla för stabilisering.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. EMAIL - OUIJA -->
-        <div class="module">
-            <div class="module-head">
-                <span class="label">7. E-post (Spektral Analys)</span>
-                <span class="status-led" id="led8"></span>
-            </div>
-            <div class="control-panel">
-                <div class="display-field" id="emailOut"></div>
-                <div class="spectral-pad" id="ouijaBoard">
-                    <div class="planchette" id="planchette"></div>
-                </div>
-                <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:var(--text-muted);">
-                    Mediets motstånd är normalt. Tvinga markören till tecknen.
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. HEAT - APPROVAL -->
-        <div class="module submit-block" id="finalModule">
-            <div class="module-head">
-                <span class="label">8. KRYPTERING AV REKVISITION</span>
-            </div>
-            <div class="control-panel">
-                <div class="rub-zone" id="rubPad">
-                    <div style="z-index:2; font-weight:bold; color:#718096; text-transform:uppercase;">Generera Entropi (Gnugga)</div>
-                    <div class="heat-overlay" id="heatOverlay"></div>
-                </div>
-                <div class="temp-gauge">
-                    <div class="target-zone"></div>
-                    <div class="temp-fill" id="tempBar"></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-top:5px; font-family:var(--mono);">
-                    <span>SYSTEMTEMP</span>
-                    <span id="cryptoStatus">VÄNTAR...</span>
-                </div>
-                <div style="height:4px; background:#e2e8f0; width:100%; margin-top:15px; border-radius:2px;"><div id="progBar" style="height:100%; background:var(--text-main); width:0%;"></div></div>
-            </div>
-            <br>
-            <button class="final-btn" id="btnSubmit" disabled>SIGNERA & SKICKA</button>
-        </div>
-
-    </div>
-
-    <script>
-        // --- CORE UTILS ---
-        const rAF = requestAnimationFrame;
-        const clamp = (v,min,max) => Math.max(min,Math.min(max,v));
         
-        // GLOBAL STATE
-        const state = {
-            name: "",
-            phone: "",
-            dateConfirmed: false,
-            code: "",
-            geoLocked: false,
-            volLocked: false,
-            email: ""
-        };
-
-        const checkGlobal = () => {
-            // Check if all previous steps (simplified logic for demo) are loosely "active"
-            // For this UI demo, we enable the final step always but it requires interaction
-            document.getElementById('finalModule').classList.add('ready');
-        };
-
-        // --- 1. FLYWHEEL ---
-        (() => {
-            const canvas = document.getElementById('canvasWheel');
-            const ctx = canvas.getContext('2d');
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ÅÄÖ".split("");
-            const segment = (Math.PI * 2) / chars.length;
-            let angle = 0, v = 0, dragging = false;
-
-            document.getElementById('btnSpin').addEventListener('mousedown', () => v += 0.05);
-            document.getElementById('btnBrake').addEventListener('mousedown', () => v *= 0.85);
-
-            function draw() {
-                v *= 0.992; // Friction
-                angle += v;
-                ctx.clearRect(0,0,140,140);
-                ctx.save(); ctx.translate(70,70); ctx.rotate(angle);
-                
-                ctx.beginPath(); ctx.arc(0,0,65,0,Math.PI*2);
-                ctx.fillStyle = "#edf2f7"; ctx.fill(); ctx.strokeStyle = "#cbd5e0"; ctx.stroke();
-
-                ctx.textAlign = "center"; ctx.textBaseline = "middle";
-                ctx.fillStyle = "#4a5568"; ctx.font = "bold 12px Menlo";
-                
-                chars.forEach((c, i) => {
-                    ctx.save();
-                    const th = i * segment;
-                    ctx.rotate(th); ctx.translate(0, -52); ctx.rotate(-angle - th);
-                    ctx.fillText(c, 0, 0);
-                    ctx.restore();
-                });
-                ctx.restore();
-                rAF(draw);
-            }
-            draw();
-
-            document.getElementById('btnStamp').onclick = () => {
-                if(Math.abs(v) > 0.02) { 
-                    document.getElementById('outName').style.color = "var(--danger)";
-                    setTimeout(()=>document.getElementById('outName').style.color = "#63b3ed", 200);
-                    return; 
-                }
-                let norm = (angle % (Math.PI*2)); if (norm < 0) norm += Math.PI*2;
-                let idx = Math.round(norm / segment);
-                let char = chars[(chars.length - idx) % chars.length];
-                state.name += char;
-                document.getElementById('outName').textContent = state.name;
-                if(state.name.length > 3) document.getElementById('led1').classList.add('active');
-            };
-        })();
-
-        // --- 2. DRIFT RADAR ---
-        (() => {
-            const blip = document.getElementById('blip');
-            const disp = document.getElementById('outPhone');
-            const grid = document.getElementById('radarGrid');
-            const nums = [1,2,3,4,5,6,7,8,9,0];
-            
-            nums.forEach(n => {
-                let d = document.createElement('div');
-                d.className = 'radar-cell'; d.innerText = n;
-                grid.appendChild(d);
-            });
-
-            let px=50, py=50, vx=0, vy=0, tx=0, ty=0;
-            
-            // Knobs
-            const bindKnob = (id, axis) => {
-                let el = document.getElementById(id);
-                let lastY = 0;
-                el.onmousedown = e => {
-                    lastY = e.clientY;
-                    const move = mv => {
-                        let delta = lastY - mv.clientY; lastY = mv.clientY;
-                        let r = parseFloat(el.style.transform.replace('rotate(',''))||0;
-                        el.style.transform = `rotate(${r+delta*2}deg)`;
-                        if(axis==='x') tx += delta * 0.05;
-                        else ty += delta * 0.05;
-                    };
-                    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
-                    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
-                };
-            };
-            bindKnob('knobX', 'x'); bindKnob('knobY', 'y');
-
-            function loop() {
-                // Decay target velocity (auto-centering knobs logic essentially)
-                tx *= 0.98; ty *= 0.98;
-                
-                // Add noise
-                vx += (tx * 0.02) + (Math.random()-0.5)*0.1;
-                vy += (ty * 0.02) + (Math.random()-0.5)*0.1;
-                
-                px += vx; py += vy;
-                
-                // Bounce
-                if(px<0||px>100) { vx*=-0.7; px=clamp(px,0,100); }
-                if(py<0||py>100) { vy*=-0.7; py=clamp(py,0,100); }
-
-                blip.style.left = px+"%"; blip.style.top = py+"%";
-                rAF(loop);
-            }
-            loop();
-
-            document.getElementById('btnPing').onclick = () => {
-                let col = Math.floor(px / 20);
-                let row = Math.floor(py / 50);
-                let idx = row*5 + col;
-                if(idx >= 0 && idx < 10) {
-                    let n = nums[idx];
-                    state.phone += n;
-                    disp.textContent = state.phone;
-                    if(state.phone.length > 5) document.getElementById('led2').classList.add('active');
-                }
-            };
-        })();
-
-        // --- 3. BINARY DATE ---
-        (() => {
-            let min = new Date('2020-01-01').getTime();
-            let max = new Date('2030-01-01').getTime();
-            let cur = (min+max)/2;
-            let iter = 0;
-            const disp = document.getElementById('dateDisp');
-            const count = document.getElementById('dateIter');
-
-            const update = () => {
-                let d = new Date(cur);
-                disp.textContent = d.toISOString().split('T')[0];
-                count.textContent = iter;
-            };
-
-            document.getElementById('btnLess').onclick = () => { iter++; max = cur; cur = (min+max)/2; update(); };
-            document.getElementById('btnMore').onclick = () => { iter++; min = cur; cur = (min+max)/2; update(); };
-            document.getElementById('btnConfirmDate').onclick = () => {
-                document.getElementById('led3').classList.add('active');
-                disp.style.border = "2px solid var(--success)";
-            };
-        })();
-
-        // --- 4. ROULETTE CODE ---
-        (() => {
-            const chars = "0123456789";
-            const el = document.getElementById('charSpinner');
-            const out = document.getElementById('codeOut');
-            const bar = document.getElementById('spinTimeBar');
-            let idx = 0, speed = 100, last = 0;
-
-            function cycle(t) {
-                if(t - last > speed) {
-                    idx = (idx + 1) % chars.length;
-                    el.textContent = chars[idx];
-                    last = t;
-                    // Visualize speed
-                    bar.style.width = (speed/3)+"%";
-                }
-                rAF(cycle);
-            }
-            rAF(cycle);
-
-            document.getElementById('btnLockChar').onclick = () => {
-                state.code += chars[idx];
-                out.textContent = state.code;
-                speed = Math.max(10, speed * 0.7); // Faster every time
-                if(state.code.length >= 4) document.getElementById('led4').classList.add('active');
-            };
-        })();
-
-        // --- 5. GEO WIND ---
-        (() => {
-            const pin = document.getElementById('dronePin');
-            const lbl = document.getElementById('windLabel');
-            let lat=50, lon=50, wLat=0, wLon=0;
-            let windDirX = 0, windDirY = 0;
-
-            // Change wind every 2 sec
-            setInterval(() => {
-                windDirX = (Math.random()-0.5) * 0.8;
-                windDirY = (Math.random()-0.5) * 0.8;
-                lbl.textContent = `VIND: ${(Math.abs(windDirX)*20).toFixed(1)} m/s ${(windDirY>0?'N':'S')}`;
-            }, 2000);
-
-            function loop() {
-                // Inputs
-                let inLat = parseFloat(document.getElementById('slideLat').value);
-                let inLon = parseFloat(document.getElementById('slideLon').value);
-                
-                wLat += (inLat - 50) * 0.05 + windDirX;
-                wLon += (inLon - 50) * 0.05 + windDirY;
-
-                // Drift
-                lat += wLat * 0.01; 
-                lon += wLon * 0.01;
-
-                // Bounds
-                if(lat<0) lat=0; if(lat>100) lat=100;
-                if(lon<0) lon=0; if(lon>100) lon=100;
-
-                // Dampen inputs to simulate sliders returning to center virtually
-                // Actually, let's just make the user fight the wind directly with the sliders acting as "thrust"
-                
-                pin.style.top = (100-lat) + "%";
-                pin.style.left = lon + "%";
-
-                document.getElementById('latVal').textContent = lat.toFixed(3);
-                document.getElementById('lonVal').textContent = lon.toFixed(3);
-                rAF(loop);
-            }
-            loop();
-
-            document.getElementById('btnDrop').onclick = () => {
-                document.getElementById('led5').classList.add('active');
-            };
-        })();
-
-        // --- 7. GRAVITY VOLUME ---
-        (() => {
-            const bead = document.getElementById('bead');
-            const well = document.getElementById('gravTrack');
-            let y = 10, vy = 0;
-            
-            // Mouse gravity
-            let my = 0;
-            well.onmousemove = e => {
-                let rect = well.getBoundingClientRect();
-                my = e.clientY - rect.top;
-            };
-
-            function sim() {
-                // Gravity pulls down
-                vy += 0.5;
-                // Mouse repels (Anti-gravity glove)
-                let d = (y+20) - my;
-                if(Math.abs(d) < 80) {
-                    vy -= (80-Math.abs(d)) * 0.05 * Math.sign(d);
-                }
-
-                y += vy;
-                
-                // Floor/Ceiling bounce
-                if(y > 160) { y=160; vy *= -0.6; }
-                if(y < 0) { y=0; vy *= -0.6; }
-
-                bead.style.top = y + "px";
-                let vol = Math.round(100 - (y/160)*100);
-                document.getElementById('volDisplay').textContent = vol + "%";
-                
-                if(Math.abs(vy) < 0.1) {
-                    document.getElementById('led7').classList.add('active');
-                } else {
-                    document.getElementById('led7').classList.remove('active');
-                }
-                rAF(sim);
-            }
-            sim();
-        })();
-
-        // --- 8. OUIJA ---
-        (() => {
-            const board = document.getElementById('ouijaBoard');
-            const planch = document.getElementById('planchette');
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@.com".split("");
-            
-            // Randomly scatter chars
-            chars.forEach(c => {
-                let el = document.createElement('div');
-                el.className = 'spectral-char';
-                el.textContent = c;
-                el.style.left = (10 + Math.random()*80) + "%";
-                el.style.top = (10 + Math.random()*80) + "%";
-                board.appendChild(el);
-            });
-
-            let mx=100, my=100, px=100, py=100;
-            
-            board.onmousemove = e => {
-                let r = board.getBoundingClientRect();
-                mx = e.clientX - r.left;
-                my = e.clientY - r.top;
-            };
-
-            function spirit() {
-                // Extremely laggy follow with noise
-                let dx = mx - px;
-                let dy = my - py;
-                
-                px += dx * 0.02 + (Math.random()-0.5)*2;
-                py += dy * 0.02 + (Math.random()-0.5)*2;
-
-                planch.style.left = px + "px";
-                planch.style.top = py + "px";
-
-                // Detection
-                let detected = null;
-                Array.from(document.querySelectorAll('.spectral-char')).forEach(el => {
-                    let r = el.getBoundingClientRect();
-                    let pr = planch.getBoundingClientRect();
-                    let cx = r.left + r.width/2;
-                    let cy = r.top + r.height/2;
-                    let pcx = pr.left + pr.width/2;
-                    let pcy = pr.top + pr.height/2;
+        <div class="form-content">
+            <form id="orderForm" onsubmit="event.preventDefault(); alert('Grattis! Du lyckades beställa!');">
+                <div class="form-section">
+                    <h2 class="section-title">
+                        Kontaktinformation
+                        <span class="feature-badge">Motion Enabled</span>
+                    </h2>
                     
-                    if(Math.hypot(cx-pcx, cy-pcy) < 10) {
-                        el.style.color = "#fff";
-                        el.style.textShadow = "0 0 5px #fff";
-                        if(Math.random() > 0.95) { // Slow typing
-                            state.email += el.textContent;
-                            document.getElementById('emailOut').textContent = state.email;
-                            if(state.email.includes("@")) document.getElementById('led8').classList.add('active');
-                        }
-                    } else {
-                        el.style.color = "rgba(255,255,255,0.2)";
-                        el.style.textShadow = "none";
-                    }
-                });
-
-                rAF(spirit);
-            }
-            spirit();
-        })();
-
-        // --- 10. HEAT SINK ---
-        (() => {
-            const pad = document.getElementById('rubPad');
-            const ov = document.getElementById('heatOverlay');
-            const tBar = document.getElementById('tempBar');
-            const pBar = document.getElementById('progBar');
-            const stat = document.getElementById('cryptoStatus');
-            const btn = document.getElementById('btnSubmit');
-
-            let temp = 0;
-            let progress = 0;
-            let lx=0, ly=0, active=false;
-
-            pad.onmousedown = e => { active=true; lx=e.clientX; ly=e.clientY; };
-            window.onmouseup = () => active=false;
-            window.onmousemove = e => {
-                if(!active) return;
-                let d = Math.hypot(e.clientX-lx, e.clientY-ly);
-                temp += d * 0.5; // Generate heat
-                lx = e.clientX; ly = e.clientY;
-            };
-
-            function thermodynamics() {
-                // Cooling (aggressive)
-                temp -= 1.5;
-                if(temp < 0) temp = 0;
+                    <div class="form-group">
+                        <label>Förnamn <span class="required">*</span></label>
+                        <div class="gyro-container" id="gyroContainer">
+                            <div class="name-display" id="nameDisplay">Klicka här för att aktivera sensorer...</div>
+                            <div class="gyro-play-area" id="gyroPlayArea">
+                                <div class="drop-zone use" id="useZone">Använd</div>
+                                <div class="drop-zone discard" id="discardZone">Kasta</div>
+                                <div class="letter-floating" id="floatingLetter">A</div>
+                            </div>
+                        </div>
+                        <p class="help-text">Vår patenterade Motion Input Technology™ för snabbare datainmatning. (Fungerar även med mus på desktop)</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Efternamn <span class="required">*</span></label>
+                        <div class="letter-sliders" id="surnameSliders">
+                            <div class="slider-row">
+                                <span class="slider-output">A</span>
+                                <input type="range" min="1" max="26" value="1" class="surname-slider" oninput="updateSurnameLetter(this)">
+                            </div>
+                            <button type="button" class="add-letter-btn" onclick="addSurnameSlider()">+ Lägg till bokstav</button>
+                        </div>
+                        <p class="help-text">Precision Character Selection™ - Välj varje bokstav individuellt för maximal noggrannhet</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>E-postadress <span class="required">*</span></label>
+                        <input type="email" id="email" required placeholder="namn@foretag.se">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Telefonnummer <span class="required">*</span></label>
+                        <div class="phone-binary-container">
+                            <div class="phone-display" id="phoneDisplay">___-___-____</div>
+                            <div class="binary-question" id="binaryQuestion">Är första siffran större än eller lika med 5?</div>
+                            <div class="binary-buttons">
+                                <button type="button" class="binary-btn higher" onclick="phoneBinaryGuess(true)">≥ Värde</button>
+                                <button type="button" class="binary-btn lower" onclick="phoneBinaryGuess(false)">&lt; Värde</button>
+                            </div>
+                            <div class="binary-info" id="binaryInfo">Siffra 1 av 10</div>
+                        </div>
+                        <p class="help-text">Intelligent Binary Search Algorithm™ för optimerad sifferinmatning</p>
+                    </div>
+                </div>
                 
-                // Logic
-                let valid = (temp > 75 && temp < 90); // Green zone is narrow
+                <div class="form-section">
+                    <h2 class="section-title">
+                        Beställningsdetaljer
+                        <span class="feature-badge">AI Optimized</span>
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label>Produktkategori <span class="required">*</span></label>
+                        <select id="category" required>
+                            <option value="">Välj kategori...</option>
+                            <option value="software">Mjukvarulösningar</option>
+                            <option value="hardware">Hårdvara</option>
+                            <option value="consulting">Konsulttjänster</option>
+                            <option value="support">Support & Underhåll</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Antal enheter <span class="required">*</span></label>
+                        <div class="quantity-slider-container">
+                            <div class="quantity-display" id="quantityDisplay">1</div>
+                            <input type="range" id="quantitySlider" min="0" max="100" value="0">
+                        </div>
+                        <p class="help-text">Advanced Logarithmic Distribution™ - Drar du lite för långt blir det 10 000 enheter.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Önskat leveransdatum <span class="required">*</span></label>
+                        <div class="date-grid" id="dateGrid"></div>
+                        <input type="hidden" id="selectedDay">
+                        <p class="help-text">Streamlined Date Selection™ - Du väljer dag. Systemet optimerar Månad och År baserat på logistisk kapacitet (Randomized).</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Önskad leveranstid <span class="required">*</span></label>
+                        <div class="clock-container">
+                            <div class="clock-face" id="clockFace" onclick="handleClockClick(event)">
+                                <div class="clock-numbers">
+                                    <span class="clock-number" style="top: 10px; left: 50%; transform: translateX(-50%)">12</span>
+                                    <span class="clock-number" style="top: 50%; right: 10px; transform: translateY(-50%)">3</span>
+                                    <span class="clock-number" style="bottom: 10px; left: 50%; transform: translateX(-50%)">6</span>
+                                    <span class="clock-number" style="top: 50%; left: 10px; transform: translateY(-50%)">9</span>
+                                </div>
+                                <div class="clock-hand hour-hand" id="hourHand"></div>
+                                <div class="clock-hand minute-hand" id="minuteHand"></div>
+                                <div class="clock-center"></div>
+                            </div>
+                            <div class="time-display" id="timeDisplay">12:00</div>
+                        </div>
+                        <p class="help-text">Intuitive Analog Interface™ - Klicka för timme, klicka igen för minut.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Särskilda önskemål</label>
+                        <textarea id="comments" rows="4"></textarea>
+                    </div>
+                </div>
                 
-                if(valid) {
-                    progress += 0.2;
-                    stat.textContent = "KRYPTERAR...";
-                    stat.style.color = "var(--success)";
+                <div class="form-section">
+                    <h2 class="section-title">
+                        Säkerhetsverifiering
+                        <span class="feature-badge">Enterprise Security</span>
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label>Säkerhetskod <span class="required">*</span></label>
+                        <div class="captcha-container">
+                            <p>Ange följande verifieringskod:</p>
+                            <div class="captcha-code" id="captchaCode">HX7Q9</div>
+                            <input type="text" id="captchaInput" placeholder="Ange kod" maxlength="5" style="max-width: 300px; margin: 0 auto;">
+                        </div>
+                        <p class="help-text">Adaptive CAPTCHA Technology™ som roterar för att förhindra bot-OCR.</p>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">
+                        Villkor & Acceptans
+                        <span class="feature-badge">Compliance Ready</span>
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label>Orderbekräftelse <span class="required">*</span></label>
+                        <div class="eula-container">
+                            <div class="eula-reference" id="eulaReference">Genom att fortsätta godkänner jag härmed att Nordic Business Solutions AB behandlar mina personuppgifter enligt GDPR, accepterar bolagets leveransvillkor inklusive 14 dagars betalningsvillkor, samt bekräftar att all information i denna beställning är korrekt och fullständig.</div>
+                            <textarea id="eulaInput" placeholder="Skriv av texten ovan EXAKT för att bekräfta..." style="width: 100%; min-height: 100px; margin-bottom: 10px;"></textarea>
+                            <div class="eula-progress">
+                                <span id="eulaProgressText">Bekräftelse: 0%</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="eulaProgressBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="help-text">Verified Acceptance Protocol™ - Kopiera/klistra in är avstängt för din säkerhet.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="terms-container">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="termsCheckbox">
+                                <label for="termsCheckbox" class="terms-text">
+                                    Jag accepterar villkoren för behandling av personuppgifter och bekräftar att jag har läst och förstått Nordic Business Solutions ABs integritetspolicy.
+                                </label>
+                            </div>
+                            <div class="status-message" id="checkboxStatus"></div>
+                        </div>
+                        <p class="help-text">Smart Consent Verification™ med intelligent (och nervös) serverkoppling.</p>
+                    </div>
+                </div>
+                
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                        Skicka beställning
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // --- 1. GYROSCOPE NAME INPUT (PHYSICS ENGINE) ---
+        let gyroName = "";
+        let gyroActive = false;
+        let gyroTransitionLock = false;
+        let currentLetter = "A";
+        
+        // Position vars
+        let letterPosX = 100;
+        let letterPosY = 100;
+        let speedX = 0;
+        let speedY = 0;
+        
+        const gyroContainer = document.getElementById('gyroContainer');
+        const nameDisplay = document.getElementById('nameDisplay');
+        const floatingLetter = document.getElementById('floatingLetter');
+        const useZone = document.getElementById('useZone');
+        const discardZone = document.getElementById('discardZone');
+        const gyroPlayArea = document.getElementById('gyroPlayArea');
+        
+        // Start on click
+        gyroContainer.addEventListener('click', function() {
+            if(!gyroActive) {
+                // Request permission for iOS 13+ devices
+                if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if(permissionState === 'granted') startGyro();
+                        })
+                        .catch(console.error);
                 } else {
-                    if(progress > 0) progress -= 0.1; // Decay progress if not in zone
-                    if(temp >= 90) {
-                        stat.textContent = "ÖVERHETTNING - KYLER NER";
-                        stat.style.color = "var(--danger)";
-                        progress = 0; // Penalty
-                    } else {
-                        stat.textContent = "FÖR LÅG ENTROPI";
-                        stat.style.color = "var(--text-muted)";
-                    }
+                    startGyro();
                 }
-                
-                progress = clamp(progress, 0, 100);
-
-                // UI
-                ov.style.height = clamp(temp,0,100) + "%";
-                tBar.style.width = clamp(temp,0,100) + "%";
-                pBar.style.width = progress + "%";
-
-                if(progress >= 100) {
-                    btn.disabled = false;
-                    btn.textContent = "GODKÄND - SKICKA";
-                    stat.textContent = "NYCKEL GENERERAD";
-                }
-
-                rAF(thermodynamics);
             }
-            rAF(thermodynamics);
+        });
+        
+        function startGyro() {
+            if(gyroActive) return;
+            gyroActive = true;
+            nameDisplay.textContent = gyroName || "Rör musen/enheten för att styra bokstaven";
+            nameDisplay.style.color = "#2d3748";
             
-            btn.onclick = () => {
-                alert("SYSTEMFEL: Det går inte att ansluta till servern (Timeout). Var god fyll i formuläret igen.");
-                location.reload();
-            };
-        })();
+            // Listen to device orientation
+            window.addEventListener('deviceorientation', handleOrientation);
+            
+            // Start the physics loop
+            createNewLetter();
+            requestAnimationFrame(gyroLoop);
+        }
+        
+        function handleOrientation(e) {
+            // Gamma is left/right, Beta is front/back
+            // Divide by factor to control sensitivity
+            speedX = (e.gamma || 0) / 5; 
+            speedY = (e.beta || 0) / 5;
+        }
 
-        // Start
-        checkGlobal();
+        // Mouse fallback for desktop users
+        gyroPlayArea.addEventListener('mousemove', (e) => {
+            if(!gyroActive) return;
+            const rect = gyroPlayArea.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Calculate speed based on distance from center
+            speedX = (e.clientX - centerX) / 30;
+            speedY = (e.clientY - centerY) / 30;
+        });
+        
+        function createNewLetter() {
+            // Generate A-Z or special action
+            currentLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            const random = Math.random();
+            if(random < 0.15) currentLetter = "✓"; // Done (space/submit logic could go here, but let's keep it simple)
+            else if(random < 0.25) currentLetter = "⌫"; // Backspace
+            
+            floatingLetter.textContent = currentLetter;
+            floatingLetter.classList.add('show');
+            
+            // Reset position to center
+            const rect = gyroPlayArea.getBoundingClientRect();
+            letterPosX = (rect.width / 2) - 20;
+            letterPosY = (rect.height / 2) - 20;
+            
+            // Randomize zones
+            positionZones();
+            gyroTransitionLock = false;
+        }
+        
+        function positionZones() {
+            const rect = gyroPlayArea.getBoundingClientRect();
+            // Simple random positioning avoiding edges slightly
+            const useX = Math.random() * (rect.width - 80);
+            const useY = Math.random() * (rect.height - 80);
+            const discardX = Math.random() * (rect.width - 80);
+            const discardY = Math.random() * (rect.height - 80);
+            
+            useZone.style.left = useX + 'px';
+            useZone.style.top = useY + 'px';
+            discardZone.style.left = discardX + 'px';
+            discardZone.style.top = discardY + 'px';
+        }
+        
+        function gyroLoop() {
+            if(!gyroActive) return;
+            
+            updateLetterPosition();
+            checkCollisions();
+            
+            requestAnimationFrame(gyroLoop);
+        }
+        
+        function updateLetterPosition() {
+            letterPosX += speedX;
+            letterPosY += speedY;
+            
+            const rect = gyroPlayArea.getBoundingClientRect();
+            
+            // Wall bouncing logic
+            if(letterPosX < 0) { letterPosX = 0; speedX *= -0.8; }
+            if(letterPosX > rect.width - 40) { letterPosX = rect.width - 40; speedX *= -0.8; }
+            if(letterPosY < 0) { letterPosY = 0; speedY *= -0.8; }
+            if(letterPosY > rect.height - 40) { letterPosY = rect.height - 40; speedY *= -0.8; }
+            
+            floatingLetter.style.left = letterPosX + 'px';
+            floatingLetter.style.top = letterPosY + 'px';
+        }
+        
+        function checkCollisions() {
+            if(gyroTransitionLock) return;
+            
+            // Calculate centers
+            const lCx = letterPosX + 20;
+            const lCy = letterPosY + 20;
+            
+            // Check Use Zone
+            const uRect = useZone.getBoundingClientRect();
+            const gpRect = gyroPlayArea.getBoundingClientRect();
+            // Convert zone rect to relative coordinates
+            const uCx = (uRect.left - gpRect.left) + 35;
+            const uCy = (uRect.top - gpRect.top) + 35;
+            
+            // Distance formula
+            const distUse = Math.sqrt(Math.pow(lCx - uCx, 2) + Math.pow(lCy - uCy, 2));
+            
+            if(distUse < 40) {
+                handleAction('use');
+                return;
+            }
+            
+            // Check Discard Zone
+            const dRect = discardZone.getBoundingClientRect();
+            const dCx = (dRect.left - gpRect.left) + 35;
+            const dCy = (dRect.top - gpRect.top) + 35;
+            
+            const distDiscard = Math.sqrt(Math.pow(lCx - dCx, 2) + Math.pow(lCy - dCy, 2));
+            
+            if(distDiscard < 40) {
+                handleAction('discard');
+                return;
+            }
+        }
+        
+        function handleAction(type) {
+            gyroTransitionLock = true;
+            floatingLetter.classList.remove('show');
+            
+            if(type === 'use') {
+                useZone.style.transform = "scale(1.2)";
+                setTimeout(() => useZone.style.transform = "scale(1)", 200);
+                
+                if(currentLetter === "⌫") {
+                    gyroName = gyroName.slice(0, -1);
+                } else if (currentLetter !== "✓") {
+                    gyroName += currentLetter;
+                }
+                nameDisplay.textContent = gyroName;
+            } else {
+                discardZone.style.transform = "scale(1.2)";
+                setTimeout(() => discardZone.style.transform = "scale(1)", 200);
+            }
+            
+            setTimeout(createNewLetter, 500);
+        }
+        
+        // --- 2. SURNAME SLIDERS ---
+        function addSurnameSlider() {
+            const container = document.getElementById('surnameSliders');
+            const btn = container.querySelector('.add-letter-btn');
+            
+            const div = document.createElement('div');
+            div.className = 'slider-row';
+            div.innerHTML = `
+                <span class="slider-output">A</span>
+                <input type="range" min="1" max="26" value="1" class="surname-slider" oninput="updateSurnameLetter(this)">
+            `;
+            
+            container.insertBefore(div, btn);
+        }
+
+        function updateSurnameLetter(slider) {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ"; // Standard + Swedish
+            // Map 1-29 roughly
+            const index = Math.min(slider.value - 1, letters.length - 1);
+            const span = slider.previousElementSibling;
+            span.textContent = letters[slider.value - 1] || "?";
+        }
+        
+        // --- 3. BINARY PHONE NUMBER ---
+        let phoneDigits = [];
+        let currentPhoneDigit = 0;
+        let phoneMin = 0;
+        let phoneMax = 9;
+        
+        function updatePhoneDisplay() {
+            let display = phoneDigits.join('');
+            while(display.length < 10) display += '_';
+            // Format: XXX-XXX-XXXX
+            let formatted = "";
+            if(display.length > 0) formatted += display.substring(0,3);
+            if(display.length > 3) formatted += "-" + display.substring(3,6);
+            if(display.length > 6) formatted += "-" + display.substring(6,10);
+            
+            document.getElementById('phoneDisplay').textContent = formatted || "___-___-____";
+            document.getElementById('binaryInfo').textContent = `Siffra ${currentPhoneDigit + 1} av 10`;
+            
+            if(currentPhoneDigit < 10) {
+                let mid = Math.floor((phoneMin + phoneMax) / 2);
+                document.getElementById('binaryQuestion').textContent = 
+                    `Är siffra ${currentPhoneDigit + 1} större än eller lika med ${mid}?`;
+            } else {
+                document.getElementById('binaryQuestion').textContent = "Telefonnummer registrerat.";
+                document.querySelector('.binary-buttons').style.display = 'none';
+                checkSubmitStatus();
+            }
+        }
+        
+        function phoneBinaryGuess(isHigher) {
+            if(currentPhoneDigit >= 10) return;
+            
+            let mid = Math.floor((phoneMin + phoneMax) / 2);
+            
+            // Standard Binary Search Logic applied to 0-9
+            if(isHigher) {
+                // User says it is >= mid
+                phoneMin = mid;
+                // Trap fix: if min==mid and we need to go higher, we must increment manually to avoid infinite loop
+                if(phoneMin === phoneMax - 1 && mid === phoneMin) {
+                     // Wait, strictly speaking >= mid means [mid, max].
+                     // But if min=8, max=9, mid=8. User says >= 8. Range is [8,9].
+                     // To force a decision, we rely on the next guess.
+                     // But if we are stuck, we just pick one.
+                     if(Math.random() > 0.5) phoneMin++;
+                }
+            } else {
+                // User says it is < mid
+                phoneMax = mid - 1; 
+                if(phoneMax < phoneMin) phoneMax = phoneMin;
+            }
+            
+            // If range collapsed to one number, we found it
+            if(phoneMin === phoneMax) {
+                phoneDigits.push(phoneMin);
+                currentPhoneDigit++;
+                phoneMin = 0;
+                phoneMax = 9;
+                updatePhoneDisplay();
+            } else {
+                // Just update the question
+                updatePhoneDisplay();
+            }
+        }
+        
+        // --- 4. LOGARITHMIC QUANTITY ---
+        const quantitySlider = document.getElementById('quantitySlider');
+        const quantityDisplay = document.getElementById('quantityDisplay');
+        
+        quantitySlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            let calculated;
+            
+            if (val === 0) calculated = 1;
+            else if (val < 20) calculated = val;
+            else if (val < 50) calculated = Math.round(val * 2.5);
+            else if (val < 80) calculated = Math.round(Math.pow(val, 1.8)); // Starts growing fast
+            else calculated = Math.round(Math.pow(10, val / 25)); // Explosive growth
+            
+            quantityDisplay.textContent = calculated.toLocaleString();
+        });
+        
+        // --- 5. DATE PICKER (RANDOM MONTH/YEAR) ---
+        const dateGrid = document.getElementById('dateGrid');
+        
+        function initDateGrid() {
+            for(let i=1; i<=31; i++) {
+                const day = document.createElement('div');
+                day.className = 'day-cell';
+                day.textContent = i;
+                day.onclick = () => selectDay(day, i);
+                dateGrid.appendChild(day);
+            }
+        }
+        
+        function selectDay(element, day) {
+            document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('selectedDay').value = day;
+            
+            // Random Month and Year assignment (The bad UI feature)
+            const months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+            const randomMonth = months[Math.floor(Math.random() * months.length)];
+            const randomYear = 2025 + Math.floor(Math.random() * 8); // 2025-2032
+            
+            // Invalid date check (e.g. Feb 30), simple retry logic
+            if(day > 28 && randomMonth === "Februari") {
+                selectDay(element, day); // Try again
+                return;
+            }
+            
+            const helpText = element.parentElement.nextElementSibling.nextElementSibling;
+            helpText.innerHTML = `Valt datum: <strong>${day} ${randomMonth} ${randomYear}</strong> (Automatiskt optimerat för vår logistik)`;
+            helpText.style.color = "#2d3748";
+        }
+        
+        initDateGrid();
+        
+        // --- 6. ANALOG CLOCK ---
+        let clockMode = 'hour'; // or 'minute'
+        let selectedHour = 12;
+        let selectedMinute = 0;
+        
+        function handleClockClick(e) {
+            const rect = document.getElementById('clockFace').getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            // Get click coordinates relative to center
+            const x = e.clientX - rect.left - centerX;
+            const y = e.clientY - rect.top - centerY;
+            
+            // Calculate angle in degrees
+            let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
+            if(angle < 0) angle += 360;
+            
+            if(clockMode === 'hour') {
+                // Snap to nearest hour (30 degrees per hour)
+                selectedHour = Math.round(angle / 30);
+                if(selectedHour === 0) selectedHour = 12;
+                
+                document.getElementById('hourHand').style.transform = `translateX(-50%) rotate(${selectedHour * 30}deg)`;
+                clockMode = 'minute'; // Switch mode
+            } else {
+                // Snap to nearest minute (6 degrees per minute)
+                selectedMinute = Math.round(angle / 6);
+                if(selectedMinute === 60) selectedMinute = 0;
+                
+                document.getElementById('minuteHand').style.transform = `translateX(-50%) rotate(${selectedMinute * 6}deg)`;
+                clockMode = 'hour'; // Switch back
+            }
+            
+            updateTimeDisplay();
+        }
+        
+        function updateTimeDisplay() {
+            const h = selectedHour.toString().padStart(2, '0');
+            const m = selectedMinute.toString().padStart(2, '0');
+            document.getElementById('timeDisplay').textContent = `${h}:${m}`;
+        }
+        
+        // --- 7. ROTATING CAPTCHA ---
+        const captchaCode = document.getElementById('captchaCode');
+        let rotation = 0;
+        
+        // Animate rotation constantly
+        setInterval(() => {
+            rotation += 2;
+            captchaCode.style.transform = `rotate(${rotation}deg)`;
+        }, 50);
+        
+        // --- 8. EULA TYPING TEST ---
+        const eulaRef = document.getElementById('eulaReference');
+        const eulaInput = document.getElementById('eulaInput');
+        const eulaBar = document.getElementById('eulaProgressBar');
+        const eulaText = document.getElementById('eulaProgressText');
+        const targetText = eulaRef.innerText.trim();
+        
+        eulaInput.addEventListener('input', function() {
+            const current = this.value;
+            let matchCount = 0;
+            
+            // Check exactly how many chars match from the start
+            for(let i=0; i<current.length; i++) {
+                if(i < targetText.length && current[i] === targetText[i]) {
+                    matchCount++;
+                } else {
+                    break; // Stop at first error
+                }
+            }
+            
+            const percentage = Math.floor((matchCount / targetText.length) * 100);
+            eulaBar.style.width = percentage + '%';
+            
+            if(current === targetText) {
+                eulaText.textContent = "Bekräftelse: 100% - Verifierad";
+                eulaText.style.color = "green";
+                eulaInput.disabled = true;
+                eulaInput.style.borderColor = "#48bb78";
+                checkSubmitStatus();
+            } else {
+                eulaText.textContent = `Bekräftelse: ${percentage}% (Måste vara exakt)`;
+                eulaText.style.color = "#718096";
+            }
+        });
+        
+        // Disable paste
+        eulaInput.onpaste = e => {
+            e.preventDefault();
+            alert("Säkerhetsprotokoll: Klistra in är förbjudet.");
+        };
+        
+        // --- 9. FLEEING CHECKBOX ---
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const checkboxStatus = document.getElementById('checkboxStatus');
+        
+        termsCheckbox.addEventListener('change', function() {
+            if(this.checked) {
+                checkboxStatus.textContent = "Verifierar samtycke mot server...";
+                checkboxStatus.className = "status-message show";
+                checkboxStatus.style.background = "#fffaf0";
+                checkboxStatus.style.color = "orange";
+                
+                // Simulate network latency then random failure
+                setTimeout(() => {
+                    // 70% chance of failure
+                    if(Math.random() > 0.3) {
+                        this.checked = false;
+                        checkboxStatus.textContent = "Felkod 419: Sessionen för samtycke löpte ut (Packet Loss). Försök igen.";
+                        checkboxStatus.className = "status-message show error";
+                    } else {
+                        checkboxStatus.textContent = "Samtycke registrerat.";
+                        checkboxStatus.className = "status-message show success";
+                        checkSubmitStatus();
+                    }
+                }, 1200);
+            } else {
+                checkboxStatus.style.display = 'none';
+            }
+        });
+        
+        // --- 10. SUBMIT VALIDATION ---
+        function checkSubmitStatus() {
+            const isEulaDone = eulaInput.value === targetText;
+            const isTermsDone = termsCheckbox.checked;
+            const isPhoneDone = phoneDigits.length === 10;
+            
+            document.getElementById('submitBtn').disabled = !(isEulaDone && isTermsDone && isPhoneDone);
+        }
+        
+        // Init first slider
+        updateSurnameLetter(document.querySelector('.surname-slider'));
+        
     </script>
 </body>
 </html>
