@@ -3,640 +3,741 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koncernportal | Total Rekvisition v7.0 (Ultimate Edition)</title>
+    <title>Intranät | Koncernövergripande Resursallokering (SECURE)</title>
     <style>
         :root {
-            --c-primary: #2c3e50;
-            --c-accent: #3498db;
-            --c-dark: #1a252f;
-            --c-bg: #ecf0f1;
-            --c-panel: #ffffff;
-            --c-danger: #e74c3c;
-            --c-success: #27ae60;
-            --c-warning: #f39c12;
-            --font-stack: 'Segoe UI', Helvetica, Arial, sans-serif;
-            --font-mono: 'Consolas', monospace;
+            --bg-body: #e0e5ec;
+            --bg-panel: #ecf0f3;
+            --text-main: #4a5568;
+            --text-muted: #a0aec0;
+            --border-light: #ffffff;
+            --border-shadow: #b8b9be;
+            --accent: #4a90e2;
+            --danger: #e53e3e;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --mono: 'Menlo', 'Monaco', 'Courier New', monospace;
+            --sans: 'Segoe UI', system-ui, sans-serif;
         }
 
-        * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
-        
+        /* --- NEUMORPHIC BASE --- */
         body {
-            background-color: var(--c-bg);
-            font-family: var(--font-stack);
-            color: #333;
+            background-color: var(--bg-body);
+            font-family: var(--sans);
+            color: var(--text-main);
             margin: 0;
-            padding-bottom: 150px;
+            padding: 20px 0 100px 0;
+            line-height: 1.5;
         }
 
-        /* --- HEADER --- */
+        .container { max-width: 850px; margin: 0 auto; padding: 0 15px; }
+
         .header {
-            background: var(--c-primary);
-            color: white;
-            padding: 20px 40px;
-            border-bottom: 4px solid var(--c-accent);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            position: sticky; top: 0; z-index: 100;
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #cbd5e0;
+            padding-bottom: 20px;
         }
-        .header h1 { margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
-        .header .meta { font-family: var(--font-mono); font-size: 11px; opacity: 0.7; margin-top: 5px; }
+        .header h1 { font-size: 1.25rem; text-transform: uppercase; letter-spacing: 2px; margin: 0; color: #2d3748; }
+        .header .meta { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; }
 
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* --- MODULES GLOBAL --- */
         .module {
-            background: var(--c-panel);
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            overflow: hidden;
+            background: var(--bg-panel);
+            border-radius: 12px;
+            box-shadow: 9px 9px 16px var(--border-shadow), -9px -9px 16px var(--border-light);
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.4);
         }
 
-        .module-header {
-            background: #f7f9f9;
-            padding: 12px 20px;
-            border-bottom: 1px solid #ecf0f1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .module-head {
+            display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 20px; border-bottom: 1px solid #cbd5e0; padding-bottom: 10px;
+        }
+        .label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; }
+        .status-led { height: 8px; width: 8px; border-radius: 50%; background: #cbd5e0; display: inline-block; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
+        .status-led.active { background: var(--success); box-shadow: 0 0 8px var(--success); }
+
+        .control-panel {
+            background: #e6e9ef;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: inset 3px 3px 7px rgba(163,177,198, 0.6), inset -3px -3px 7px rgba(255,255,255, 0.5);
         }
 
-        .module-title { font-weight: 700; font-size: 13px; text-transform: uppercase; color: var(--c-primary); letter-spacing: 0.5px; }
-        .module-body { padding: 20px; }
-        .label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: #7f8c8d; }
-        .help-text { font-size: 11px; color: #95a5a6; font-style: italic; margin-top: 10px; border-left: 3px solid #bdc3c7; padding-left: 10px; line-height: 1.4; }
-
-        /* --- 1. FLYWHEEL (NAME) --- */
-        .flywheel-ui { display: flex; gap: 20px; align-items: center; background: #eef2f3; padding: 20px; border-radius: 4px; }
-        .fw-canvas-wrap { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
-        .fw-marker { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 15px solid var(--c-danger); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
-        .fw-controls { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .fw-display { background: white; border: 2px solid var(--c-primary); font-family: var(--font-mono); font-size: 24px; padding: 10px; min-height: 50px; letter-spacing: 3px; font-weight: bold; color: var(--c-primary); word-break: break-all; }
-        .btn-hold { flex: 1; padding: 12px; border: none; font-weight: bold; font-size: 11px; text-transform: uppercase; cursor: grab; transition: transform 0.1s; color: white; border-radius: 3px; }
-        .btn-hold:active { transform: scale(0.98); cursor: grabbing; }
-        .btn-hold.accel { background: #34495e; }
-        .btn-hold.brake { background: #7f8c8d; }
-        .btn-action { background: var(--c-accent); color: white; border: none; padding: 10px; font-weight: bold; text-transform: uppercase; font-size: 12px; cursor: pointer; border-radius: 3px; }
-        .btn-action:hover { background: #2980b9; }
-
-        /* --- 2. DRIFT PHONE --- */
-        .drift-ui { background: #2c3e50; padding: 15px; border-radius: 5px; color: #2ecc71; text-align: center; }
-        .drift-screen { background: #000; border: 2px solid #7f8c8d; height: 180px; position: relative; overflow: hidden; cursor: crosshair; margin-bottom: 10px; }
-        .drift-grid { position: absolute; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); pointer-events: none; }
-        .drift-cell { border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 24px; font-family: var(--font-mono); color: #333; }
-        .drift-cursor { width: 12px; height: 12px; background: #2ecc71; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px #2ecc71; }
-        .drift-controls { display: flex; justify-content: space-around; align-items: flex-end; }
-        .knob-wrap { display: flex; flex-direction: column; align-items: center; width: 60px; }
-        .knob { width: 50px; height: 50px; background: #bdc3c7; border-radius: 50%; border: 3px solid #95a5a6; position: relative; cursor: ew-resize; box-shadow: 0 3px 0 #555; }
-        .knob::after { content: ''; position: absolute; top: 5px; left: 50%; width: 4px; height: 15px; background: #333; transform: translateX(-50%); }
-        .thrust-meter { width: 100%; height: 4px; background: #333; margin-top: 5px; position: relative; }
-        .thrust-val { position: absolute; top: 0; height: 100%; background: #2ecc71; left: 50%; width: 0; transition: width 0.1s, left 0.1s; }
-        .phone-display { font-family: var(--font-mono); font-size: 20px; color: #2ecc71; min-height: 30px; margin-bottom: 10px; border-bottom: 1px dashed #555; }
-
-        /* --- 3. BINARY DATE --- */
-        .date-ui { background: white; padding: 20px; border: 1px solid #ddd; text-align: center; }
-        .date-display { font-family: var(--font-mono); font-size: 28px; font-weight: bold; color: var(--c-primary); margin: 15px 0; letter-spacing: 2px; }
-        .btn-group { display: flex; gap: 5px; justify-content: center; }
-
-        /* --- 4. PASSWORD SPINNER --- */
-        .pwd-ui { background: #34495e; padding: 20px; border-radius: 4px; text-align: center; color: white; }
-        .char-spinner { font-family: var(--font-mono); font-size: 48px; background: #2c3e50; display: inline-block; padding: 10px 20px; border-radius: 4px; margin-bottom: 15px; border: 2px solid #95a5a6; min-width: 80px; }
-        .pwd-out { font-family: var(--font-mono); letter-spacing: 3px; border-bottom: 1px solid #7f8c8d; padding-bottom: 5px; min-height: 24px; margin-bottom: 15px; word-break: break-all; }
-        .pwd-meter { height: 4px; background: #2c3e50; width: 100%; border-radius: 2px; overflow: hidden; margin-top: 10px; }
-        .pwd-fill { height: 100%; width: 0%; background: var(--c-danger); transition: width 0.2s; }
-
-        /* --- 5. OUIJA EMAIL --- */
-        .ouija-ui { background: #d35400; padding: 15px; border-radius: 4px; position: relative; height: 260px; overflow: hidden; cursor: none; border: 4px solid #a04000; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); }
-        .ouija-letters { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 10px; }
-        .spirit-char { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 18px; color: #5a2d0c; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
-        .planchette { position: absolute; width: 50px; height: 60px; background: rgba(255,255,255,0.9); border-radius: 50% 50% 5px 5px; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 2px solid #333; z-index: 10; pointer-events: none; }
-        .planchette::after { content: ''; position: absolute; top: 25px; left: 50%; width: 10px; height: 10px; background: transparent; border: 1px solid #000; border-radius: 50%; transform: translateX(-50%); }
-        .ouija-out { position: absolute; bottom: 10px; width: 100%; text-align: center; font-family: 'Times New Roman', serif; font-size: 20px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-
-        /* --- 6. GEO WIND --- */
-        .geo-ui { background: #ecf0f1; padding: 15px; border-radius: 4px; position: relative; }
-        .geo-map { height: 200px; background: white; border: 2px solid #bdc3c7; position: relative; overflow: hidden; background-image: radial-gradient(#bdc3c7 1px, transparent 1px); background-size: 20px 20px; margin-bottom: 15px; }
-        .geo-pin { position: absolute; width: 14px; height: 14px; background: var(--c-danger); border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: top 0.1s linear, left 0.1s linear; }
-        .wind-warning { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.9); padding: 5px; font-size: 10px; border: 1px solid var(--c-warning); color: #d35400; font-weight: bold; border-radius: 2px; }
-        .geo-slider { width: 100%; margin: 10px 0; }
-        .coord-disp { font-family: var(--font-mono); font-size: 12px; color: var(--c-primary); text-align: center; margin-bottom: 10px; }
-
-        /* --- 7. COST SPINNERS --- */
-        .spinner-ui { display: flex; gap: 10px; justify-content: center; background: #f4f4f4; padding: 20px; border-radius: 4px; }
-        .digit-col { display: flex; flex-direction: column; align-items: center; }
-        .spinner-canvas { background: white; border: 2px solid var(--c-primary); cursor: pointer; border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
-        .digit-val { font-family: var(--font-mono); font-size: 18px; font-weight: bold; margin-top: 5px; color: var(--c-primary); }
-
-        /* --- 8. GRAVITY VOLUME --- */
-        .grav-ui { background: white; padding: 25px; border-radius: 4px; text-align: center; border: 1px solid #ddd; }
-        .grav-track { width: 40px; height: 200px; background: #ecf0f1; border-radius: 20px; margin: 0 auto; position: relative; border: 1px solid #bdc3c7; }
-        .grav-handle { width: 34px; height: 34px; background: var(--c-accent); border-radius: 50%; position: absolute; left: 2px; top: 50%; cursor: grab; box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 2px solid white; }
-        .grav-val { font-family: var(--font-mono); font-size: 24px; color: var(--c-accent); margin-top: 15px; font-weight: bold; }
-
-        /* --- 9. RESOURCES --- */
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .service-card { border: 1px solid #eee; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; background: #fff; border-radius: 4px; }
-        .service-card:hover { border-color: var(--c-accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .status-dot { width: 14px; height: 14px; background: #eee; border-radius: 50%; margin: 0 auto 10px; border: 1px solid #ccc; transition: background 0.3s, box-shadow 0.3s; }
-
-        /* --- 10. HEAT SINK --- */
-        .heat-ui { background: #ecf0f1; padding: 20px; border-radius: 4px; text-align: center; }
-        .rub-pad { 
-            width: 100%; height: 100px; 
-            background: repeating-linear-gradient(45deg, #e0e0e0, #e0e0e0 10px, #ecf0f1 10px, #ecf0f1 20px); 
-            border: 2px dashed #95a5a6; border-radius: 4px; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: grab; position: relative; overflow: hidden; 
-            transition: border-color 0.2s;
+        /* --- COMPONENTS --- */
+        button {
+            font-family: var(--mono); font-weight: bold; font-size: 0.8rem;
+            color: var(--text-main); background: var(--bg-panel);
+            border: none; border-radius: 6px; padding: 10px 15px;
+            box-shadow: 4px 4px 8px var(--border-shadow), -4px -4px 8px var(--border-light);
+            cursor: pointer; transition: all 0.1s ease; outline: none; text-transform: uppercase;
         }
-        .rub-pad:active { cursor: grabbing; border-color: var(--c-danger); border-style: solid; }
-        .rub-text { position: relative; z-index: 10; font-weight: bold; color: #7f8c8d; user-select: none; }
-        .rub-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(to top, #e74c3c, #f1c40f); opacity: 0.6; transition: height 0.05s linear; pointer-events: none; }
-        .temp-meter-wrap { margin-top: 15px; background: #bdc3c7; height: 20px; border-radius: 10px; position: relative; overflow: hidden; }
-        .temp-zone { position: absolute; left: 80%; width: 15%; height: 100%; background: rgba(39, 174, 96, 0.3); border-left: 1px dashed #27ae60; border-right: 1px dashed #27ae60; z-index: 1; }
-        .temp-bar { height: 100%; width: 0%; background: #e74c3c; transition: width 0.05s linear; position: relative; z-index: 2; opacity: 0.8; }
-        .encrypt-progress { margin-top: 5px; height: 5px; background: #ddd; width: 100%; border-radius: 2px; overflow: hidden; }
-        .encrypt-fill { height: 100%; width: 0%; background: var(--c-primary); transition: width 0.1s linear; }
-        .status-text { font-family: var(--font-mono); font-size: 12px; margin-top: 10px; height: 15px; font-weight: bold; }
+        button:active { box-shadow: inset 2px 2px 5px var(--border-shadow), inset -2px -2px 5px var(--border-light); transform: translateY(1px); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button.primary { color: var(--accent); }
+        button.danger { color: var(--danger); }
+
+        .display-field {
+            font-family: var(--mono); background: #2d3748; color: #63b3ed;
+            padding: 10px; border-radius: 4px; text-align: center;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5); margin-bottom: 15px;
+            min-height: 40px; display: flex; align-items: center; justify-content: center;
+            letter-spacing: 2px; white-space: pre-wrap; word-break: break-all;
+        }
+
+        /* --- 1. FLYWHEEL --- */
+        .flywheel-wrap { display: flex; gap: 20px; align-items: center; }
+        .wheel-container { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+        .marker { position: absolute; top: -5px; left: 50%; transform: translateX(-50%); border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid var(--danger); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
         
-        .submit-btn { 
-            margin-top: 20px; width: 100%; padding: 15px; 
-            background: #95a5a6; color: white; border: none; 
-            font-weight: bold; text-transform: uppercase; cursor: not-allowed; 
+        /* --- 2. DRIFT --- */
+        .radar-screen { 
+            width: 100%; height: 180px; background: #000; position: relative; 
+            overflow: hidden; cursor: crosshair; margin-bottom: 10px; border: 2px solid #4a5568;
         }
-        .submit-btn.enabled { background: var(--c-success); cursor: pointer; }
+        .radar-grid { 
+            width: 100%; height: 100%; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr);
+            background-image: linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .radar-cell { display: flex; align-items: center; justify-content: center; color: rgba(0,255,0,0.3); font-family: var(--mono); font-size: 1.5rem; border: 1px solid rgba(0,255,0,0.1); }
+        .blip { width: 8px; height: 8px; background: #0f0; border-radius: 50%; position: absolute; box-shadow: 0 0 10px #0f0; transform: translate(-50%, -50%); }
+        .knob-row { display: flex; justify-content: space-around; align-items: center; margin-top: 15px; }
+        .knob { 
+            width: 50px; height: 50px; border-radius: 50%; background: var(--bg-panel);
+            box-shadow: 5px 5px 10px var(--border-shadow), -5px -5px 10px var(--border-light);
+            position: relative; cursor: ns-resize; transform: rotate(0deg);
+        }
+        .knob::after { content: ''; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 4px; height: 12px; background: var(--text-muted); border-radius: 2px; }
+        
+        /* --- 4. SPINNER --- */
+        .char-slot { font-size: 3rem; color: var(--text-main); font-weight: bold; height: 80px; display: flex; align-items: center; justify-content: center; background: #e2e8f0; border-radius: 6px; margin-bottom: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+        
+        /* --- 5. GEO --- */
+        .map-frame { height: 180px; background: #fff; border: 1px solid #cbd5e0; position: relative; overflow: hidden; margin-bottom: 15px; background-image: radial-gradient(#cbd5e0 1px, transparent 1px); background-size: 20px 20px; }
+        .drone-pin { width: 12px; height: 12px; background: var(--danger); position: absolute; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: translate(-50%, -50%); transition: top 0.2s linear, left 0.2s linear; }
+        .slider-group { display: flex; flex-direction: column; gap: 10px; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--bg-panel); border: 1px solid var(--border-shadow); box-shadow: 2px 2px 4px var(--border-shadow), -2px -2px 4px var(--border-light); margin-top: -6px; cursor: pointer; }
+        input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #cbd5e0; border-radius: 2px; }
 
+        /* --- 7. GRAVITY --- */
+        .gravity-well { height: 200px; background: #edf2f7; border-radius: 50px; width: 60px; margin: 0 auto; position: relative; border: 1px solid #cbd5e0; box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1); }
+        .mercury-bead { width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #fff, #718096); border-radius: 50%; position: absolute; left: 9px; cursor: grab; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .mercury-bead:active { cursor: grabbing; }
+
+        /* --- 8. OUIJA --- */
+        .spectral-pad { background: #2d3748; padding: 10px; border-radius: 6px; height: 200px; position: relative; cursor: none; overflow: hidden; }
+        .spectral-char { position: absolute; color: rgba(255,255,255,0.2); font-family: serif; font-size: 14px; user-select: none; }
+        .planchette { width: 40px; height: 50px; border: 2px solid rgba(255,255,255,0.8); border-radius: 50% 50% 5px 5px; position: absolute; transform: translate(-50%, -50%); pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; }
+        .planchette::after { content: ''; width: 6px; height: 6px; border: 1px solid #fff; border-radius: 50%; }
+
+        /* --- 10. HEAT --- */
+        .rub-zone { 
+            height: 120px; background: repeating-linear-gradient(45deg, #e2e8f0, #e2e8f0 10px, #edf2f7 10px, #edf2f7 20px);
+            border: 2px dashed #cbd5e0; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            cursor: grab; margin-bottom: 15px; position: relative; overflow: hidden; user-select: none;
+        }
+        .rub-zone:active { cursor: grabbing; border-color: var(--accent); border-style: solid; }
+        .heat-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, rgba(229,62,62,0.8), transparent); pointer-events: none; transition: height 0.05s; }
+        .temp-gauge { height: 10px; background: #cbd5e0; border-radius: 5px; overflow: hidden; position: relative; margin-top: 5px; }
+        .temp-fill { height: 100%; background: linear-gradient(90deg, #3498db, #e74c3c); width: 0%; transition: width 0.1s linear; }
+        .target-zone { position: absolute; left: 75%; width: 15%; height: 100%; background: rgba(56, 161, 105, 0.5); border-left: 1px solid #fff; border-right: 1px solid #fff; }
+
+        .submit-block { margin-top: 50px; padding: 20px; text-align: center; opacity: 0.5; pointer-events: none; transition: all 0.5s; filter: grayscale(1); }
+        .submit-block.ready { opacity: 1; pointer-events: all; filter: grayscale(0); }
+        .final-btn { width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 2px; background: var(--success); color: white; border: none; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="container" style="margin:0; padding:0;">
-            <h1>Koncernportal v7.0 UE</h1>
-            <div class="meta">Enhet: Användaradministration | Användare: A. Andersson</div>
+        <div class="container">
+            <h1>HR-Portal v7.0.2 (RC4)</h1>
+            <div class="meta">Protokoll: SEC-HARDENED | Session ID: 0x9F3A</div>
         </div>
     </div>
 
     <div class="container">
 
-        <!-- 1. FLYWHEEL -->
+        <!-- 1. NAME - INERTIA -->
         <div class="module">
-            <div class="module-header"><span class="module-title">1. Identitet (Inertia Wheel)</span></div>
-            <div class="module-body">
-                <span class="label">Fullständigt Namn</span>
-                <div class="flywheel-ui">
-                    <div class="fw-canvas-wrap">
-                        <div class="fw-marker"></div>
-                        <canvas id="wheelCanvas" width="160" height="160"></canvas>
-                    </div>
-                    <div class="fw-controls">
-                        <div class="fw-display" id="nameOutput"></div>
-                        <div style="display:flex; gap:10px;">
-                            <button class="btn-hold accel" id="btnAccel">⚡ Motor</button>
-                            <button class="btn-hold brake" id="btnBrake">🛑 Broms</button>
-                        </div>
-                        <button class="btn-action" id="btnStamp">Stämpla</button>
-                    </div>
+            <div class="module-head">
+                <span class="label">1. Användaridentitet (Roterande Inmatning)</span>
+                <span class="status-led" id="led1"></span>
+            </div>
+            <div class="control-panel flywheel-wrap">
+                <div class="wheel-container">
+                    <div class="marker"></div>
+                    <canvas id="canvasWheel" width="140" height="140"></canvas>
                 </div>
-                <div class="help-text">Accelerera hjulet och bromsa försiktigt. Stämpla när rätt bokstav är under den röda pilen och hjulet står nästan stilla.</div>
+                <div style="flex:1;">
+                    <div class="display-field" id="outName"></div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                        <button class="primary" id="btnSpin">Inducera</button>
+                        <button class="danger" id="btnBrake">Friktion</button>
+                    </div>
+                    <button style="width:100%" id="btnStamp">Stämpla Tecken</button>
+                </div>
             </div>
         </div>
 
-        <!-- 2. DRIFT PHONE -->
+        <!-- 2. PHONE - VECTOR -->
         <div class="module">
-            <div class="module-header"><span class="module-title">2. Kontakt (Velocity Vector)</span></div>
-            <div class="module-body">
-                <span class="label">Telefonnummer</span>
-                <div class="drift-ui">
-                    <div class="phone-display"><span id="phoneOut"></span><span style="animation:blink 1s infinite">_</span></div>
-                    <div class="drift-screen" id="driftScreen">
-                        <div class="drift-grid" id="driftGrid"></div>
-                        <div class="drift-cursor" id="driftCursor"></div>
-                    </div>
-                    <div class="drift-controls">
-                        <div class="knob-wrap"><div class="knob" id="knobX"></div><div class="thrust-meter"><div class="thrust-val" id="barX"></div></div></div>
-                        <button class="btn-action" id="btnDriftSelect" style="border-radius:50%; width:60px; height:60px;">LÅS</button>
-                        <div class="knob-wrap"><div class="knob" id="knobY"></div><div class="thrust-meter"><div class="thrust-val" id="barY"></div></div></div>
-                    </div>
-                </div>
-                <div class="help-text">Rattarna styr accelerationen (gas). Motstyr för att stanna. Lås signalen när du svävar över en siffra.</div>
+            <div class="module-head">
+                <span class="label">2. Kontaktvektor (XY-Låsning)</span>
+                <span class="status-led" id="led2"></span>
             </div>
-        </div>
-
-        <!-- 3. BINARY DATE -->
-        <div class="module">
-            <div class="module-header"><span class="module-title">3. Tidsperiod (Binary Sort)</span></div>
-            <div class="module-body">
-                <span class="label">Önskat Startdatum</span>
-                <div class="date-ui">
-                    <div class="date-display" id="dateDisplay">2024-06-15</div>
-                    <div class="btn-group">
-                        <button class="btn-action" id="btnEarlier" style="background:#95a5a6">← Tidigare</button>
-                        <button class="btn-action" id="btnExact">✓ Bekräfta</button>
-                        <button class="btn-action" id="btnLater" style="background:#95a5a6">Senare →</button>
+            <div class="control-panel">
+                <div class="display-field" id="outPhone">__-_______</div>
+                <div class="radar-screen" id="radar">
+                    <div class="radar-grid" id="radarGrid"></div>
+                    <div class="blip" id="blip"></div>
+                </div>
+                <div class="knob-row">
+                    <div style="text-align:center">
+                        <div class="knob" id="knobX"></div>
+                        <span class="label" style="margin-top:5px; display:block">LAT</span>
+                    </div>
+                    <button style="height:60px; width:60px; border-radius:50%; font-size:10px;" id="btnPing">LÅS<br>SIGNAL</button>
+                    <div style="text-align:center">
+                        <div class="knob" id="knobY"></div>
+                        <span class="label" style="margin-top:5px; display:block">LONG</span>
                     </div>
                 </div>
-                <div class="help-text">Binär sökning. Antal gissningar: <span id="dateCount">0</span></div>
             </div>
         </div>
 
-        <!-- 4. PASSWORD SPINNER -->
+        <!-- 3. DATE - BINARY -->
         <div class="module">
-            <div class="module-header"><span class="module-title">4. Autentisering (Roulette)</span></div>
-            <div class="module-body">
-                <span class="label">Säkerhetskod</span>
-                <div class="pwd-ui">
-                    <div class="pwd-out" id="pwdOut">_</div>
-                    <div class="char-spinner" id="charSpinner">A</div>
-                    <div>
-                        <button class="btn-action" id="btnLockChar" style="background:var(--c-success)">Lås Tecken</button>
-                        <button class="btn-action" id="btnResetPwd" style="background:var(--c-danger)">Rensa</button>
-                    </div>
-                    <div class="pwd-meter"><div class="pwd-fill" id="pwdBar"></div></div>
+            <div class="module-head">
+                <span class="label">3. Period (Binär Sortering)</span>
+                <span class="status-led" id="led3"></span>
+            </div>
+            <div class="control-panel" style="text-align:center;">
+                <div class="display-field" id="dateDisp" style="font-size:1.5rem; color:#4a5568; background:#cbd5e0;">2024-06-15</div>
+                <div style="font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); margin-bottom:15px;">ITERATIONER: <span id="dateIter">0</span></div>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button id="btnLess">&lt; FÖREGÅENDE</button>
+                    <button class="success" style="color:var(--success)" id="btnConfirmDate">BEKRÄFTA</button>
+                    <button id="btnMore">NÄSTKOMMANDE &gt;</button>
                 </div>
-                <div class="help-text">Hastigheten ökar för varje tecken. Tryck "Lås" i exakt rätt ögonblick.</div>
             </div>
         </div>
 
-        <!-- 5. GEO WIND -->
+        <!-- 4. CODE - ROULETTE -->
         <div class="module">
-            <div class="module-header"><span class="module-title">5. Leverans (Geo Drift)</span></div>
-            <div class="module-body">
-                <span class="label">Koordinater</span>
-                <div class="geo-ui">
-                    <div class="wind-warning" id="windInd">VIND: LUGN</div>
-                    <div class="coord-disp">LAT: <span id="latVal">59.3293</span> LON: <span id="lonVal">18.0686</span></div>
-                    <div class="geo-map" id="geoMap"><div class="geo-pin" id="geoPin"></div></div>
-                    <input type="range" class="geo-slider" id="latSlider" min="55" max="69" step="0.0001" value="59.3293">
-                    <input type="range" class="geo-slider" id="lonSlider" min="11" max="24" step="0.0001" value="18.0686">
+            <div class="module-head">
+                <span class="label">4. Auktoriseringskod (Sekventiell)</span>
+                <span class="status-led" id="led4"></span>
+            </div>
+            <div class="control-panel" style="text-align:center;">
+                <div class="display-field" id="codeOut" style="letter-spacing:5px;">_ _ _ _</div>
+                <div class="char-slot" id="charSpinner">A</div>
+                <div style="height:4px; background:#cbd5e0; width:100%; margin-bottom:15px;"><div id="spinTimeBar" style="height:100%; width:100%; background:var(--accent);"></div></div>
+                <button class="primary" style="width:100%" id="btnLockChar">LÅS TECKEN (EXAKT)</button>
+            </div>
+        </div>
+
+        <!-- 5. GEO - WIND -->
+        <div class="module">
+            <div class="module-head">
+                <span class="label">5. Leveranskoordinater (Atmosfärisk Kompensation)</span>
+                <span class="status-led" id="led5"></span>
+            </div>
+            <div class="control-panel">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span class="label">DRÖNARE: ONLINE</span>
+                    <span class="label" id="windLabel" style="color:var(--danger)">VIND: 12 m/s NV</span>
                 </div>
-                <div class="help-text">Simulerat väder påverkar drönaren. Kompensera för vindavdrift manuellt.</div>
-            </div>
-        </div>
-
-        <!-- 6. COST CENTER -->
-        <div class="module">
-            <div class="module-header"><span class="module-title">6. Debitering (Slots)</span></div>
-            <div class="module-body">
-                <span class="label">Kostnadsställe</span>
-                <div class="spinner-ui">
-                    <div class="digit-col"><canvas id="spin1" width="60" height="80" class="spinner-canvas"></canvas><div class="digit-val" id="val1">0</div></div>
-                    <div class="digit-col"><canvas id="spin2" width="60" height="80" class="spinner-canvas"></canvas><div class="digit-val" id="val2">0</div></div>
-                    <div class="digit-col"><canvas id="spin3" width="60" height="80" class="spinner-canvas"></canvas><div class="digit-val" id="val3">0</div></div>
-                    <div class="digit-col"><canvas id="spin4" width="60" height="80" class="spinner-canvas"></canvas><div class="digit-val" id="val4">0</div></div>
+                <div class="map-frame" id="geoMap">
+                    <div class="drone-pin" id="dronePin"></div>
                 </div>
-                <div class="help-text">Klicka för att bromsa de roterande rullarna.</div>
-            </div>
-        </div>
-
-        <!-- 7. GRAVITY VOLUME -->
-        <div class="module">
-            <div class="module-header"><span class="module-title">7. Notifiering (Gravity)</span></div>
-            <div class="module-body">
-                <span class="label">Volymnivå</span>
-                <div class="grav-ui">
-                    <div class="grav-track" id="gravTrack"><div class="grav-handle" id="gravHandle"></div></div>
-                    <div class="grav-val" id="gravVal">50%</div>
+                <div class="display-field" style="font-size:0.8rem; height:auto; padding:5px;">LAT: <span id="latVal">0.000</span> | LON: <span id="lonVal">0.000</span></div>
+                <div class="slider-group">
+                    <input type="range" id="slideLat" min="0" max="100" step="0.1">
+                    <input type="range" id="slideLon" min="0" max="100" step="0.1">
                 </div>
-                <div class="help-text">Musen till höger = Antigravitation (Upp). Musen till vänster = Gravitation (Ned).</div>
+                <button style="width:100%; margin-top:15px;" id="btnDrop">BEGÄR LEVERANS HÄR</button>
             </div>
         </div>
 
-        <!-- 8. OUIJA EMAIL -->
+        <!-- 7. VOLUME - GRAVITY -->
         <div class="module">
-            <div class="module-header"><span class="module-title">8. E-post (Spectral)</span></div>
-            <div class="module-body">
-                <span class="label">Adress</span>
-                <div class="ouija-ui" id="ouijaBoard">
-                    <div class="ouija-letters" id="ouijaLetters"></div>
+            <div class="module-head">
+                <span class="label">6. Notisvolym (Kvicksilver)</span>
+                <span class="status-led" id="led7"></span>
+            </div>
+            <div class="control-panel" style="display:flex; align-items:center; gap:30px;">
+                <div class="gravity-well" id="gravTrack">
+                    <div class="mercury-bead" id="bead"></div>
+                </div>
+                <div style="flex:1; text-align:center;">
+                    <span class="label">NIVÅ</span>
+                    <div class="display-field" id="volDisplay" style="font-size:2rem; margin-top:10px;">50%</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:10px;">Håll musen stilla för stabilisering.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. EMAIL - OUIJA -->
+        <div class="module">
+            <div class="module-head">
+                <span class="label">7. E-post (Spektral Analys)</span>
+                <span class="status-led" id="led8"></span>
+            </div>
+            <div class="control-panel">
+                <div class="display-field" id="emailOut"></div>
+                <div class="spectral-pad" id="ouijaBoard">
                     <div class="planchette" id="planchette"></div>
-                    <div class="ouija-out" id="ouijaOut"></div>
                 </div>
-                <div class="help-text">Markören gör motstånd. Håll den stilla över en bokstav i 1 sekund för att välja.</div>
+                <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:var(--text-muted);">
+                    Mediets motstånd är normalt. Tvinga markören till tecknen.
+                </div>
             </div>
         </div>
 
-        <!-- 9. RESOURCES -->
-        <div class="module">
-            <div class="module-header"><span class="module-title">9. Resurser (Tri-Click)</span></div>
-            <div class="module-body">
-                <span class="label">Välj utrustning</span>
-                <div class="service-grid">
-                    <div class="service-card"><div class="status-dot"></div>Laptop Std</div>
-                    <div class="service-card"><div class="status-dot"></div>VPN Token</div>
-                    <div class="service-card"><div class="status-dot"></div>iPhone 8</div>
-                    <div class="service-card"><div class="status-dot"></div>Office 365</div>
-                </div>
-                <div class="help-text">Klicka 3 gånger på varje objekt för att bekräfta.</div>
+        <!-- 10. HEAT - APPROVAL -->
+        <div class="module submit-block" id="finalModule">
+            <div class="module-head">
+                <span class="label">8. KRYPTERING AV REKVISITION</span>
             </div>
-        </div>
-
-        <!-- 10. APPROVAL -->
-        <div class="module" style="border-top: 4px solid var(--c-primary);">
-            <div class="module-header"><span class="module-title">10. Signering (Thermal Encryption)</span></div>
-            <div class="module-body">
-                <span class="label">Generera Friktion</span>
-                <div class="heat-ui">
-                    <div class="rub-pad" id="rubPad">
-                        <span class="rub-text">GNUGGA HÄR</span>
-                        <div class="rub-overlay" id="rubOverlay"></div>
-                    </div>
-                    <div class="temp-meter-wrap"><div class="temp-zone"></div><div class="temp-bar" id="tempBar"></div></div>
-                    <div class="encrypt-progress"><div class="encrypt-fill" id="encryptFill"></div></div>
-                    <div class="status-text" id="heatStatus">SYSTEM: STANDBY</div>
+            <div class="control-panel">
+                <div class="rub-zone" id="rubPad">
+                    <div style="z-index:2; font-weight:bold; color:#718096; text-transform:uppercase;">Generera Entropi (Gnugga)</div>
+                    <div class="heat-overlay" id="heatOverlay"></div>
                 </div>
-                <div class="help-text">Gnugga för att bygga värme. Håll temperaturen i gröna zonen tills mätaren är full. Överhettning nollställer systemet.</div>
-                <button class="submit-btn" id="btnSubmit">Skicka Rekvisition</button>
+                <div class="temp-gauge">
+                    <div class="target-zone"></div>
+                    <div class="temp-fill" id="tempBar"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-top:5px; font-family:var(--mono);">
+                    <span>SYSTEMTEMP</span>
+                    <span id="cryptoStatus">VÄNTAR...</span>
+                </div>
+                <div style="height:4px; background:#e2e8f0; width:100%; margin-top:15px; border-radius:2px;"><div id="progBar" style="height:100%; background:var(--text-main); width:0%;"></div></div>
             </div>
+            <br>
+            <button class="final-btn" id="btnSubmit" disabled>SIGNERA & SKICKA</button>
         </div>
 
     </div>
 
     <script>
-        /**
-         * KONCERNPORTAL v7.0 CORE
-         * The best of the worst.
-         */
-        const requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+        // --- CORE UTILS ---
+        const rAF = requestAnimationFrame;
+        const clamp = (v,min,max) => Math.max(min,Math.min(max,v));
+        
+        // GLOBAL STATE
+        const state = {
+            name: "",
+            phone: "",
+            dateConfirmed: false,
+            code: "",
+            geoLocked: false,
+            volLocked: false,
+            email: ""
+        };
 
-        // --- 1. FLYWHEEL LOGIC ---
+        const checkGlobal = () => {
+            // Check if all previous steps (simplified logic for demo) are loosely "active"
+            // For this UI demo, we enable the final step always but it requires interaction
+            document.getElementById('finalModule').classList.add('ready');
+        };
+
+        // --- 1. FLYWHEEL ---
         (() => {
-            const canvas = document.getElementById('wheelCanvas');
+            const canvas = document.getElementById('canvasWheel');
             const ctx = canvas.getContext('2d');
-            const display = document.getElementById('nameOutput');
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ_".split("");
-            const segAngle = (Math.PI * 2) / chars.length;
-            let angle = 0, velocity = 0, isAccel = false, isBrake = false;
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ÅÄÖ".split("");
+            const segment = (Math.PI * 2) / chars.length;
+            let angle = 0, v = 0, dragging = false;
 
-            document.getElementById('btnAccel').addEventListener('mousedown', () => isAccel=true);
-            window.addEventListener('mouseup', () => { isAccel=false; isBrake=false; });
-            document.getElementById('btnBrake').addEventListener('mousedown', () => isBrake=true);
+            document.getElementById('btnSpin').addEventListener('mousedown', () => v += 0.05);
+            document.getElementById('btnBrake').addEventListener('mousedown', () => v *= 0.85);
 
-            function loop() {
-                if(isAccel) velocity += 0.003; 
-                if(isBrake) velocity *= 0.94;
-                velocity *= 0.998; angle += velocity;
-
-                ctx.clearRect(0,0,160,160); ctx.save(); ctx.translate(80,80); ctx.rotate(angle);
-                ctx.beginPath(); ctx.arc(0,0,75,0,Math.PI*2); ctx.fillStyle="#ecf0f1"; ctx.fill(); ctx.lineWidth=4; ctx.strokeStyle="#2c3e50"; ctx.stroke();
+            function draw() {
+                v *= 0.992; // Friction
+                angle += v;
+                ctx.clearRect(0,0,140,140);
+                ctx.save(); ctx.translate(70,70); ctx.rotate(angle);
                 
-                ctx.fillStyle = "#2c3e50"; ctx.font = "bold 14px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-                for(let i=0; i<chars.length; i++) {
+                ctx.beginPath(); ctx.arc(0,0,65,0,Math.PI*2);
+                ctx.fillStyle = "#edf2f7"; ctx.fill(); ctx.strokeStyle = "#cbd5e0"; ctx.stroke();
+
+                ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                ctx.fillStyle = "#4a5568"; ctx.font = "bold 12px Menlo";
+                
+                chars.forEach((c, i) => {
                     ctx.save();
-                    const theta = i * segAngle; ctx.rotate(theta); ctx.translate(0, -58);
-                    ctx.rotate(-angle - theta); // Stand up upright
-                    ctx.fillText(chars[i], 0, 0); ctx.restore();
-                }
-                ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-75); ctx.strokeStyle="rgba(0,0,0,0.1)"; ctx.stroke();
-                ctx.restore(); requestAnimFrame(loop);
+                    const th = i * segment;
+                    ctx.rotate(th); ctx.translate(0, -52); ctx.rotate(-angle - th);
+                    ctx.fillText(c, 0, 0);
+                    ctx.restore();
+                });
+                ctx.restore();
+                rAF(draw);
             }
-            loop();
+            draw();
 
             document.getElementById('btnStamp').onclick = () => {
-                if(Math.abs(velocity) > 0.03) { alert("SÄKERHETSSPÄRR: Roterande delar."); return; }
+                if(Math.abs(v) > 0.02) { 
+                    document.getElementById('outName').style.color = "var(--danger)";
+                    setTimeout(()=>document.getElementById('outName').style.color = "#63b3ed", 200);
+                    return; 
+                }
                 let norm = (angle % (Math.PI*2)); if (norm < 0) norm += Math.PI*2;
-                let idx = Math.round(norm / segAngle);
-                let charIdx = (chars.length - idx) % chars.length;
-                let char = chars[charIdx];
-                display.textContent += (char === "_") ? " " : char;
+                let idx = Math.round(norm / segment);
+                let char = chars[(chars.length - idx) % chars.length];
+                state.name += char;
+                document.getElementById('outName').textContent = state.name;
+                if(state.name.length > 3) document.getElementById('led1').classList.add('active');
             };
         })();
 
-        // --- 2. DRIFT PHONE LOGIC ---
+        // --- 2. DRIFT RADAR ---
         (() => {
-            const cursor = document.getElementById('driftCursor');
-            const grid = document.getElementById('driftGrid');
-            const out = document.getElementById('phoneOut');
-            const digits = [1,2,3,4,5,6,7,8,9,0];
-            digits.forEach(d => { let el = document.createElement('div'); el.className='drift-cell'; el.textContent=d; grid.appendChild(el); });
+            const blip = document.getElementById('blip');
+            const disp = document.getElementById('outPhone');
+            const grid = document.getElementById('radarGrid');
+            const nums = [1,2,3,4,5,6,7,8,9,0];
+            
+            nums.forEach(n => {
+                let d = document.createElement('div');
+                d.className = 'radar-cell'; d.innerText = n;
+                grid.appendChild(d);
+            });
 
-            let x=50, y=50, vx=0, vy=0, tx=0, ty=0;
+            let px=50, py=50, vx=0, vy=0, tx=0, ty=0;
+            
+            // Knobs
+            const bindKnob = (id, axis) => {
+                let el = document.getElementById(id);
+                let lastY = 0;
+                el.onmousedown = e => {
+                    lastY = e.clientY;
+                    const move = mv => {
+                        let delta = lastY - mv.clientY; lastY = mv.clientY;
+                        let r = parseFloat(el.style.transform.replace('rotate(',''))||0;
+                        el.style.transform = `rotate(${r+delta*2}deg)`;
+                        if(axis==='x') tx += delta * 0.05;
+                        else ty += delta * 0.05;
+                    };
+                    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+                    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+                };
+            };
+            bindKnob('knobX', 'x'); bindKnob('knobY', 'y');
 
             function loop() {
-                vx += tx * 0.01; vy += ty * 0.01; x += vx; y += vy;
-                if(x<0||x>100) { x=Math.max(0,Math.min(100,x)); vx*=-0.8; }
-                if(y<0||y>100) { y=Math.max(0,Math.min(100,y)); vy*=-0.8; }
-                cursor.style.left = x+"%"; cursor.style.top = y+"%";
+                // Decay target velocity (auto-centering knobs logic essentially)
+                tx *= 0.98; ty *= 0.98;
                 
-                const setBar = (el, val) => {
-                    let w = Math.min(50, Math.abs(val)*5);
-                    el.style.left = val>0 ? "50%" : (50-w)+"%"; el.style.width = w+"%";
-                };
-                setBar(document.getElementById('barX'), tx); setBar(document.getElementById('barY'), ty);
-                requestAnimFrame(loop);
+                // Add noise
+                vx += (tx * 0.02) + (Math.random()-0.5)*0.1;
+                vy += (ty * 0.02) + (Math.random()-0.5)*0.1;
+                
+                px += vx; py += vy;
+                
+                // Bounce
+                if(px<0||px>100) { vx*=-0.7; px=clamp(px,0,100); }
+                if(py<0||py>100) { vy*=-0.7; py=clamp(py,0,100); }
+
+                blip.style.left = px+"%"; blip.style.top = py+"%";
+                rAF(loop);
             }
             loop();
 
-            const setupKnob = (id, axis) => {
-                const k = document.getElementById(id); let startY=0;
-                k.addEventListener('mousedown', e => {
-                    startY = e.clientY;
-                    const move = ev => {
-                        let d = startY - ev.clientY; startY = ev.clientY;
-                        let rot = parseFloat(k.style.transform.replace('rotate(',''))||0;
-                        k.style.transform = `rotate(${rot+d}deg)`;
-                        if(axis==='x') tx = Math.max(-10, Math.min(10, tx + d*0.1));
-                        else ty = Math.max(-10, Math.min(10, ty + d*0.1));
-                    };
-                    const up = () => { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
-                    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
-                });
-            };
-            setupKnob('knobX', 'x'); setupKnob('knobY', 'y');
-
-            document.getElementById('btnDriftSelect').onclick = () => {
-                if(Math.hypot(vx,vy) > 0.15) { alert("HASTIGHETSVARNING: Stabilisera innan dockning."); return; }
-                let col = Math.floor(x/20); let row = Math.floor(y/50);
-                let idx = row*5 + col; if(idx >= 0 && idx < 10) out.textContent += digits[idx];
+            document.getElementById('btnPing').onclick = () => {
+                let col = Math.floor(px / 20);
+                let row = Math.floor(py / 50);
+                let idx = row*5 + col;
+                if(idx >= 0 && idx < 10) {
+                    let n = nums[idx];
+                    state.phone += n;
+                    disp.textContent = state.phone;
+                    if(state.phone.length > 5) document.getElementById('led2').classList.add('active');
+                }
             };
         })();
 
         // --- 3. BINARY DATE ---
         (() => {
-            let min = new Date('2020-01-01').getTime(); let max = new Date('2030-12-31').getTime();
-            let curr = new Date('2025-01-01').getTime(); let count = 0;
-            const disp = document.getElementById('dateDisplay'); const cnt = document.getElementById('dateCount');
-            const upd = () => { disp.textContent = new Date(curr).toISOString().split('T')[0]; cnt.textContent = count; };
-            document.getElementById('btnEarlier').onclick = () => { count++; max = curr; curr = min + (max-min)/2; upd(); };
-            document.getElementById('btnLater').onclick = () => { count++; min = curr; curr = min + (max-min)/2; upd(); };
-            document.getElementById('btnExact').onclick = () => { count++; disp.style.color = "#27ae60"; setTimeout(()=>disp.style.color="#2c3e50",500); };
+            let min = new Date('2020-01-01').getTime();
+            let max = new Date('2030-01-01').getTime();
+            let cur = (min+max)/2;
+            let iter = 0;
+            const disp = document.getElementById('dateDisp');
+            const count = document.getElementById('dateIter');
+
+            const update = () => {
+                let d = new Date(cur);
+                disp.textContent = d.toISOString().split('T')[0];
+                count.textContent = iter;
+            };
+
+            document.getElementById('btnLess').onclick = () => { iter++; max = cur; cur = (min+max)/2; update(); };
+            document.getElementById('btnMore').onclick = () => { iter++; min = cur; cur = (min+max)/2; update(); };
+            document.getElementById('btnConfirmDate').onclick = () => {
+                document.getElementById('led3').classList.add('active');
+                disp.style.border = "2px solid var(--success)";
+            };
         })();
 
-        // --- 4. PASSWORD SPINNER ---
+        // --- 4. ROULETTE CODE ---
         (() => {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#";
-            const spinEl = document.getElementById('charSpinner');
-            const out = document.getElementById('pwdOut'); const bar = document.getElementById('pwdBar');
-            let idx = 0; let delay = 100; let timer; let pwd = "";
+            const chars = "0123456789";
+            const el = document.getElementById('charSpinner');
+            const out = document.getElementById('codeOut');
+            const bar = document.getElementById('spinTimeBar');
+            let idx = 0, speed = 100, last = 0;
 
-            function cycle() { idx = (idx+1)%chars.length; spinEl.textContent = chars[idx]; timer = setTimeout(cycle, delay); }
-            cycle();
+            function cycle(t) {
+                if(t - last > speed) {
+                    idx = (idx + 1) % chars.length;
+                    el.textContent = chars[idx];
+                    last = t;
+                    // Visualize speed
+                    bar.style.width = (speed/3)+"%";
+                }
+                rAF(cycle);
+            }
+            rAF(cycle);
 
             document.getElementById('btnLockChar').onclick = () => {
-                pwd += chars[idx]; out.textContent = pwd;
-                delay = Math.max(10, delay * 0.85); clearTimeout(timer); cycle();
-                bar.style.width = Math.min(100, pwd.length*10)+"%";
-            };
-            document.getElementById('btnResetPwd').onclick = () => {
-                pwd=""; out.textContent="_"; delay=100; bar.style.width="0%"; clearTimeout(timer); cycle();
+                state.code += chars[idx];
+                out.textContent = state.code;
+                speed = Math.max(10, speed * 0.7); // Faster every time
+                if(state.code.length >= 4) document.getElementById('led4').classList.add('active');
             };
         })();
 
         // --- 5. GEO WIND ---
         (() => {
-            const pin = document.getElementById('geoPin');
-            const latS = document.getElementById('latSlider'); const lonS = document.getElementById('lonSlider');
-            const wTxt = document.getElementById('windInd');
-            let lat=59.3293, lon=18.0686, wLat=0.0001, wLon=0.0002;
+            const pin = document.getElementById('dronePin');
+            const lbl = document.getElementById('windLabel');
+            let lat=50, lon=50, wLat=0, wLon=0;
+            let windDirX = 0, windDirY = 0;
 
+            // Change wind every 2 sec
             setInterval(() => {
-                if(Math.random()>0.96) { 
-                    wLat=(Math.random()-0.5)*0.008; wLon=(Math.random()-0.5)*0.008; 
-                    wTxt.textContent = `VIND: ${(Math.abs(wLat)*10000).toFixed(0)} m/s`; wTxt.style.color="#d35400";
-                }
-                lat += wLat; lon += wLon;
-                latS.value = lat; lonS.value = lon;
-                document.getElementById('latVal').textContent = lat.toFixed(4);
-                document.getElementById('lonVal').textContent = lon.toFixed(4);
-                
-                let top = ((69-lat)/(69-55))*100; let left = ((lon-11)/(24-11))*100;
-                pin.style.top = Math.max(-5, Math.min(105, top))+"%";
-                pin.style.left = Math.max(-5, Math.min(105, left))+"%";
-            }, 100);
-            
-            const inp = () => { lat = parseFloat(latS.value); lon = parseFloat(lonS.value); };
-            latS.oninput = inp; lonS.oninput = inp;
-        })();
+                windDirX = (Math.random()-0.5) * 0.8;
+                windDirY = (Math.random()-0.5) * 0.8;
+                lbl.textContent = `VIND: ${(Math.abs(windDirX)*20).toFixed(1)} m/s ${(windDirY>0?'N':'S')}`;
+            }, 2000);
 
-        // --- 6. COST SPINNERS ---
-        [1,2,3,4].forEach(id => {
-            const cvs = document.getElementById('spin'+id); const ctx = cvs.getContext('2d');
-            const val = document.getElementById('val'+id);
-            let rot = Math.random()*100; let speed = 0.8+Math.random()*0.2; let stop = false;
-            
             function loop() {
-                if(!stop) rot += speed; else { speed *= 0.96; rot += speed; if(speed<0.005) speed=0; }
-                ctx.clearRect(0,0,60,80); ctx.save(); ctx.translate(30,40);
-                for(let n=0; n<10; n++) {
-                    let y = ((n-rot)%10)*30;
-                    if(y<-40) y+=300;
-                    if(y>40 && y<260) {
-                        ctx.font="bold 20px Consolas"; ctx.fillStyle=(Math.abs(y)<10)?"#e74c3c":"#bdc3c7";
-                        ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(n,0,y);
-                    }
-                }
-                ctx.restore();
-                if(speed===0) val.textContent = Math.round(rot)%10;
-                requestAnimFrame(loop);
+                // Inputs
+                let inLat = parseFloat(document.getElementById('slideLat').value);
+                let inLon = parseFloat(document.getElementById('slideLon').value);
+                
+                wLat += (inLat - 50) * 0.05 + windDirX;
+                wLon += (inLon - 50) * 0.05 + windDirY;
+
+                // Drift
+                lat += wLat * 0.01; 
+                lon += wLon * 0.01;
+
+                // Bounds
+                if(lat<0) lat=0; if(lat>100) lat=100;
+                if(lon<0) lon=0; if(lon>100) lon=100;
+
+                // Dampen inputs to simulate sliders returning to center virtually
+                // Actually, let's just make the user fight the wind directly with the sliders acting as "thrust"
+                
+                pin.style.top = (100-lat) + "%";
+                pin.style.left = lon + "%";
+
+                document.getElementById('latVal').textContent = lat.toFixed(3);
+                document.getElementById('lonVal').textContent = lon.toFixed(3);
+                rAF(loop);
             }
             loop();
-            cvs.onmousedown = () => stop = true;
-        });
+
+            document.getElementById('btnDrop').onclick = () => {
+                document.getElementById('led5').classList.add('active');
+            };
+        })();
 
         // --- 7. GRAVITY VOLUME ---
         (() => {
-            const h = document.getElementById('gravHandle'); const v = document.getElementById('gravVal');
-            const t = document.getElementById('gravTrack');
-            let y=100, vel=0;
-
-            window.addEventListener('mousemove', e => {
-                let r = t.getBoundingClientRect();
-                let dist = e.clientX - (r.left + r.width/2);
-                if(Math.abs(dist)<300) vel -= (dist/300)*0.8;
-            });
-
-            function loop() {
-                y += vel; vel *= 0.96;
-                if(y<0) { y=0; vel*=-0.5; } if(y>166) { y=166; vel*=-0.5; }
-                h.style.top = y+"px";
-                v.textContent = Math.round(100 - (y/166*100)) + "%";
-                requestAnimFrame(loop);
-            }
-            loop();
-        })();
-
-        // --- 8. OUIJA EMAIL ---
-        (() => {
-            const b = document.getElementById('ouijaBoard'); const p = document.getElementById('planchette');
-            const out = document.getElementById('ouijaOut'); const ld = document.getElementById('ouijaLetters');
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@.".split("");
-            chars.forEach(c => { let el=document.createElement('div'); el.className='spirit-char'; el.textContent=c; ld.appendChild(el); });
-
-            let px=50, py=50, vx=0, vy=0, tx=50, ty=50, target=null, timer=0;
-            b.addEventListener('mousemove', e => {
-                let r = b.getBoundingClientRect();
-                tx = ((e.clientX-r.left)/r.width)*100; ty = ((e.clientY-r.top)/r.height)*100;
-            });
-
-            function loop() {
-                let ax=0, ay=0, closest=1000, cChar=null;
-                Array.from(document.querySelectorAll('.spirit-char')).forEach(el => {
-                    let r = b.getBoundingClientRect(); let er = el.getBoundingClientRect();
-                    let ex = ((er.left+er.width/2 - r.left)/r.width)*100; let ey = ((er.top+er.height/2 - r.top)/r.height)*100;
-                    let d = Math.hypot(px-ex, py-ey);
-                    if(d<8) { ax+=(ex-px)*0.1; ay+=(ey-py)*0.1; if(d<closest){closest=d; cChar=el.textContent;} }
-                });
-                vx+=(tx-px)*0.02 + ax + (Math.random()-0.5)*0.5; vy+=(ty-py)*0.02 + ay + (Math.random()-0.5)*0.5;
-                vx*=0.9; vy*=0.9; px+=vx; py+=vy; px=Math.max(0,Math.min(100,px)); py=Math.max(0,Math.min(100,py));
-                p.style.left=px+"%"; p.style.top=py+"%";
-
-                if(closest<3) {
-                    if(target===cChar) {
-                        timer++;
-                        if(timer>60) { out.textContent+=cChar; timer=-20; out.style.color="#f1c40f"; setTimeout(()=>out.style.color="white",200); }
-                    } else { target=cChar; timer=0; }
-                } else { timer=0; target=null; }
-                requestAnimFrame(loop);
-            }
-            loop();
-        })();
-
-        // --- 9. RESOURCES ---
-        document.querySelectorAll('.service-card').forEach(c => {
-            let clk=0; const dot=c.querySelector('.status-dot');
-            c.onclick = () => {
-                clk++;
-                if(clk===1) dot.style.background="#f1c40f";
-                else if(clk===2) dot.style.background="#e67e22";
-                else if(clk===3) { dot.style.background="#2ecc71"; dot.style.boxShadow="0 0 5px #2ecc71"; setTimeout(()=>{clk=0;dot.style.background="#eee";dot.style.boxShadow="none"},2000); }
+            const bead = document.getElementById('bead');
+            const well = document.getElementById('gravTrack');
+            let y = 10, vy = 0;
+            
+            // Mouse gravity
+            let my = 0;
+            well.onmousemove = e => {
+                let rect = well.getBoundingClientRect();
+                my = e.clientY - rect.top;
             };
-        });
+
+            function sim() {
+                // Gravity pulls down
+                vy += 0.5;
+                // Mouse repels (Anti-gravity glove)
+                let d = (y+20) - my;
+                if(Math.abs(d) < 80) {
+                    vy -= (80-Math.abs(d)) * 0.05 * Math.sign(d);
+                }
+
+                y += vy;
+                
+                // Floor/Ceiling bounce
+                if(y > 160) { y=160; vy *= -0.6; }
+                if(y < 0) { y=0; vy *= -0.6; }
+
+                bead.style.top = y + "px";
+                let vol = Math.round(100 - (y/160)*100);
+                document.getElementById('volDisplay').textContent = vol + "%";
+                
+                if(Math.abs(vy) < 0.1) {
+                    document.getElementById('led7').classList.add('active');
+                } else {
+                    document.getElementById('led7').classList.remove('active');
+                }
+                rAF(sim);
+            }
+            sim();
+        })();
+
+        // --- 8. OUIJA ---
+        (() => {
+            const board = document.getElementById('ouijaBoard');
+            const planch = document.getElementById('planchette');
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@.com".split("");
+            
+            // Randomly scatter chars
+            chars.forEach(c => {
+                let el = document.createElement('div');
+                el.className = 'spectral-char';
+                el.textContent = c;
+                el.style.left = (10 + Math.random()*80) + "%";
+                el.style.top = (10 + Math.random()*80) + "%";
+                board.appendChild(el);
+            });
+
+            let mx=100, my=100, px=100, py=100;
+            
+            board.onmousemove = e => {
+                let r = board.getBoundingClientRect();
+                mx = e.clientX - r.left;
+                my = e.clientY - r.top;
+            };
+
+            function spirit() {
+                // Extremely laggy follow with noise
+                let dx = mx - px;
+                let dy = my - py;
+                
+                px += dx * 0.02 + (Math.random()-0.5)*2;
+                py += dy * 0.02 + (Math.random()-0.5)*2;
+
+                planch.style.left = px + "px";
+                planch.style.top = py + "px";
+
+                // Detection
+                let detected = null;
+                Array.from(document.querySelectorAll('.spectral-char')).forEach(el => {
+                    let r = el.getBoundingClientRect();
+                    let pr = planch.getBoundingClientRect();
+                    let cx = r.left + r.width/2;
+                    let cy = r.top + r.height/2;
+                    let pcx = pr.left + pr.width/2;
+                    let pcy = pr.top + pr.height/2;
+                    
+                    if(Math.hypot(cx-pcx, cy-pcy) < 10) {
+                        el.style.color = "#fff";
+                        el.style.textShadow = "0 0 5px #fff";
+                        if(Math.random() > 0.95) { // Slow typing
+                            state.email += el.textContent;
+                            document.getElementById('emailOut').textContent = state.email;
+                            if(state.email.includes("@")) document.getElementById('led8').classList.add('active');
+                        }
+                    } else {
+                        el.style.color = "rgba(255,255,255,0.2)";
+                        el.style.textShadow = "none";
+                    }
+                });
+
+                rAF(spirit);
+            }
+            spirit();
+        })();
 
         // --- 10. HEAT SINK ---
         (() => {
-            const pad=document.getElementById('rubPad'); const ov=document.getElementById('rubOverlay');
-            const bar=document.getElementById('tempBar'); const fill=document.getElementById('encryptFill');
-            const stat=document.getElementById('heatStatus'); const btn=document.getElementById('btnSubmit');
-            let temp=0, prog=0, lx=0, ly=0, rub=false;
+            const pad = document.getElementById('rubPad');
+            const ov = document.getElementById('heatOverlay');
+            const tBar = document.getElementById('tempBar');
+            const pBar = document.getElementById('progBar');
+            const stat = document.getElementById('cryptoStatus');
+            const btn = document.getElementById('btnSubmit');
 
-            pad.onmousedown=e=>{rub=true;lx=e.clientX;ly=e.clientY;}; window.onmouseup=()=>{rub=false;};
-            window.onmousemove=e=>{ if(!rub)return; let d=Math.hypot(e.clientX-lx, e.clientY-ly); temp+=d*0.3; lx=e.clientX; ly=e.clientY; };
+            let temp = 0;
+            let progress = 0;
+            let lx=0, ly=0, active=false;
 
-            function loop() {
-                temp -= 0.5; if(temp<0) temp=0;
-                if(temp>=100) { temp=0; prog=0; stat.textContent="⚠️ ÖVERHETTNING! RESET"; stat.style.color="#e74c3c"; }
+            pad.onmousedown = e => { active=true; lx=e.clientX; ly=e.clientY; };
+            window.onmouseup = () => active=false;
+            window.onmousemove = e => {
+                if(!active) return;
+                let d = Math.hypot(e.clientX-lx, e.clientY-ly);
+                temp += d * 0.5; // Generate heat
+                lx = e.clientX; ly = e.clientY;
+            };
+
+            function thermodynamics() {
+                // Cooling (aggressive)
+                temp -= 1.5;
+                if(temp < 0) temp = 0;
                 
-                if(temp>=80 && temp<=95) {
-                    prog+=0.4; stat.textContent=`KRYPTERAR... ${Math.floor(prog)}%`; stat.style.color="#27ae60";
-                } else if(temp>0 && prog<100) {
-                    if(stat.textContent!=="⚠️ ÖVERHETTNING! RESET") { stat.textContent="SYSTEM SVALT"; stat.style.color="#7f8c8d"; }
-                    prog-=0.1;
+                // Logic
+                let valid = (temp > 75 && temp < 90); // Green zone is narrow
+                
+                if(valid) {
+                    progress += 0.2;
+                    stat.textContent = "KRYPTERAR...";
+                    stat.style.color = "var(--success)";
+                } else {
+                    if(progress > 0) progress -= 0.1; // Decay progress if not in zone
+                    if(temp >= 90) {
+                        stat.textContent = "ÖVERHETTNING - KYLER NER";
+                        stat.style.color = "var(--danger)";
+                        progress = 0; // Penalty
+                    } else {
+                        stat.textContent = "FÖR LÅG ENTROPI";
+                        stat.style.color = "var(--text-muted)";
+                    }
                 }
-                if(prog<0) prog=0; 
-                if(prog>=100) { prog=100; stat.textContent="SIGNERAD"; btn.disabled=false; btn.classList.add('enabled'); }
+                
+                progress = clamp(progress, 0, 100);
 
-                ov.style.height=temp+"%"; bar.style.width=temp+"%"; fill.style.width=prog+"%";
-                bar.style.background = (temp<80) ? "#3498db" : (temp>95) ? "#e74c3c" : "#27ae60";
-                requestAnimFrame(loop);
+                // UI
+                ov.style.height = clamp(temp,0,100) + "%";
+                tBar.style.width = clamp(temp,0,100) + "%";
+                pBar.style.width = progress + "%";
+
+                if(progress >= 100) {
+                    btn.disabled = false;
+                    btn.textContent = "GODKÄND - SKICKA";
+                    stat.textContent = "NYCKEL GENERERAD";
+                }
+
+                rAF(thermodynamics);
             }
-            loop();
-
-            btn.onclick = () => { alert("Tack! Din rekvisition har arkiverats i /dev/null."); location.reload(); };
+            rAF(thermodynamics);
+            
+            btn.onclick = () => {
+                alert("SYSTEMFEL: Det går inte att ansluta till servern (Timeout). Var god fyll i formuläret igen.");
+                location.reload();
+            };
         })();
+
+        // Start
+        checkGlobal();
     </script>
 </body>
 </html>
