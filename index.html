@@ -3,457 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT-Serviceportalen</title>
+    <title>IT-Serviceportalen | Ny Beställning</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* GRUNDLÄGGANDE STIL (Corporate Look) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; overflow-x: hidden; }
+        
+        /* HEADER */
+        .header { background: white; border-bottom: 3px solid #0078d4; padding: 0 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; }
+        .logo { font-size: 22px; font-weight: 600; color: #0078d4; }
+        .user-menu { display: flex; align-items: center; gap: 25px; }
+        .user-name { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: #f3f3f3; border-radius: 4px; cursor: pointer; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-        }
+        /* LAYOUT */
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; padding-bottom: 100px; }
+        .breadcrumb { font-size: 14px; color: #666; margin-bottom: 30px; }
+        .page-title { font-size: 32px; font-weight: 600; margin-bottom: 10px; color: #1a1a1a; }
+        .page-subtitle { font-size: 16px; color: #666; margin-bottom: 40px; }
+        
+        /* CARDS & FORMS */
+        .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border: 1px solid #eaeaea; }
+        .card-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #1a1a1a; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card-subtitle { font-size: 14px; color: #666; margin-bottom: 25px; margin-top: 5px; }
+        .form-group { margin-bottom: 30px; }
+        .form-label { display: block; font-weight: 500; margin-bottom: 12px; color: #333; }
+        .required { color: #d13438; }
+        .form-input { width: 100%; padding: 12px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 14px; transition: border-color 0.2s; }
+        .form-hint { font-size: 13px; color: #666; margin-top: 8px; font-style: italic; }
 
-        .header {
-            background: white;
-            border-bottom: 3px solid #0078d4;
-            padding: 0 40px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+        /* KNAPPAR */
+        .btn { padding: 12px 24px; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: #0078d4; color: white; }
+        .btn-primary:hover { background: #106ebe; }
+        .btn-secondary { background: white; color: #333; border: 1px solid #d1d1d1; }
+        .btn-secondary:hover { background: #f3f3f3; }
 
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
+        /* --- KOMPONENT: NAMN-VÄLJARE (ALFABETHJUL) --- */
+        .name-selector { display: flex; gap: 30px; align-items: flex-start; padding: 20px; background: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 8px; flex-wrap: wrap; }
+        .alphabet-wheel-container { text-align: center; }
+        .alphabet-wheel { border: 2px solid #0078d4; border-radius: 50%; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; }
+        .name-output { flex: 1; min-width: 200px; }
+        .name-display { background: white; border: 2px solid #0078d4; border-radius: 4px; padding: 20px; min-height: 60px; font-size: 20px; font-family: 'Courier New', monospace; word-break: break-all; margin-bottom: 15px; }
+        .name-controls { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        .logo {
-            font-size: 22px;
-            font-weight: 600;
-            color: #0078d4;
-        }
+        /* --- KOMPONENT: TELEFON (PRECISION SLIDER) --- */
+        .phone-input-modern { padding: 20px; background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%); border: 1px solid #e1e1e1; border-radius: 8px; }
+        .phone-display { text-align: center; font-size: 28px; font-family: 'Courier New', monospace; color: #0078d4; font-weight: 600; padding: 15px; background: white; border: 2px solid #0078d4; border-radius: 8px; margin-bottom: 20px; letter-spacing: 2px; }
+        .phone-slider { width: 100%; height: 8px; background: #e1e1e1; outline: none; -webkit-appearance: none; border-radius: 4px; }
+        .phone-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: white; border: 3px solid #0078d4; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
+        /* --- KOMPONENT: DATUM (BINÄR SÖKNING) --- */
+        .date-picker-optimized { padding: 20px; background: white; border: 2px solid #0078d4; border-radius: 8px; text-align: center; }
+        .date-display { font-size: 32px; font-weight: 700; color: #0078d4; margin: 20px 0; font-family: 'Courier New', monospace; }
+        .date-buttons { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .date-btn { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; }
+        .date-btn-before { background: #ff6b6b; color: white; }
+        .date-btn-after { background: #51cf66; color: white; }
+        .date-btn-exact { background: #0078d4; color: white; }
 
-        .user-name {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-            background: #f3f3f3;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        /* --- KOMPONENT: KOSTNADSSTÄLLE (SNURROR) --- */
+        .cost-center-visual { display: flex; gap: 15px; padding: 20px; background: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 8px; justify-content: center; flex-wrap: wrap; }
+        .digit-spinner { text-align: center; }
+        .digit-canvas { border: 2px solid #0078d4; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: block; margin: 0 auto; background: white; }
+        .digit-value { margin-top: 10px; font-size: 24px; font-weight: 700; color: #0078d4; font-family: 'Courier New', monospace; }
 
-        .container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 40px;
-        }
+        /* --- KOMPONENT: LÖSENORD (ROULETTE) --- */
+        .password-roulette-container { background: #2b2b2b; padding: 20px; border-radius: 8px; color: white; text-align: center; }
+        .roulette-display { background: #000; font-family: 'Courier New', monospace; font-size: 24px; padding: 15px; margin-bottom: 20px; border: 1px solid #444; min-height: 60px; letter-spacing: 3px; color: #00ff00; word-break: break-all; }
+        .roulette-active-char-box { width: 80px; height: 80px; background: white; color: black; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: bold; border: 4px solid #0078d4; border-radius: 10px; }
+        .password-strength-meter { height: 6px; background: #444; margin-top: 15px; border-radius: 3px; overflow: hidden; }
+        .strength-bar { height: 100%; width: 0%; background: #d13438; transition: width 0.3s, background 0.3s; }
+        .roulette-controls { display: flex; justify-content: center; gap: 10px; }
 
-        .breadcrumb {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 30px;
-        }
+        /* --- KOMPONENT: LEVERANS (GEO + VIND) --- */
+        .geo-picker { padding: 20px; background: #eef6fb; border: 1px solid #b3d6f2; border-radius: 8px; }
+        .geo-display { font-family: monospace; text-align: center; margin-bottom: 15px; font-size: 16px; color: #0078d4; font-weight: bold; }
+        .geo-map-placeholder { height: 250px; background: #fff; border: 2px dashed #ccc; position: relative; margin-bottom: 20px; overflow: hidden; border-radius: 4px; }
+        /* Rutnät för "karta"-känsla */
+        .geo-map-placeholder::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(#e5e5e5 1px, transparent 1px), linear-gradient(90deg, #e5e5e5 1px, transparent 1px); background-size: 20px 20px; }
+        .geo-pin { font-size: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); transition: top 0.1s linear, left 0.1s linear; z-index: 10; }
+        .wind-indicator { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 5px 10px; font-size: 12px; border-radius: 4px; border: 1px solid #ccc; z-index: 20; font-weight: bold; }
+        .geo-slider { width: 100%; margin: 10px 0; }
 
-        .page-title {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #1a1a1a;
-        }
+        /* --- KOMPONENT: VOLYM (GRAVITATION) --- */
+        .volume-control { padding: 25px; background: white; border: 2px solid #0078d4; border-radius: 8px; position: relative; }
+        /* Volymen styrs av globala event, stil fixas i HTML-sektionen */
 
-        .page-subtitle {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 40px;
-        }
+        /* --- KOMPONENT: TJÄNSTER (MULTI-CLICK) --- */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .service-item { background: white; border: 1px solid #e1e1e1; border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; }
+        .service-item:hover { border-color: #0078d4; box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
+        .service-icon { font-size: 28px; margin-bottom: 10px; }
+        .click-counter { position: absolute; top: 10px; right: 10px; background: #0078d4; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
 
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-        }
-
-        .card-subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 30px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 12px;
-            color: #333;
-        }
-
-        .required {
-            color: #d13438;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #0078d4;
-        }
-
-        .form-hint {
-            font-size: 13px;
-            color: #666;
-            margin-top: 8px;
-            font-style: italic;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: #0078d4;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #106ebe;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #333;
-            border: 1px solid #d1d1d1;
-        }
-
-        .btn-secondary:hover {
-            background: #f3f3f3;
-        }
-
-        /* Innovativ namn-väljare med alfabet-hjul */
-        .name-selector {
-            display: flex;
-            gap: 30px;
-            align-items: flex-start;
-            padding: 20px;
-            background: #f9f9f9;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-        }
-
-        .alphabet-wheel-container {
-            text-align: center;
-        }
-
-        .alphabet-wheel {
-            border: 2px solid #0078d4;
-            border-radius: 50%;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .name-output {
-            flex: 1;
-        }
-
-        .name-display {
-            background: white;
-            border: 2px solid #0078d4;
-            border-radius: 4px;
-            padding: 20px;
-            min-height: 80px;
-            font-size: 24px;
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
-            margin-bottom: 15px;
-        }
-
-        .name-controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Förenklad telefonnummer-input med precision slider */
-        .phone-input-modern {
-            padding: 20px;
-            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-        }
-
-        .phone-display {
-            text-align: center;
-            font-size: 32px;
-            font-family: 'Courier New', monospace;
-            color: #0078d4;
-            font-weight: 600;
-            padding: 20px;
-            background: white;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        .phone-slider {
-            width: 100%;
-            height: 8px;
-            background: linear-gradient(to right, #0078d4, #106ebe);
-            border-radius: 4px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .phone-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border: 3px solid #0078d4;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* Optimerad datum-väljare med binär sökning */
-        .date-picker-optimized {
-            padding: 25px;
-            background: white;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .date-display {
-            font-size: 48px;
-            font-weight: 700;
-            color: #0078d4;
-            margin: 30px 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .date-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .date-btn {
-            padding: 15px 35px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .date-btn-before {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        .date-btn-before:hover {
-            background: #ff5252;
-        }
-
-        .date-btn-after {
-            background: #51cf66;
-            color: white;
-        }
-
-        .date-btn-after:hover {
-            background: #40c057;
-        }
-
-        .date-btn-exact {
-            background: #0078d4;
-            color: white;
-        }
-
-        .date-btn-exact:hover {
-            background: #106ebe;
-        }
-
-        .search-counter {
-            font-size: 13px;
-            color: #666;
-            margin-top: 15px;
-        }
-
-        /* Visuell kostnadsställe-väljare */
-        .cost-center-visual {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            background: #f9f9f9;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            justify-content: center;
-        }
-
-        .digit-spinner {
-            text-align: center;
-        }
-
-        .digit-canvas {
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: block;
-            margin: 0 auto;
-        }
-
-        .digit-value {
-            margin-top: 15px;
-            font-size: 28px;
-            font-weight: 700;
-            color: #0078d4;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* Interaktiv volymkontroll för notifikationer */
-        .volume-control {
-            padding: 25px;
-            background: white;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-        }
-
-        .volume-circle-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-        }
-
-        .volume-value-display {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 36px;
-            font-weight: 700;
-            color: #0078d4;
-        }
-
-        .notification-banner {
-            background: #fff4ce;
-            border: 1px solid #ffb900;
-            border-radius: 4px;
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .service-item {
-            background: white;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .service-item:hover {
-            border-color: #0078d4;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-        }
-
-        .service-icon {
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .service-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-        }
-
-        .service-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .click-counter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #0078d4;
-            color: white;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-        }
+        /* --- KOMPONENT: VILLKOR (SCROLL & BALANS) --- */
+        .terms-scroll-box { height: 150px; overflow-y: scroll; border: 1px solid #ccc; padding: 15px; background: #f9f9f9; margin-bottom: 20px; font-size: 12px; color: #666; line-height: 1.6; }
+        .approval-container { margin-top: 15px; height: 60px; background: #e1e1e1; border-radius: 30px; position: relative; user-select: none; border: 1px solid #ccc; }
+        .approval-zone { position: absolute; left: 72%; top: 0; bottom: 0; width: 30px; background: rgba(186, 216, 10, 0.4); border-left: 1px dashed #999; border-right: 1px dashed #999; }
+        .approval-thumb { position: absolute; left: 10px; top: 4px; width: 50px; height: 50px; background: white; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: grab; font-weight: bold; color: #666; border: 2px solid #999; z-index: 5; transition: background 0.2s; }
+        .approval-thumb:active { cursor: grabbing; background: #0078d4; color: white; border-color: #005a9e; }
+        .approval-timer { position: absolute; top: -25px; right: 0; font-family: monospace; font-weight: bold; color: #333; }
+        
+        .notification-banner { background: #fff4ce; border: 1px solid #ffb900; border-radius: 4px; padding: 15px 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
 
         @media (max-width: 768px) {
-            .name-selector {
-                flex-direction: column;
-            }
-            
-            .service-grid {
-                grid-template-columns: 1fr;
-            }
+            .name-selector { flex-direction: column; }
+            .service-grid { grid-template-columns: 1fr; }
+            .header-content { padding: 0 20px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <div class="header">
         <div class="header-content">
             <div class="logo">IT-Serviceportalen</div>
@@ -469,45 +132,48 @@
     <div class="container">
         <div class="breadcrumb">Hem > Tjänster > Ny beställning</div>
         
-        <h1 class="page-title">Beställ ny behörighet</h1>
-        <p class="page-subtitle">Fyll i formuläret nedan för att beställa åtkomst till system och tjänster.</p>
+        <h1 class="page-title">Beställ behörighet & Utrustning</h1>
+        <p class="page-subtitle">Fyll i formuläret noggrant. Felaktiga uppgifter raderas automatiskt.</p>
 
         <div class="notification-banner">
-            <span>💡</span>
+            <span style="font-size: 20px;">💡</span>
             <div>
-                <strong>Ny användarupplevelse!</strong> Vi har uppdaterat våra formulär med moderna, interaktiva komponenter för en smidigare process.
+                <strong>Uppdatering:</strong> Vi har infört "friktionsbaserad design" för att säkerställa att du verkligen tänker igenom din beställning.
             </div>
         </div>
 
+        <!-- KORT 1: PERSONUPPGIFTER -->
         <div class="card">
             <h2 class="card-title">Personuppgifter</h2>
-            <p class="card-subtitle">Ange dina uppgifter med våra förbättrade input-metoder</p>
+            <p class="card-subtitle">Identifiera dig själv.</p>
             
+            <!-- Namn -->
             <div class="form-group">
                 <label class="form-label">Fullständigt namn <span class="required">*</span></label>
                 <div class="name-selector">
                     <div class="alphabet-wheel-container">
                         <canvas class="alphabet-wheel" id="alphabetWheel" width="140" height="140"></canvas>
-                        <p class="form-hint">Klicka för bokstav</p>
+                        <p class="form-hint">Klicka för att välja bokstav</p>
                     </div>
                     <div class="name-output">
                         <div class="name-display" id="nameDisplay"></div>
                         <div class="name-controls">
                             <button type="button" class="btn btn-secondary" id="nameSpace">Mellanslag</button>
                             <button type="button" class="btn btn-secondary" id="nameBackspace">⌫ Radera</button>
-                            <button type="button" class="btn btn-secondary" id="nameClear">Rensa</button>
+                            <button type="button" class="btn btn-secondary" id="nameClear">Rensa allt</button>
                         </div>
                     </div>
                 </div>
-                <div class="form-hint">Klicka på alfabethjulet när önskad bokstav visas överst</div>
+                <div class="form-hint">Hjulet snurrar med varierande hastighet för säkerhets skull.</div>
             </div>
 
+            <!-- Telefon -->
             <div class="form-group">
                 <label class="form-label">Mobiltelefon <span class="required">*</span></label>
                 <div class="phone-input-modern">
                     <div class="phone-display" id="phoneDisplay">07X-XXX XX XX</div>
                     <input type="range" class="phone-slider" id="phoneSlider" min="700000000" max="799999999" value="700000000" step="1">
-                    <div class="form-hint">Precisionsjustera ditt telefonnummer med slidern</div>
+                    <div class="form-hint">Finjustera numret med reglaget. Vi rekommenderar en stadig handmus.</div>
                 </div>
             </div>
 
@@ -517,47 +183,51 @@
             </div>
         </div>
 
+        <!-- KORT 2: ANSTÄLLNING -->
         <div class="card">
             <h2 class="card-title">Anställningsuppgifter</h2>
-            <p class="card-subtitle">Specificera din organisationstillhörighet</p>
+            <p class="card-subtitle">Organisatorisk placering.</p>
 
+            <!-- Datum -->
             <div class="form-group">
                 <label class="form-label">Startdatum <span class="required">*</span></label>
                 <div class="date-picker-optimized">
-                    <p style="margin-bottom: 20px; color: #666;">Optimerad datumväljare med binär sökning - färre klick!</p>
+                    <p style="margin-bottom: 20px; color: #666;">Binär datumväljare - Matematiskt överlägsen!</p>
                     <div class="date-display" id="dateDisplay">2020-01-01</div>
                     <div class="date-buttons">
                         <button class="date-btn date-btn-before" id="beforeBtn">Tidigare ←</button>
-                        <button class="date-btn date-btn-exact" id="exactBtn">Detta datum ✓</button>
+                        <button class="date-btn date-btn-exact" id="exactBtn">Bekräfta ✓</button>
                         <button class="date-btn date-btn-after" id="afterBtn">→ Senare</button>
                     </div>
-                    <div class="search-counter">Klick: <strong id="dateClicks">0</strong> | Genomsnitt: 14 klick per datum</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 10px;">Antal klick: <span id="dateClicks">0</span></div>
                 </div>
             </div>
 
+            <!-- Kostnadsställe -->
             <div class="form-group">
-                <label class="form-label">Kostnadsställe</label>
+                <label class="form-label">Kostnadsställe (4 siffror)</label>
                 <div class="cost-center-visual">
                     <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit1" width="80" height="100"></canvas>
+                        <canvas class="digit-canvas" id="digit1" width="60" height="80"></canvas>
                         <div class="digit-value" id="value1">0</div>
                     </div>
                     <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit2" width="80" height="100"></canvas>
+                        <canvas class="digit-canvas" id="digit2" width="60" height="80"></canvas>
                         <div class="digit-value" id="value2">0</div>
                     </div>
                     <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit3" width="80" height="100"></canvas>
+                        <canvas class="digit-canvas" id="digit3" width="60" height="80"></canvas>
                         <div class="digit-value" id="value3">0</div>
                     </div>
                     <div class="digit-spinner">
-                        <canvas class="digit-canvas" id="digit4" width="80" height="100"></canvas>
+                        <canvas class="digit-canvas" id="digit4" width="60" height="80"></canvas>
                         <div class="digit-value" id="value4">0</div>
                     </div>
                 </div>
-                <div class="form-hint">Klicka på varje roterande siffra när önskat värde visas</div>
+                <div class="form-hint">Klicka på siffran när den roterar till rätt position.</div>
             </div>
 
+            <!-- Avdelning -->
             <div class="form-group">
                 <label class="form-label">Avdelning <span class="required">*</span></label>
                 <select class="form-input" id="departmentSelect">
@@ -568,101 +238,168 @@
                     <option value="support">Support</option>
                     <option value="finance">Ekonomi</option>
                 </select>
-                <div class="form-hint">Alfabetiskt sorterad för din bekvämlighet</div>
+                <div class="form-hint">Listan sorteras om slumpmässigt för att ge alla avdelningar en rättvis chans.</div>
             </div>
         </div>
 
+        <!-- KORT 3: SÄKERHET (NY) -->
+        <div class="card">
+            <h2 class="card-title">Säkerhet & Konto</h2>
+            <p class="card-subtitle">Skapa ett säkert lösenord med vår slumpgenerator-modul.</p>
+
+            <div class="form-group">
+                <label class="form-label">Nytt lösenord <span class="required">*</span></label>
+                <div class="password-roulette-container">
+                    <div class="roulette-display">
+                        <span id="pwd-result" class="pwd-text">_</span>
+                    </div>
+                    
+                    <div class="roulette-active-char-box">
+                        <div id="charSpinner">A</div>
+                    </div>
+
+                    <div class="roulette-controls">
+                        <button type="button" class="btn btn-primary" id="lockCharBtn">LÅS TECKEN</button>
+                        <button type="button" class="btn btn-secondary" id="resetPwdBtn">Börja om</button>
+                    </div>
+                    
+                    <div class="form-hint" style="margin-top: 15px; color: #ccc;">
+                        Vänta tills önskat tecken visas och klicka "Lås". Hastigheten ökar för varje tecken för att förhindra hacking.
+                    </div>
+                    <div class="password-strength-meter">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div id="strengthText" style="font-size: 12px; text-align: right; margin-top: 5px;">Oskyddad</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KORT 4: LEVERANS (NY) -->
+        <div class="card">
+            <h2 class="card-title">Leverans av hårdvara</h2>
+            <p class="card-subtitle">Ange exakt geografisk position där du vill möta budet.</p>
+
+            <div class="geo-picker">
+                <div class="geo-display">
+                    Lat: <span id="latVal">59.3293</span> | Long: <span id="longVal">18.0686</span>
+                </div>
+                
+                <div class="geo-map-placeholder" id="geoMap">
+                    <div class="geo-pin" id="geoPin">📍</div>
+                    <div class="wind-indicator" id="windInd">Vind: Stilla 💨</div>
+                </div>
+
+                <div class="geo-controls">
+                    <label class="form-label">Latitud (Nord/Syd)</label>
+                    <input type="range" min="55" max="69" step="0.0001" value="59.3293" class="geo-slider" id="latSlider">
+                    
+                    <label class="form-label" style="margin-top: 15px;">Longitud (Väst/Öst)</label>
+                    <input type="range" min="11" max="24" step="0.0001" value="18.0686" class="geo-slider" id="longSlider">
+                </div>
+                <div class="form-hint">
+                    Varning: Starka digitala vindar kan få markören att driva. Korrigera positionen kontinuerligt.
+                </div>
+            </div>
+        </div>
+
+        <!-- KORT 5: INSTÄLLNINGAR (VOLYM) -->
         <div class="card">
             <h2 class="card-title">Inställningar</h2>
-            <p class="card-subtitle">Anpassa din användarupplevelse</p>
+            <p class="card-subtitle">Anpassa din upplevelse.</p>
 
             <div class="form-group">
                 <label class="form-label">Notifikationsvolym</label>
                 <div class="volume-control">
-                    <p style="text-align: center; color: #666; margin-bottom: 20px;">Gravitationsbaserad volymkontroll - innovativ styrning genom musposition</p>
+                    <p style="text-align: center; color: #666; margin-bottom: 20px;">Gravitationsbaserad volymkontroll</p>
                     <div style="display: flex; gap: 40px; align-items: center; justify-content: center;">
                         <div style="text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: 10px;">🔊</div>
-                            <div style="font-size: 14px; color: #666;">100%</div>
+                            <div style="font-size: 30px;">🔊</div>
                         </div>
-                        <div style="position: relative; width: 60px; height: 400px; background: linear-gradient(to top, #e1e1e1 0%, #0078d4 100%); border-radius: 30px; border: 3px solid #0078d4;">
-                            <div id="volumeSlider" style="position: absolute; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; background: white; border: 4px solid #0078d4; border-radius: 50%; cursor: grab; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: none;"></div>
-                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;">
-                                <div style="position: absolute; left: 70px; top: 0; font-size: 12px; color: #666;">Max</div>
-                                <div style="position: absolute; left: 70px; top: 50%; transform: translateY(-50%); font-size: 12px; color: #666;">50%</div>
-                                <div style="position: absolute; left: 70px; bottom: 0; font-size: 12px; color: #666;">Tyst</div>
-                            </div>
+                        <!-- Slider container -->
+                        <div style="position: relative; width: 60px; height: 300px; background: linear-gradient(to top, #e1e1e1 0%, #0078d4 100%); border-radius: 30px; border: 3px solid #0078d4;">
+                            <div id="volumeSlider" style="position: absolute; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; background: white; border: 4px solid #0078d4; border-radius: 50%; cursor: grab; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"></div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: 10px;">🔇</div>
-                            <div style="font-size: 14px; color: #666;">0%</div>
+                            <div style="font-size: 30px;">🔇</div>
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 25px;">
                         <div style="font-size: 32px; font-weight: 700; color: #0078d4;" id="volumeValueGravity">50%</div>
-                        <div class="form-hint">För musen åt vänster för att sänka volym, åt höger för att höja</div>
+                        <div class="form-hint">För musen åt vänster för att sänka volym, åt höger för att höja. Fysiklagar gäller.</div>
                     </div>
                 </div>
             </div>
-
-            <div style="margin-top: 40px; display: flex; gap: 15px; justify-content: flex-end;">
-                <button class="btn btn-secondary">Avbryt</button>
-                <button class="btn btn-primary" id="submitBtn">Skicka beställning</button>
-            </div>
         </div>
 
+        <!-- KORT 6: TJÄNSTER -->
         <div class="card">
-            <h2 class="card-title">Populära tjänster</h2>
-            <p class="card-subtitle">Klicka flera gånger för att bekräfta ditt val (förhindrar felklick)</p>
+            <h2 class="card-title">Välj Tjänster</h2>
+            <p class="card-subtitle">Klicka 3 gånger på varje kort för att bekräfta val.</p>
             <div class="service-grid">
                 <div class="service-item">
                     <div class="click-counter">0/3</div>
                     <div class="service-icon">💻</div>
-                    <div class="service-title">Datorutrustning</div>
-                    <div class="service-desc">Beställ ny laptop, skärm eller tillbehör.</div>
+                    <div class="service-title">Laptop</div>
+                    <div class="service-desc">Standard PC.</div>
                 </div>
                 <div class="service-item">
                     <div class="click-counter">0/3</div>
                     <div class="service-icon">🔐</div>
-                    <div class="service-title">Åtkomstbehörigheter</div>
-                    <div class="service-desc">Ansök om tillgång till system och applikationer.</div>
+                    <div class="service-title">VPN-token</div>
+                    <div class="service-desc">För distansarbete.</div>
                 </div>
                 <div class="service-item">
                     <div class="click-counter">0/3</div>
                     <div class="service-icon">📱</div>
-                    <div class="service-title">Mobiltelefoni</div>
-                    <div class="service-desc">Hantera ditt tjänsteabonnemang.</div>
-                </div>
-                <div class="service-item">
-                    <div class="click-counter">0/3</div>
-                    <div class="service-icon">☁️</div>
-                    <div class="service-title">Molntjänster</div>
-                    <div class="service-desc">Åtkomst till molnbaserade tjänster.</div>
-                </div>
-                <div class="service-item">
-                    <div class="click-counter">0/3</div>
-                    <div class="service-icon">🛠️</div>
-                    <div class="service-title">IT-support</div>
-                    <div class="service-desc">Få hjälp med tekniska problem.</div>
-                </div>
-                <div class="service-item">
-                    <div class="click-counter">0/3</div>
-                    <div class="service-icon">📊</div>
-                    <div class="service-title">Rapportering</div>
-                    <div class="service-desc">Skapa och hantera rapporter.</div>
+                    <div class="service-title">iPhone 8</div>
+                    <div class="service-desc">Från lagret.</div>
                 </div>
             </div>
         </div>
+
+        <!-- KORT 7: VILLKOR & GODKÄNNANDE (NY) -->
+        <div class="card" style="border: 2px solid #d13438;">
+            <h2 class="card-title">Slutgiltigt Godkännande</h2>
+            
+            <div class="terms-scroll-box" id="termsBox">
+                <strong>ALLMÄNNA VILLKOR FÖR IT-SERVICE</strong><br><br>
+                1. Genom att använda detta formulär godkänner du att IT-avdelningen har rätt men inte skyldighet att lösa dina problem.<br><br>
+                2. "Starta om datorn" är alltid det första steget, oavsett om du beställer en musmatta eller behörighet.<br><br>
+                3. Scrollhastigheten i denna ruta har begränsats för att simulera känslan av att läsa ett juridiskt dokument noggrant. Vi vet att du inte läser det ändå.<br><br>
+                4. Hårdvara levereras till angivna koordinater. Om vinden tar koordinaterna levereras hårdvaran till vinden.<br><br>
+                5. Lösenordet du genererade nyss har redan gått ut. Vänligen byt det inom 3 minuter efter inloggning.<br><br>
+                6. Kaffe vid IT-avdelningen är endast för IT-personal.<br><br>
+                7. Har du läst hit? Bra jobbat. Fortsätt scrolla. Lite till.<br><br>
+                8. Snart klar...<br><br>
+                9. Okej, du är redo att balansera slidern nedan.
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label class="form-label">Dra reglaget till den dolda zonen och <span style="text-decoration: underline;">håll kvar i 3 sekunder</span> för att godkänna</label>
+                <div class="approval-container">
+                    <div class="approval-zone"></div> <!-- Den osynliga zonen -->
+                    <div class="approval-thumb" id="approvalThumb">DRA</div>
+                    <div class="approval-timer" id="approvalTimer">0.0s</div>
+                </div>
+                <div class="form-hint" id="approvalStatus" style="color: #d13438; font-weight: bold; text-align: center; margin-top: 10px;">EJ GODKÄND</div>
+            </div>
+
+            <div style="margin-top: 40px; display: flex; gap: 15px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="location.reload()">Avbryt (Ladda om)</button>
+                <button class="btn btn-primary" id="submitBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Skicka beställning</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Roterande alfabethjul
+        // --- LOGIK FÖR ALFABETHJUL ---
         const alphabetWheel = document.getElementById('alphabetWheel');
         const alphabetCtx = alphabetWheel.getContext('2d');
         const nameDisplay = document.getElementById('nameDisplay');
         let currentName = '';
         let alphabetRotation = 0;
-        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ '; // Inkluderar ett mellanslag
         
         function drawAlphabetWheel() {
             alphabetCtx.clearRect(0, 0, 140, 140);
@@ -674,13 +411,14 @@
                 alphabetCtx.save();
                 alphabetCtx.rotate((i * Math.PI * 2) / alphabet.length);
                 alphabetCtx.textAlign = 'center';
-                alphabetCtx.font = 'bold 18px Arial';
+                alphabetCtx.font = 'bold 16px Arial';
                 alphabetCtx.fillStyle = i === 0 ? '#0078d4' : '#333';
-                alphabetCtx.fillText(alphabet[i], 0, -48);
+                alphabetCtx.fillText(alphabet[i], 0, -52);
                 alphabetCtx.restore();
             }
             alphabetCtx.restore();
-            alphabetRotation += 0.035;
+            // Oregelbunden hastighet
+            alphabetRotation += 0.03 + (Math.sin(Date.now() / 500) * 0.02);
             requestAnimationFrame(drawAlphabetWheel);
         }
         drawAlphabetWheel();
@@ -692,35 +430,19 @@
             nameDisplay.textContent = currentName;
         });
         
-        document.getElementById('nameSpace').addEventListener('click', () => {
-            currentName += ' ';
-            nameDisplay.textContent = currentName;
-        });
-        
-        document.getElementById('nameBackspace').addEventListener('click', () => {
-            currentName = currentName.slice(0, -1);
-            nameDisplay.textContent = currentName;
-        });
-        
-        document.getElementById('nameClear').addEventListener('click', () => {
-            currentName = '';
-            nameDisplay.textContent = currentName;
-        });
+        document.getElementById('nameSpace').addEventListener('click', () => currentName += ' ', nameDisplay.textContent = currentName);
+        document.getElementById('nameBackspace').addEventListener('click', () => { currentName = currentName.slice(0, -1); nameDisplay.textContent = currentName; });
+        document.getElementById('nameClear').addEventListener('click', () => { currentName = ''; nameDisplay.textContent = currentName; });
 
-        // Telefonnummer precision slider
+        // --- LOGIK FÖR TELEFON SLIDER ---
         const phoneSlider = document.getElementById('phoneSlider');
         const phoneDisplay = document.getElementById('phoneDisplay');
-        
-        function formatPhone(num) {
-            const str = '0' + num.toString();
-            return str.substring(0, 3) + '-' + str.substring(3, 6) + ' ' + str.substring(6, 8) + ' ' + str.substring(8);
-        }
-        
         phoneSlider.addEventListener('input', (e) => {
-            phoneDisplay.textContent = formatPhone(e.target.value);
+            const str = '0' + e.target.value;
+            phoneDisplay.textContent = str.substring(0, 3) + '-' + str.substring(3, 6) + ' ' + str.substring(6, 8) + ' ' + str.substring(8);
         });
 
-        // Binär sökning för datum
+        // --- LOGIK FÖR DATUM ---
         const dateDisplay = document.getElementById('dateDisplay');
         const dateClicks = document.getElementById('dateClicks');
         let minDate = new Date('2000-01-01');
@@ -736,651 +458,251 @@
             dateClicks.textContent = clickCount;
         }
         
-        document.getElementById('beforeBtn').addEventListener('click', () => {
-            maxDate = new Date(currentDate.getTime() - 86400000);
-            updateDate();
-        });
-        
-        document.getElementById('afterBtn').addEventListener('click', () => {
-            minDate = new Date(currentDate.getTime() + 86400000);
-            updateDate();
-        });
-        
-        document.getElementById('exactBtn').addEventListener('click', () => {
-            dateDisplay.style.color = '#107c10';
-            setTimeout(() => {
-                dateDisplay.style.color = '#0078d4';
-            }, 1000);
-        });
+        document.getElementById('beforeBtn').addEventListener('click', () => { maxDate = new Date(currentDate.getTime() - 86400000); updateDate(); });
+        document.getElementById('afterBtn').addEventListener('click', () => { minDate = new Date(currentDate.getTime() + 86400000); updateDate(); });
+        document.getElementById('exactBtn').addEventListener('click', () => { dateDisplay.style.color = '#107c10'; setTimeout(() => dateDisplay.style.color = '#0078d4', 1000); });
 
-        // Roterande kostnadsställe-siffror
+        // --- LOGIK FÖR KOSTNADSSTÄLLE ---
         const digitConfigs = [
-            { canvas: document.getElementById('digit1'), value: document.getElementById('value1'), rotation: 0, speed: 0.028 },
-            { canvas: document.getElementById('digit2'), value: document.getElementById('value2'), rotation: Math.PI/5, speed: 0.037 },
-            { canvas: document.getElementById('digit3'), value: document.getElementById('value3'), rotation: Math.PI/3, speed: 0.042 },
-            { canvas: document.getElementById('digit4'), value: document.getElementById('value4'), rotation: Math.PI/2, speed: 0.033 }
+            { canvas: document.getElementById('digit1'), value: document.getElementById('value1'), rotation: 0, speed: 0.03 },
+            { canvas: document.getElementById('digit2'), value: document.getElementById('value2'), rotation: 1, speed: 0.04 },
+            { canvas: document.getElementById('digit3'), value: document.getElementById('value3'), rotation: 2, speed: 0.05 },
+            { canvas: document.getElementById('digit4'), value: document.getElementById('value4'), rotation: 3, speed: 0.035 }
         ];
         
         digitConfigs.forEach(config => {
             const ctx = config.canvas.getContext('2d');
-            
             function drawDigit() {
-                ctx.clearRect(0, 0, 80, 100);
-                ctx.save();
-                ctx.translate(40, 50);
-                ctx.rotate(config.rotation);
-                
+                ctx.clearRect(0, 0, 60, 80);
+                ctx.save(); ctx.translate(30, 40); ctx.rotate(config.rotation);
                 for (let i = 0; i < 10; i++) {
-                    ctx.save();
-                    ctx.rotate((i * Math.PI * 2) / 10);
-                    ctx.textAlign = 'center';
-                    ctx.font = 'bold 24px Arial';
-                    ctx.fillStyle = i === 0 ? '#0078d4' : '#666';
-                    ctx.fillText(i, 0, -28);
-                    ctx.restore();
+                    ctx.save(); ctx.rotate((i * Math.PI * 2) / 10);
+                    ctx.font = 'bold 18px Arial'; ctx.fillStyle = i===0?'#0078d4':'#ccc';
+                    ctx.fillText(i, 0, -25); ctx.restore();
                 }
                 ctx.restore();
                 config.rotation += config.speed;
                 requestAnimationFrame(drawDigit);
             }
             drawDigit();
-            
             config.canvas.addEventListener('click', () => {
                 const digit = Math.floor(((-config.rotation % (Math.PI * 2)) + Math.PI * 2) / (Math.PI * 2) * 10) % 10;
                 config.value.textContent = digit;
             });
         });
 
-        // Gravitationsbaserad volymslider
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumeValueGravity = document.getElementById('volumeValueGravity');
-        let sliderPosition = 200; // Start i mitten (50%)
-        let sliderVelocity = 0;
-        let isDraggingVolume = false;
-        let dragStartY = 0;
-        let dragStartPos = 0;
+        // --- LOGIK FÖR LÖSENORD ROULETTE ---
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
+        const spinner = document.getElementById('charSpinner');
+        const pwdResult = document.getElementById('pwd-result');
+        const lockBtn = document.getElementById('lockCharBtn');
+        const resetBtn = document.getElementById('resetPwdBtn');
+        const strengthBar = document.getElementById('strengthBar');
         
-        volumeSlider.addEventListener('mousedown', (e) => {
-            isDraggingVolume = true;
-            dragStartY = e.clientY;
-            dragStartPos = sliderPosition;
-            volumeSlider.style.cursor = 'grabbing';
-            sliderVelocity = 0;
+        let charIndex = 0;
+        let currentPassword = "";
+        let spinSpeed = 120; 
+        let spinInterval;
+
+        function spinChar() {
+            charIndex = (charIndex + 1) % chars.length;
+            spinner.textContent = chars[charIndex];
+        }
+        function startSpinner() {
+            if(spinInterval) clearInterval(spinInterval);
+            spinInterval = setInterval(spinChar, spinSpeed);
+        }
+        startSpinner();
+
+        lockBtn.addEventListener('click', () => {
+            const lockedChar = spinner.textContent;
+            currentPassword += lockedChar;
+            pwdResult.textContent = currentPassword;
+            spinSpeed = Math.max(15, spinSpeed - 10); // Ökar hastigheten!
+            startSpinner();
+            
+            const width = Math.min(100, currentPassword.length * 8);
+            strengthBar.style.width = width + '%';
+            if(currentPassword.length > 12) {
+                strengthBar.style.background = '#d13438'; // Blir rött om för långt (overflow)
+                document.getElementById('strengthText').textContent = "BUFFERTÖVERFLÖDE!";
+            } else {
+                document.getElementById('strengthText').textContent = "Styrka: " + width + "%";
+            }
         });
+
+        resetBtn.addEventListener('click', () => {
+            currentPassword = ""; pwdResult.textContent = "_"; spinSpeed = 120; strengthBar.style.width = "0%"; startSpinner();
+        });
+
+        // --- LOGIK FÖR GEO LEVERANS MED VIND ---
+        const latSlider = document.getElementById('latSlider');
+        const longSlider = document.getElementById('longSlider');
+        const latVal = document.getElementById('latVal');
+        const longVal = document.getElementById('longVal');
+        const geoPin = document.getElementById('geoPin');
+        const windInd = document.getElementById('windInd');
+        
+        let windX = 0.0001; let windY = 0.0001;
+        
+        function updateMap() {
+            const latPercent = 100 - ((latSlider.value - 55) / (69 - 55) * 100);
+            const longPercent = (longSlider.value - 11) / (24 - 11) * 100;
+            geoPin.style.top = latPercent + '%';
+            geoPin.style.left = longPercent + '%';
+            latVal.textContent = parseFloat(latSlider.value).toFixed(4);
+            longVal.textContent = parseFloat(longSlider.value).toFixed(4);
+        }
+
+        // Vindsimulering
+        setInterval(() => {
+            if(Math.random() > 0.9) { // Byt vind ibland
+                windX = (Math.random() - 0.5) * 0.002;
+                windY = (Math.random() - 0.5) * 0.002;
+                const speed = Math.round(Math.abs(windX * 5000));
+                windInd.textContent = `Vind: ${windX > 0 ? 'Öst' : 'Väst'} ${speed} m/s 💨`;
+            }
+            // Flytta sliders
+            latSlider.value = parseFloat(latSlider.value) + windY;
+            longSlider.value = parseFloat(longSlider.value) + windX;
+            updateMap();
+        }, 100);
+        latSlider.addEventListener('input', updateMap);
+        longSlider.addEventListener('input', updateMap);
+
+        // --- LOGIK FÖR GODKÄNNANDE SLIDER ---
+        const thumb = document.getElementById('approvalThumb');
+        const appContainer = document.querySelector('.approval-container');
+        const timerDisplay = document.getElementById('approvalTimer');
+        const statusDisplay = document.getElementById('approvalStatus');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        let isDraggingApproval = false;
+        let approvedTime = 0;
+        let checkInterval;
+
+        thumb.addEventListener('mousedown', (e) => { isDraggingApproval = true; e.preventDefault(); });
         
         document.addEventListener('mouseup', () => {
-            if (isDraggingVolume) {
-                volumeSlider.style.cursor = 'grab';
+            if(isDraggingApproval) {
+                isDraggingApproval = false;
+                thumb.style.left = '10px';
+                approvedTime = 0;
+                timerDisplay.textContent = "0.0s";
+                clearInterval(checkInterval);
+                if(statusDisplay.textContent !== "GODKÄND!") {
+                     statusDisplay.textContent = "EJ GODKÄND (Tappad)";
+                }
             }
-            isDraggingVolume = false;
         });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDraggingApproval) return;
+            const rect = appContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left - 25; 
+            x = Math.max(0, Math.min(x, rect.width - 50));
+            thumb.style.left = x + 'px';
+
+            const percent = x / (rect.width - 50);
+            clearInterval(checkInterval);
+            
+            // Zonen är runt 72% (se CSS left: 72%)
+            if (percent > 0.70 && percent < 0.76) { 
+                thumb.style.borderColor = "#bad80a";
+                checkInterval = setInterval(() => {
+                    approvedTime += 0.1;
+                    timerDisplay.textContent = approvedTime.toFixed(1) + "s";
+                    if (approvedTime >= 3.0) {
+                        statusDisplay.textContent = "GODKÄND!";
+                        statusDisplay.style.color = "#107c10";
+                        thumb.style.background = "#107c10";
+                        thumb.textContent = "✓";
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = 1;
+                        submitBtn.style.cursor = "pointer";
+                        clearInterval(checkInterval);
+                        isDraggingApproval = false; // Lås den
+                    }
+                }, 100);
+            } else {
+                thumb.style.borderColor = "#999";
+                approvedTime = 0;
+                timerDisplay.textContent = "0.0s";
+            }
+        });
+
+        // --- LOGIK FÖR VOLYM GRAVITATION ---
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValueGravity = document.getElementById('volumeValueGravity');
+        let sliderPos = 150; 
+        let sliderVel = 0;
+        let isDraggingVolume = false;
+        let startY, startPos;
+        
+        volumeSlider.addEventListener('mousedown', (e) => { isDraggingVolume = true; startY = e.clientY; startPos = sliderPos; volumeSlider.style.cursor = 'grabbing'; sliderVel = 0; });
+        document.addEventListener('mouseup', () => { if(isDraggingVolume) volumeSlider.style.cursor = 'grab'; isDraggingVolume = false; });
         
         document.addEventListener('mousemove', (e) => {
             if (isDraggingVolume) {
-                const deltaY = e.clientY - dragStartY;
-                sliderPosition = Math.max(0, Math.min(350, dragStartPos + deltaY));
-                volumeSlider.style.top = sliderPosition + 'px';
-                const volume = Math.round((1 - sliderPosition / 350) * 100);
-                volumeValueGravity.textContent = volume + '%';
-            }
-            
-            // Gravitation baserat på musposition relativt till slidern
-            if (!isDraggingVolume) {
-                const sliderRect = volumeSlider.getBoundingClientRect();
-                const sliderCenterX = sliderRect.left + sliderRect.width / 2;
-                const sliderCenterY = sliderRect.top + sliderRect.height / 2;
+                const deltaY = e.clientY - startY;
+                sliderPos = Math.max(0, Math.min(260, startPos + deltaY));
+            } else {
+                const rect = volumeSlider.getBoundingClientRect();
+                const cx = rect.left + rect.width/2;
+                const cy = rect.top + rect.height/2;
+                const dx = e.clientX - cx;
+                const dy = Math.abs(e.clientY - cy);
                 
-                // Beräkna horisontellt avstånd
-                const horizontalDist = e.clientX - sliderCenterX;
-                const verticalDist = Math.abs(e.clientY - sliderCenterY);
-                
-                // Om musen är nära vertikalt och åt sidan horisontellt
-                if (verticalDist < 250 && Math.abs(horizontalDist) < 400) {
-                    // Ju närmare musen är, desto starkare gravitation
-                    const gravityStrength = (400 - Math.abs(horizontalDist)) / 400 * 0.5;
-                    
-                    if (horizontalDist < 0) {
-                        // Mus till vänster = slider faller nedåt (mot 0%)
-                        sliderVelocity += gravityStrength;
-                    } else {
-                        // Mus till höger = slider faller uppåt (mot 100%)
-                        sliderVelocity -= gravityStrength;
-                    }
+                if (dy < 300 && Math.abs(dx) < 500) {
+                    const grav = (500 - Math.abs(dx))/500 * 0.8;
+                    sliderVel += (dx < 0) ? grav : -grav; // Vänster = ner, Höger = upp
                 }
             }
         });
-        
-        // Uppdatera slider-position kontinuerligt
-        function updateGravitySlider() {
-            if (!isDraggingVolume) {
-                sliderPosition += sliderVelocity;
-                sliderPosition = Math.max(0, Math.min(350, sliderPosition));
-                
-                volumeSlider.style.top = sliderPosition + 'px';
-                const volume = Math.round((1 - sliderPosition / 350) * 100);
-                volumeValueGravity.textContent = volume + '%';
-                
-                // Friktion
-                sliderVelocity *= 0.95;
-            }
-            requestAnimationFrame(updateGravitySlider);
-        }
-        updateGravitySlider();
-        
-        // Initial position
-        volumeSlider.style.top = sliderPosition + 'px';
 
-        // Avdelning dropdown med smart sortering
-        const departmentSelect = document.getElementById('departmentSelect');
-        const departments = [
-            { value: 'it', text: 'IT' },
-            { value: 'hr', text: 'HR' },
-            { value: 'sales', text: 'Försäljning' },
-            { value: 'support', text: 'Support' },
-            { value: 'finance', text: 'Ekonomi' }
-        ];
-        
-        departmentSelect.addEventListener('focus', () => {
-            // Sortera omvänt alfabetiskt varje gång användaren öppnar dropdown
-            departments.sort((a, b) => b.text.localeCompare(a.text, 'sv'));
-            
-            departmentSelect.innerHTML = '<option value="">Välj avdelning</option>';
-            departments.forEach(dept => {
-                const option = document.createElement('option');
-                option.value = dept.value;
-                option.textContent = dept.text;
-                departmentSelect.appendChild(option);
-            });
-            
-            // Efter en kort stund, sortera på nytt
+        function physicsLoop() {
+            if (!isDraggingVolume) {
+                sliderPos += sliderVel;
+                sliderPos = Math.max(0, Math.min(260, sliderPos));
+                sliderVel *= 0.96; // Friktion
+            }
+            volumeSlider.style.top = sliderPos + 'px';
+            const vol = Math.round((1 - sliderPos/260) * 100);
+            volumeValueGravity.textContent = vol + '%';
+            requestAnimationFrame(physicsLoop);
+        }
+        physicsLoop();
+
+        // --- LOGIK FÖR AVDELNING DROPDOWN ---
+        const deptSelect = document.getElementById('departmentSelect');
+        deptSelect.addEventListener('focus', () => {
+            const opts = Array.from(deptSelect.options).slice(1); // Spara alternativen
+            deptSelect.innerHTML = '<option value="">Laddar...</option>';
             setTimeout(() => {
-                departments.sort(() => Math.random() - 0.5);
-                const currentValue = departmentSelect.value;
-                departmentSelect.innerHTML = '<option value="">Välj avdelning</option>';
-                departments.forEach(dept => {
-                    const option = document.createElement('option');
-                    option.value = dept.value;
-                    option.textContent = dept.text;
-                    departmentSelect.appendChild(option);
-                });
-                if (currentValue) {
-                    departmentSelect.value = currentValue;
-                }
-            }, 800);
+                opts.sort(() => Math.random() - 0.5);
+                deptSelect.innerHTML = '<option value="">Välj avdelning</option>';
+                opts.forEach(o => deptSelect.appendChild(o));
+            }, 500);
         });
 
-        // Service items med multi-klick bekräftelse
+        // --- LOGIK FÖR SERVICE CLICK ---
         document.querySelectorAll('.service-item').forEach(item => {
-            const counter = item.querySelector('.click-counter');
-            let clicks = 0;
-            
+            const cnt = item.querySelector('.click-counter');
+            let c = 0;
             item.addEventListener('click', () => {
-                clicks++;
-                counter.textContent = `${clicks}/3`;
-                
-                if (clicks >= 3) {
-                    item.style.borderColor = '#107c10';
-                    item.style.background = '#f0fff4';
-                    setTimeout(() => {
-                        item.style.borderColor = '#e1e1e1';
-                        item.style.background = 'white';
-                        clicks = 0;
-                        counter.textContent = '0/3';
-                    }, 2000);
+                c++; cnt.textContent = c + '/3';
+                if(c>=3) { 
+                    item.style.borderColor='#107c10'; item.style.background='#f0fff4'; 
+                    setTimeout(() => { item.style.borderColor='#e1e1e1'; item.style.background='white'; c=0; cnt.textContent='0/3'; }, 2000);
                 }
             });
         });
 
-        // Submit med validering
+        // --- SUBMIT ---
         document.getElementById('submitBtn').addEventListener('click', () => {
-            alert('Beställning skickad! Dina val har registrerats.');
+            alert("Tack! Din beställning behandlas nu av våra algoritmer (förväntad väntetid: 6-8 år).");
         });
 
-        <!-- NY SEKTION: SÄKERHET -->
-        <div class="card">
-            <h2 class="card-title">Säkerhet & Konto</h2>
-            <p class="card-subtitle">Skapa ett säkert lösenord med vår slumpgenerator-modul</p>
-
-            <div class="form-group">
-                <label class="form-label">Nytt lösenord <span class="required">*</span></label>
-                <div class="password-roulette-container">
-                    <div class="roulette-display">
-                        <!-- Visar det valda lösenordet -->
-                        <span id="pwd-result" class="pwd-text">_</span>
-                    </div>
-                    
-                    <div class="roulette-active-char-box">
-                        <div class="roulette-spinner" id="charSpinner">A</div>
-                    </div>
-
-                    <div class="roulette-controls">
-                        <button type="button" class="btn btn-primary" id="lockCharBtn">LÅS TECKEN</button>
-                        <button type="button" class="btn btn-secondary" id="resetPwdBtn">Rensa</button>
-                    </div>
-                    
-                    <div class="form-hint" style="margin-top: 15px;">
-                        <strong>Säkerhetskrav:</strong> Minst 8 tecken. Vänta tills önskat tecken visas i rutan och klicka "Lås tecken" snabbt. Hastigheten ökar för varje tecken för högre säkerhet.
-                    </div>
-                    <div class="password-strength-meter">
-                        <div class="strength-bar" id="strengthBar"></div>
-                    </div>
-                    <div id="strengthText" style="font-size: 12px; text-align: right; margin-top: 5px;">Oskyddad</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- NY SEKTION: LEVERANS -->
-        <div class="card">
-            <h2 class="card-title">Leverans av hårdvara</h2>
-            <p class="card-subtitle">Ange exakt geografisk position för leveransbudet</p>
-
-            <div class="geo-picker">
-                <div class="geo-display">
-                    Lat: <span id="latVal">59.3293</span> | Long: <span id="longVal">18.0686</span>
-                </div>
-                
-                <div class="geo-map-placeholder" id="geoMap">
-                    <div class="geo-pin" id="geoPin">📍</div>
-                    <div class="wind-indicator" id="windInd">Vind: Väst 4 m/s 💨</div>
-                </div>
-
-                <div class="geo-controls">
-                    <label class="form-label">Latitud (Nord/Syd)</label>
-                    <input type="range" min="55" max="69" step="0.0001" value="59.3293" class="geo-slider" id="latSlider">
-                    
-                    <label class="form-label" style="margin-top: 15px;">Longitud (Väst/Öst)</label>
-                    <input type="range" min="11" max="24" step="0.0001" value="18.0686" class="geo-slider" id="longSlider">
-                </div>
-                <div class="form-hint">
-                    Observera: Våra sliders simuleras med atmosfäriskt tryck. Stark vind kan få din position att driva iväg. Korrigera kontinuerligt.
-                </div>
-            </div>
-        </div>
-
-        <!-- NY SEKTION: GODKÄNNANDE -->
-        <div class="card">
-            <h2 class="card-title">Villkor</h2>
-            
-            <div class="terms-scroll-box" id="termsBox">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. För att garantera att du läser detta har vi saktat ner scrollhastigheten baserat på textens komplexitet. Genom att fortsätta säljer du din själ till IT-avdelningen. 
-                <br><br>
-                (Scrolla ner... långsamt...)
-                <br><br><br><br><br><br><br><br><br><br><br><br>
-                Här är slutet.
-            </div>
-
-            <div class="form-group" style="margin-top: 20px;">
-                <label class="form-label">Dra reglaget till den gröna zonen och håll kvar i 3 sekunder för att godkänna</label>
-                <div class="approval-container">
-                    <div class="approval-track">
-                        <div class="approval-zone"></div>
-                        <div class="approval-thumb" id="approvalThumb">drag</div>
-                    </div>
-                    <div class="approval-timer" id="approvalTimer">0.0s</div>
-                </div>
-                <div class="form-hint" id="approvalStatus" style="color: #d13438;">Ej godkänd</div>
-            </div>
-        </div>
-
-<style>
-    /* CSS för Lösenords-Roulette */
-    .password-roulette-container {
-        background: #2b2b2b;
-        padding: 20px;
-        border-radius: 8px;
-        color: white;
-        text-align: center;
-    }
-
-    .roulette-display {
-        background: #000;
-        font-family: 'Courier New', monospace;
-        font-size: 24px;
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 1px solid #444;
-        min-height: 60px;
-        letter-spacing: 3px;
-        color: #00ff00;
-        word-break: break-all;
-    }
-
-    .roulette-active-char-box {
-        width: 80px;
-        height: 80px;
-        background: white;
-        color: black;
-        margin: 0 auto 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 40px;
-        font-weight: bold;
-        border: 4px solid #0078d4;
-        border-radius: 10px;
-    }
-
-    .password-strength-meter {
-        height: 6px;
-        background: #444;
-        margin-top: 15px;
-        border-radius: 3px;
-        overflow: hidden;
-    }
-
-    .strength-bar {
-        height: 100%;
-        width: 0%;
-        background: #d13438;
-        transition: width 0.3s, background 0.3s;
-    }
-
-    /* CSS för Geo-Picker */
-    .geo-picker {
-        padding: 20px;
-        background: #eef6fb;
-        border: 1px solid #b3d6f2;
-        border-radius: 8px;
-    }
-
-    .geo-display {
-        font-family: monospace;
-        text-align: center;
-        margin-bottom: 15px;
-        font-size: 16px;
-        color: #0078d4;
-        font-weight: bold;
-    }
-
-    .geo-map-placeholder {
-        height: 200px;
-        background: #fff;
-        border: 2px dashed #ccc;
-        position: relative;
-        margin-bottom: 20px;
-        overflow: hidden;
-    }
-
-    .geo-pin {
-        font-size: 30px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -100%); /* Pin point at bottom center */
-        transition: top 0.1s linear, left 0.1s linear;
-    }
-
-    .wind-indicator {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255,255,255,0.8);
-        padding: 5px 10px;
-        font-size: 12px;
-        border-radius: 4px;
-    }
-
-    .geo-slider {
-        width: 100%;
-        margin: 10px 0;
-    }
-
-    /* CSS för Godkännande-slider */
-    .terms-scroll-box {
-        height: 150px;
-        overflow-y: scroll;
-        border: 1px solid #ccc;
-        padding: 15px;
-        background: #f9f9f9;
-        margin-bottom: 20px;
-        font-size: 12px;
-        color: #666;
-    }
-
-    .approval-container {
-        margin-top: 15px;
-        height: 60px;
-        background: #e1e1e1;
-        border-radius: 30px;
-        position: relative;
-        user-select: none;
-    }
-
-    .approval-track {
-        position: relative;
-        height: 100%;
-        width: 100%;
-    }
-
-    .approval-zone {
-        position: absolute;
-        left: 70%; /* Svårt att hitta */
-        top: 0;
-        bottom: 0;
-        width: 40px;
-        background: #bad80a; /* Subtle green */
-        opacity: 0.5;
-    }
-
-    .approval-thumb {
-        position: absolute;
-        left: 10px;
-        top: 5px;
-        width: 50px;
-        height: 50px;
-        background: white;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        cursor: grab;
-        font-weight: bold;
-        color: #666;
-        border: 2px solid #999;
-    }
-
-    .approval-thumb:active {
-        cursor: grabbing;
-        background: #0078d4;
-        color: white;
-    }
-
-    .approval-timer {
-        position: absolute;
-        top: -25px;
-        right: 0;
-        font-family: monospace;
-        font-weight: bold;
-    }
-</style>
-
-<script>
-    // --- LÖSENORDS ROULETTE LOGIK ---
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
-    const spinner = document.getElementById('charSpinner');
-    const pwdResult = document.getElementById('pwd-result');
-    const lockBtn = document.getElementById('lockCharBtn');
-    const resetBtn = document.getElementById('resetPwdBtn');
-    const strengthBar = document.getElementById('strengthBar');
-    
-    let charIndex = 0;
-    let currentPassword = "";
-    let spinSpeed = 100; // Börjar långsamt
-    let spinInterval;
-    let isSpinning = true;
-
-    function spinChar() {
-        charIndex = (charIndex + 1) % chars.length;
-        spinner.textContent = chars[charIndex];
-    }
-
-    function startSpinner() {
-        if(spinInterval) clearInterval(spinInterval);
-        spinInterval = setInterval(spinChar, spinSpeed);
-    }
-
-    startSpinner();
-
-    lockBtn.addEventListener('click', () => {
-        // Lägg till tecknet
-        const lockedChar = spinner.textContent;
-        currentPassword += lockedChar;
-        
-        // Uppdatera UI
-        pwdResult.textContent = currentPassword;
-        
-        // Gör det svårare: Öka hastigheten för varje tecken
-        spinSpeed = Math.max(10, spinSpeed - 8); 
-        startSpinner();
-
-        // Uppdatera styrkemätare (visuellt och absurt)
-        const width = Math.min(100, currentPassword.length * 5);
-        strengthBar.style.width = width + '%';
-        
-        // Byt färg beroende på om det är "bra" tecken (slumpmässigt egentligen i detta fall)
-        if (['!', '@', '#'].includes(lockedChar)) {
-            strengthBar.style.background = '#00ff00';
-        } else if (currentPassword.length > 15) {
-             // Om det blir för långt, nollställs styrkan för "buffer overflow" skämt
-             strengthBar.style.background = '#d13438';
-             document.getElementById('strengthText').textContent = "BUFFERTÖVERFLÖDE - OSÄKERT";
-        }
-    });
-
-    resetBtn.addEventListener('click', () => {
-        currentPassword = "";
-        pwdResult.textContent = "_";
-        spinSpeed = 100;
-        strengthBar.style.width = "0%";
-        startSpinner();
-    });
-
-
-    // --- GEO PICKER MED VIND LOGIK ---
-    const latSlider = document.getElementById('latSlider');
-    const longSlider = document.getElementById('longSlider');
-    const latVal = document.getElementById('latVal');
-    const longVal = document.getElementById('longVal');
-    const geoPin = document.getElementById('geoPin');
-    const windInd = document.getElementById('windInd');
-    
-    let windX = 0.0002; // Vindens styrka Longitud
-    let windY = 0.0001; // Vindens styrka Latitud
-    
-    // Uppdatera position visuellt
-    function updateMap() {
-        // Normalisera värden för kartan (bara visuellt)
-        // Lat: 55-69, Long: 11-24
-        const latPercent = 100 - ((latSlider.value - 55) / (69 - 55) * 100); // Invertera Y
-        const longPercent = (longSlider.value - 11) / (24 - 11) * 100;
-        
-        geoPin.style.top = latPercent + '%';
-        geoPin.style.left = longPercent + '%';
-        
-        latVal.textContent = parseFloat(latSlider.value).toFixed(4);
-        longVal.textContent = parseFloat(longSlider.value).toFixed(4);
-    }
-
-    // Vind-funktion
-    setInterval(() => {
-        // Ändra vindriktning slumpmässigt ibland
-        if(Math.random() > 0.95) {
-            windX = (Math.random() - 0.5) * 0.001;
-            windY = (Math.random() - 0.5) * 0.001;
-            
-            const dir = windX > 0 ? "Öst" : "Väst";
-            const speed = Math.round(Math.abs(windX * 10000));
-            windInd.textContent = `Vind: ${dir} ${speed} m/s 💨`;
-        }
-
-        // Applicera vind på sliders
-        let currentLat = parseFloat(latSlider.value);
-        let currentLong = parseFloat(longSlider.value);
-
-        // Sliders rör sig om man inte håller i dem (simulerat genom att bara ändra värdet)
-        // För extra jobbighet: De rör sig även när man håller i dem i denna kod, 
-        // men vi låter det vara "driften"
-        
-        latSlider.value = currentLat + windY;
-        longSlider.value = currentLong + windX;
-        
-        updateMap();
-    }, 100);
-
-    latSlider.addEventListener('input', updateMap);
-    longSlider.addEventListener('input', updateMap);
-
-
-    // --- GODKÄNNANDE SLIDER ---
-    const thumb = document.getElementById('approvalThumb');
-    const container = document.querySelector('.approval-container');
-    const timerDisplay = document.getElementById('approvalTimer');
-    const statusDisplay = document.getElementById('approvalStatus');
-    
-    let isDragging = false;
-    let approvedTime = 0;
-    let checkInterval;
-
-    thumb.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        e.preventDefault(); // Förhindra textmarkering
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        // Om man släpper, åker den tillbaka
-        thumb.style.left = '10px';
-        approvedTime = 0;
-        timerDisplay.textContent = "0.0s";
-        statusDisplay.textContent = "Ej godkänd";
-        statusDisplay.style.color = "#d13438";
-        clearInterval(checkInterval);
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-
-        const rect = container.getBoundingClientRect();
-        let x = e.clientX - rect.left - 25; // Centrera musen på tummen
-        
-        // Begränsa inom behållaren
-        x = Math.max(0, Math.min(x, rect.width - 50));
-        
-        thumb.style.left = x + 'px';
-
-        // Kolla om vi är i zonen (70% - ca 80%)
-        const percent = x / (rect.width - 50);
-        
-        // Rensa tidigare timer om vi rör oss utanför
-        clearInterval(checkInterval);
-        
-        if (percent > 0.68 && percent < 0.75) { // Den gröna zonen
-            thumb.style.borderColor = "#bad80a";
-            
-            // Starta timer
-            checkInterval = setInterval(() => {
-                approvedTime += 0.1;
-                timerDisplay.textContent = approvedTime.toFixed(1) + "s";
-                
-                if (approvedTime >= 3.0) {
-                    statusDisplay.textContent = "GODKÄND!";
-                    statusDisplay.style.color = "#107c10";
-                    thumb.style.background = "#107c10";
-                    thumb.style.color = "white";
-                    thumb.textContent = "✓";
-                    clearInterval(checkInterval);
-                }
-            }, 100);
-        } else {
-            thumb.style.borderColor = "#999";
-            approvedTime = 0;
-            timerDisplay.textContent = "0.0s";
-        }
-    });
-</script>
     </script>
-
 </body>
 </html>
