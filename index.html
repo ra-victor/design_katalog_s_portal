@@ -935,6 +935,451 @@
         document.getElementById('submitBtn').addEventListener('click', () => {
             alert('Beställning skickad! Dina val har registrerats.');
         });
+
+        <!-- NY SEKTION: SÄKERHET -->
+        <div class="card">
+            <h2 class="card-title">Säkerhet & Konto</h2>
+            <p class="card-subtitle">Skapa ett säkert lösenord med vår slumpgenerator-modul</p>
+
+            <div class="form-group">
+                <label class="form-label">Nytt lösenord <span class="required">*</span></label>
+                <div class="password-roulette-container">
+                    <div class="roulette-display">
+                        <!-- Visar det valda lösenordet -->
+                        <span id="pwd-result" class="pwd-text">_</span>
+                    </div>
+                    
+                    <div class="roulette-active-char-box">
+                        <div class="roulette-spinner" id="charSpinner">A</div>
+                    </div>
+
+                    <div class="roulette-controls">
+                        <button type="button" class="btn btn-primary" id="lockCharBtn">LÅS TECKEN</button>
+                        <button type="button" class="btn btn-secondary" id="resetPwdBtn">Rensa</button>
+                    </div>
+                    
+                    <div class="form-hint" style="margin-top: 15px;">
+                        <strong>Säkerhetskrav:</strong> Minst 8 tecken. Vänta tills önskat tecken visas i rutan och klicka "Lås tecken" snabbt. Hastigheten ökar för varje tecken för högre säkerhet.
+                    </div>
+                    <div class="password-strength-meter">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div id="strengthText" style="font-size: 12px; text-align: right; margin-top: 5px;">Oskyddad</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NY SEKTION: LEVERANS -->
+        <div class="card">
+            <h2 class="card-title">Leverans av hårdvara</h2>
+            <p class="card-subtitle">Ange exakt geografisk position för leveransbudet</p>
+
+            <div class="geo-picker">
+                <div class="geo-display">
+                    Lat: <span id="latVal">59.3293</span> | Long: <span id="longVal">18.0686</span>
+                </div>
+                
+                <div class="geo-map-placeholder" id="geoMap">
+                    <div class="geo-pin" id="geoPin">📍</div>
+                    <div class="wind-indicator" id="windInd">Vind: Väst 4 m/s 💨</div>
+                </div>
+
+                <div class="geo-controls">
+                    <label class="form-label">Latitud (Nord/Syd)</label>
+                    <input type="range" min="55" max="69" step="0.0001" value="59.3293" class="geo-slider" id="latSlider">
+                    
+                    <label class="form-label" style="margin-top: 15px;">Longitud (Väst/Öst)</label>
+                    <input type="range" min="11" max="24" step="0.0001" value="18.0686" class="geo-slider" id="longSlider">
+                </div>
+                <div class="form-hint">
+                    Observera: Våra sliders simuleras med atmosfäriskt tryck. Stark vind kan få din position att driva iväg. Korrigera kontinuerligt.
+                </div>
+            </div>
+        </div>
+
+        <!-- NY SEKTION: GODKÄNNANDE -->
+        <div class="card">
+            <h2 class="card-title">Villkor</h2>
+            
+            <div class="terms-scroll-box" id="termsBox">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. För att garantera att du läser detta har vi saktat ner scrollhastigheten baserat på textens komplexitet. Genom att fortsätta säljer du din själ till IT-avdelningen. 
+                <br><br>
+                (Scrolla ner... långsamt...)
+                <br><br><br><br><br><br><br><br><br><br><br><br>
+                Här är slutet.
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label class="form-label">Dra reglaget till den gröna zonen och håll kvar i 3 sekunder för att godkänna</label>
+                <div class="approval-container">
+                    <div class="approval-track">
+                        <div class="approval-zone"></div>
+                        <div class="approval-thumb" id="approvalThumb">drag</div>
+                    </div>
+                    <div class="approval-timer" id="approvalTimer">0.0s</div>
+                </div>
+                <div class="form-hint" id="approvalStatus" style="color: #d13438;">Ej godkänd</div>
+            </div>
+        </div>
+
+<style>
+    /* CSS för Lösenords-Roulette */
+    .password-roulette-container {
+        background: #2b2b2b;
+        padding: 20px;
+        border-radius: 8px;
+        color: white;
+        text-align: center;
+    }
+
+    .roulette-display {
+        background: #000;
+        font-family: 'Courier New', monospace;
+        font-size: 24px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #444;
+        min-height: 60px;
+        letter-spacing: 3px;
+        color: #00ff00;
+        word-break: break-all;
+    }
+
+    .roulette-active-char-box {
+        width: 80px;
+        height: 80px;
+        background: white;
+        color: black;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        font-weight: bold;
+        border: 4px solid #0078d4;
+        border-radius: 10px;
+    }
+
+    .password-strength-meter {
+        height: 6px;
+        background: #444;
+        margin-top: 15px;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .strength-bar {
+        height: 100%;
+        width: 0%;
+        background: #d13438;
+        transition: width 0.3s, background 0.3s;
+    }
+
+    /* CSS för Geo-Picker */
+    .geo-picker {
+        padding: 20px;
+        background: #eef6fb;
+        border: 1px solid #b3d6f2;
+        border-radius: 8px;
+    }
+
+    .geo-display {
+        font-family: monospace;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 16px;
+        color: #0078d4;
+        font-weight: bold;
+    }
+
+    .geo-map-placeholder {
+        height: 200px;
+        background: #fff;
+        border: 2px dashed #ccc;
+        position: relative;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .geo-pin {
+        font-size: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%); /* Pin point at bottom center */
+        transition: top 0.1s linear, left 0.1s linear;
+    }
+
+    .wind-indicator {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255,255,255,0.8);
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    .geo-slider {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    /* CSS för Godkännande-slider */
+    .terms-scroll-box {
+        height: 150px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 15px;
+        background: #f9f9f9;
+        margin-bottom: 20px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .approval-container {
+        margin-top: 15px;
+        height: 60px;
+        background: #e1e1e1;
+        border-radius: 30px;
+        position: relative;
+        user-select: none;
+    }
+
+    .approval-track {
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
+
+    .approval-zone {
+        position: absolute;
+        left: 70%; /* Svårt att hitta */
+        top: 0;
+        bottom: 0;
+        width: 40px;
+        background: #bad80a; /* Subtle green */
+        opacity: 0.5;
+    }
+
+    .approval-thumb {
+        position: absolute;
+        left: 10px;
+        top: 5px;
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        cursor: grab;
+        font-weight: bold;
+        color: #666;
+        border: 2px solid #999;
+    }
+
+    .approval-thumb:active {
+        cursor: grabbing;
+        background: #0078d4;
+        color: white;
+    }
+
+    .approval-timer {
+        position: absolute;
+        top: -25px;
+        right: 0;
+        font-family: monospace;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    // --- LÖSENORDS ROULETTE LOGIK ---
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
+    const spinner = document.getElementById('charSpinner');
+    const pwdResult = document.getElementById('pwd-result');
+    const lockBtn = document.getElementById('lockCharBtn');
+    const resetBtn = document.getElementById('resetPwdBtn');
+    const strengthBar = document.getElementById('strengthBar');
+    
+    let charIndex = 0;
+    let currentPassword = "";
+    let spinSpeed = 100; // Börjar långsamt
+    let spinInterval;
+    let isSpinning = true;
+
+    function spinChar() {
+        charIndex = (charIndex + 1) % chars.length;
+        spinner.textContent = chars[charIndex];
+    }
+
+    function startSpinner() {
+        if(spinInterval) clearInterval(spinInterval);
+        spinInterval = setInterval(spinChar, spinSpeed);
+    }
+
+    startSpinner();
+
+    lockBtn.addEventListener('click', () => {
+        // Lägg till tecknet
+        const lockedChar = spinner.textContent;
+        currentPassword += lockedChar;
+        
+        // Uppdatera UI
+        pwdResult.textContent = currentPassword;
+        
+        // Gör det svårare: Öka hastigheten för varje tecken
+        spinSpeed = Math.max(10, spinSpeed - 8); 
+        startSpinner();
+
+        // Uppdatera styrkemätare (visuellt och absurt)
+        const width = Math.min(100, currentPassword.length * 5);
+        strengthBar.style.width = width + '%';
+        
+        // Byt färg beroende på om det är "bra" tecken (slumpmässigt egentligen i detta fall)
+        if (['!', '@', '#'].includes(lockedChar)) {
+            strengthBar.style.background = '#00ff00';
+        } else if (currentPassword.length > 15) {
+             // Om det blir för långt, nollställs styrkan för "buffer overflow" skämt
+             strengthBar.style.background = '#d13438';
+             document.getElementById('strengthText').textContent = "BUFFERTÖVERFLÖDE - OSÄKERT";
+        }
+    });
+
+    resetBtn.addEventListener('click', () => {
+        currentPassword = "";
+        pwdResult.textContent = "_";
+        spinSpeed = 100;
+        strengthBar.style.width = "0%";
+        startSpinner();
+    });
+
+
+    // --- GEO PICKER MED VIND LOGIK ---
+    const latSlider = document.getElementById('latSlider');
+    const longSlider = document.getElementById('longSlider');
+    const latVal = document.getElementById('latVal');
+    const longVal = document.getElementById('longVal');
+    const geoPin = document.getElementById('geoPin');
+    const windInd = document.getElementById('windInd');
+    
+    let windX = 0.0002; // Vindens styrka Longitud
+    let windY = 0.0001; // Vindens styrka Latitud
+    
+    // Uppdatera position visuellt
+    function updateMap() {
+        // Normalisera värden för kartan (bara visuellt)
+        // Lat: 55-69, Long: 11-24
+        const latPercent = 100 - ((latSlider.value - 55) / (69 - 55) * 100); // Invertera Y
+        const longPercent = (longSlider.value - 11) / (24 - 11) * 100;
+        
+        geoPin.style.top = latPercent + '%';
+        geoPin.style.left = longPercent + '%';
+        
+        latVal.textContent = parseFloat(latSlider.value).toFixed(4);
+        longVal.textContent = parseFloat(longSlider.value).toFixed(4);
+    }
+
+    // Vind-funktion
+    setInterval(() => {
+        // Ändra vindriktning slumpmässigt ibland
+        if(Math.random() > 0.95) {
+            windX = (Math.random() - 0.5) * 0.001;
+            windY = (Math.random() - 0.5) * 0.001;
+            
+            const dir = windX > 0 ? "Öst" : "Väst";
+            const speed = Math.round(Math.abs(windX * 10000));
+            windInd.textContent = `Vind: ${dir} ${speed} m/s 💨`;
+        }
+
+        // Applicera vind på sliders
+        let currentLat = parseFloat(latSlider.value);
+        let currentLong = parseFloat(longSlider.value);
+
+        // Sliders rör sig om man inte håller i dem (simulerat genom att bara ändra värdet)
+        // För extra jobbighet: De rör sig även när man håller i dem i denna kod, 
+        // men vi låter det vara "driften"
+        
+        latSlider.value = currentLat + windY;
+        longSlider.value = currentLong + windX;
+        
+        updateMap();
+    }, 100);
+
+    latSlider.addEventListener('input', updateMap);
+    longSlider.addEventListener('input', updateMap);
+
+
+    // --- GODKÄNNANDE SLIDER ---
+    const thumb = document.getElementById('approvalThumb');
+    const container = document.querySelector('.approval-container');
+    const timerDisplay = document.getElementById('approvalTimer');
+    const statusDisplay = document.getElementById('approvalStatus');
+    
+    let isDragging = false;
+    let approvedTime = 0;
+    let checkInterval;
+
+    thumb.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        e.preventDefault(); // Förhindra textmarkering
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        // Om man släpper, åker den tillbaka
+        thumb.style.left = '10px';
+        approvedTime = 0;
+        timerDisplay.textContent = "0.0s";
+        statusDisplay.textContent = "Ej godkänd";
+        statusDisplay.style.color = "#d13438";
+        clearInterval(checkInterval);
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const rect = container.getBoundingClientRect();
+        let x = e.clientX - rect.left - 25; // Centrera musen på tummen
+        
+        // Begränsa inom behållaren
+        x = Math.max(0, Math.min(x, rect.width - 50));
+        
+        thumb.style.left = x + 'px';
+
+        // Kolla om vi är i zonen (70% - ca 80%)
+        const percent = x / (rect.width - 50);
+        
+        // Rensa tidigare timer om vi rör oss utanför
+        clearInterval(checkInterval);
+        
+        if (percent > 0.68 && percent < 0.75) { // Den gröna zonen
+            thumb.style.borderColor = "#bad80a";
+            
+            // Starta timer
+            checkInterval = setInterval(() => {
+                approvedTime += 0.1;
+                timerDisplay.textContent = approvedTime.toFixed(1) + "s";
+                
+                if (approvedTime >= 3.0) {
+                    statusDisplay.textContent = "GODKÄND!";
+                    statusDisplay.style.color = "#107c10";
+                    thumb.style.background = "#107c10";
+                    thumb.style.color = "white";
+                    thumb.textContent = "✓";
+                    clearInterval(checkInterval);
+                }
+            }, 100);
+        } else {
+            thumb.style.borderColor = "#999";
+            approvedTime = 0;
+            timerDisplay.textContent = "0.0s";
+        }
+    });
+</script>
     </script>
 
 </body>
